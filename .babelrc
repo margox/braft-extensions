@@ -1,0 +1,20 @@
+{
+  "presets": [
+    [
+      "@babel/env", {
+        "targets": {
+          "browsers": [
+            "last 2 versions",
+            "not IE <= 10"
+          ]
+        },
+        "modules": false
+      }
+    ],
+    "@babel/react"
+  ],
+  "plugins": [
+    "@babel/transform-runtime",
+    "@babel/proposal-class-properties"
+  ]
+}
