@@ -5,9 +5,39 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import BraftEditor from 'braft-editor'
 
-import CodeHighlighter from '../src/code-highlighter'
+import '../dist/code-highlighter.css'
+import '../dist/color-picker.css'
 
-BraftEditor.use(CodeHighlighter())
+import CodeHighlighter from '../dist/code-highlighter'
+import ColorPicker from '../dist/color-picker'
+
+import 'prismjs/components/prism-java'
+import 'prismjs/components/prism-php'
+
+BraftEditor.use(CodeHighlighter({
+  syntaxs: [
+    {
+      name: 'JavaScript',
+      syntax: 'javascript'
+    }, {
+      name: 'HTML',
+      syntax: 'html'
+    }, {
+      name: 'CSS',
+      syntax: 'css'
+    }, {
+      name: 'Java',
+      syntax: 'java',
+    }, {
+      name: 'PHP',
+      syntax: 'php'
+    }
+  ]
+}))
+
+BraftEditor.use(ColorPicker({
+  theme: 'light'
+}))
 
 class Demo extends React.Component {
 

@@ -37,7 +37,7 @@ export default (options) => {
 
   return {
     type: 'prop-interception',
-    interceptor: (editorProps, editor) => {
+    interceptor: (editorProps) => {
       editorProps.colorPicker = getColorPicker(options)
       editorProps.colorPickerTheme = options.theme
       editorProps.colorPickerAutoHide = false

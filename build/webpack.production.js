@@ -5,13 +5,15 @@ var merge = require('webpack-merge')
   , baseConfigs = require('./webpack.base')
 
 var entryNames = ['code-highlighter', 'color-picker']
-var entries = {}
+var entries = {
+  index: './index.js'
+}
 
 entryNames.forEach(item => entries[item] = `./${item}/index.jsx`)
 
 module.exports = merge(baseConfigs, {
   mode: 'production',
-  devtool: 'source-map',
+  // devtool: 'source-map',
   context: path.join(__dirname, '../src'),
   entry: entries,
   output: {
@@ -30,13 +32,16 @@ module.exports = merge(baseConfigs, {
     'braft-finder': 'braft-finder',
     'braft-utils': 'braft-utils',
     'braft-convert': 'braft-convert',
-    'immutable': 'immutable'
+    'immutable': 'immutable',
+    'prismjs': 'prismjs',
+    'draft-js-prism': 'draft-js-prism',
+    'react-color': 'react-color',
   },
   optimization: {
-    minimize: false,
+    minimize: true,
   },
   plugins: [
-    new ExtractTextPlugin('index.css'),
+    new ExtractTextPlugin('[name].css'),
     new OptimizeCssAssetsPlugin({
       assetNameRegExp: /.css$/,
       cssProcessor: require('cssnano'),

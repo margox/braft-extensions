@@ -88,8 +88,9 @@ class CodeBlockWrapper extends React.Component {
       const selectionState = SelectionState.createEmpty(this.codeBlockBlockKey)
       const editorState = EditorState.forceSelection(this.props.editorState, selectionState)
 
-      this.props.editor.setValue(ContentUtils.setSelectionBlockData(editorState, { syntax }))
-      this.setState({ syntax, syntaxName })
+      this.setState({ syntax, syntaxName }, () => {
+        this.props.editor.setValue(ContentUtils.setSelectionBlockData(editorState, { syntax }))
+      })
 
     } catch (error) {
       console.warn(error)

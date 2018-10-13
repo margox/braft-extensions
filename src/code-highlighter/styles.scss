@@ -15,6 +15,7 @@
       &:hover {
         span{
           background-color: #fff;
+          border-color: rgba(#000, .1);
           color: #333;
         }
         .syntax-list{
@@ -31,7 +32,7 @@
         height: 28px;
         background-clip: padding-box;
         padding-left: 10px;
-        border: 1px solid rgba(#000, .1);
+        border: 1px solid rgba(#000, 0);
         border-radius: 3px 3px 0 0;
         color: #888;
         font-size: 12px;
