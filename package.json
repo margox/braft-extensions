@@ -1,6 +1,6 @@
 {
   "name": "braft-extensions",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Extensions for Braft Editor",
   "main": "dist/index.js",
   "scripts": {
@@ -25,7 +25,7 @@
     "babel-eslint": "^9.0.0",
     "babel-loader": "^8.0.0",
     "babel-plugin-transform-runtime": "^6.23.0",
-    "braft-editor": "^2.1.5",
+    "braft-editor": "^2.1.9",
     "css-loader": "^0.28.11",
     "draft-js-prism": "^1.0.6",
     "eslint": "^5.4.0",

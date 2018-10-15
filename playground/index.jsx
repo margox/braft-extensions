@@ -5,11 +5,11 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import BraftEditor from 'braft-editor'
 
-import '../dist/code-highlighter.css'
-import '../dist/color-picker.css'
+// import '../dist/code-highlighter.css'
+// import '../dist/color-picker.css'
 
-import CodeHighlighter from '../dist/code-highlighter'
-import ColorPicker from '../dist/color-picker'
+import CodeHighlighter from '../src/code-highlighter'
+import ColorPicker from '../src/color-picker'
 
 import 'prismjs/components/prism-java'
 import 'prismjs/components/prism-php'
@@ -62,7 +62,7 @@ class Demo extends React.Component {
     return (
       <div>
         <div className="demo-editor" id="demo">
-          <BraftEditor onChange={this.handleChange} value={editorState}/>
+          <BraftEditor id="editor-1" onChange={this.handleChange} value={editorState} contentStyle={{height: 300}}/>
         </div>
       </div>
     )

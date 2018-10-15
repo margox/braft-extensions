@@ -1,6 +1,18 @@
+html,body{
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Helvetica;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+#root{
+  position: relative;
+}
+
 .demo-editor{
   width: 1000px;
   margin: 50px auto 0 auto;
+  background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 3px;
 }

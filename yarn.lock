@@ -1151,9 +1151,9 @@ braft-convert@^2.1.4:
     draft-convert "^2.0.0"
     draft-js "^0.10.3"
 
-braft-editor@^2.1.5:
-  version "2.1.5"
-  resolved "https://registry.yarnpkg.com/braft-editor/-/braft-editor-2.1.5.tgz#39184cc0c5fea6fae093c7df58e152cebc420937"
+braft-editor@^2.1.9:
+  version "2.1.9"
+  resolved "https://registry.yarnpkg.com/braft-editor/-/braft-editor-2.1.9.tgz#548242c50c96115d2525c7c0eb8eb311237e0e4b"
   dependencies:
     "@babel/runtime" "^7.0.0"
     braft-convert "^2.1.4"
