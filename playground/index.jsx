@@ -10,6 +10,7 @@ import BraftEditor from 'braft-editor'
 
 import CodeHighlighter from '../src/code-highlighter'
 import ColorPicker from '../src/color-picker'
+import Emoticon from '../src/emoticon'
 
 import 'prismjs/components/prism-java'
 import 'prismjs/components/prism-php'
@@ -38,6 +39,8 @@ BraftEditor.use(CodeHighlighter({
 BraftEditor.use(ColorPicker({
   theme: 'light'
 }))
+
+BraftEditor.use(Emoticon())
 
 class Demo extends React.Component {
 

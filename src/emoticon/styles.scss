@@ -1,0 +1,45 @@
+.braft-emoticon-picker {
+  box-sizing: border-box;
+  width: 210px;
+  height: 210px;
+  overflow: hidden;
+  &::before,
+  &::after{
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    left: 0;
+    height: 30px;
+    border-radius: 2px;
+    content: '';
+    pointer-events: none;
+  }
+  &::before{
+    top: 0;
+    background-image: linear-gradient(to top, rgba(#21242a, 0), rgba(#21242a, 1));
+  }
+  &::after{
+    bottom: 0;
+    background-image: linear-gradient(rgba(#21242a, 0), rgba(#21242a, 1));
+  }
+  .braft-emoticons-list{
+    box-sizing: content-box;
+    width: 200px;
+    height: 190px;
+    margin: 0;
+    padding: 15px 15px 20px;
+    overflow: auto;
+    img{
+      display: block;
+      float: left;
+      width: 20px;
+      height: 20px;
+      margin: 3px;
+      padding: 5px;
+      border-radius: 3px;
+      &:hover{
+        background-color: #3498db;
+      }
+    }
+  }
+}
