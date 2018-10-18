@@ -1,10 +1,11 @@
 var merge = require('webpack-merge')
   , ExtractTextPlugin = require('extract-text-webpack-plugin')
+  , CopyWebpackPlugin = require('copy-webpack-plugin')
   , OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
   , path = require('path')
   , baseConfigs = require('./webpack.base')
 
-var entryNames = ['code-highlighter', 'color-picker']
+var entryNames = ['code-highlighter', 'color-picker', 'emoticon']
 var entries = {
   index: './index.js'
 }
@@ -13,7 +14,6 @@ entryNames.forEach(item => entries[item] = `./${item}/index.jsx`)
 
 module.exports = merge(baseConfigs, {
   mode: 'production',
-  // devtool: 'source-map',
   context: path.join(__dirname, '../src'),
   entry: entries,
   output: {
@@ -38,7 +38,7 @@ module.exports = merge(baseConfigs, {
     'react-color': 'react-color',
   },
   optimization: {
-    minimize: true,
+    minimize: false,
   },
   plugins: [
     new ExtractTextPlugin('[name].css'),
@@ -54,5 +54,12 @@ module.exports = merge(baseConfigs, {
         safe: true
       }
     }),
+    new CopyWebpackPlugin([
+      {
+        from: '../src/emoticon/images/*.*',
+        to: '../dist/assets/',
+        flatten: true
+      },
+    ])
   ]
 })

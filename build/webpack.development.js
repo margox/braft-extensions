@@ -12,7 +12,8 @@ module.exports = merge(baseConfigs, {
   },
   output: {
     path: path.join(__dirname, './dist'),
-    filename: '[name].js'
+    filename: '[name].js',
+    publicPath: '/',
   },
   plugins: [
     new ExtractTextPlugin('index.css'),

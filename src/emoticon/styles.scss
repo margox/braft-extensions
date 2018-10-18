@@ -43,3 +43,16 @@
     }
   }
 }
+
+.braft-emoticon-in-editor{
+  position: relative;
+  padding: 0 2px;
+  letter-spacing: 12px;
+  img{
+    position: absolute;
+    top: 0;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+  }
+}

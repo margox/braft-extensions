@@ -7,10 +7,11 @@ import BraftEditor from 'braft-editor'
 
 // import '../dist/code-highlighter.css'
 // import '../dist/color-picker.css'
+import '../dist/emoticon.css'
 
 import CodeHighlighter from '../src/code-highlighter'
 import ColorPicker from '../src/color-picker'
-import Emoticon from '../src/emoticon'
+import Emoticon from '../dist/emoticon'
 
 import 'prismjs/components/prism-java'
 import 'prismjs/components/prism-php'

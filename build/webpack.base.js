@@ -39,8 +39,8 @@ module.exports = {
           {
             loader: 'url-loader',
             options: {
-              limit: 8192,
-              name: '[name]_[hash:6].[ext]'
+              limit: 100,
+              name: './assets/[name].[ext]',
             }
           }
         ]
@@ -51,8 +51,7 @@ module.exports = {
             loader: 'url-loader',
             options: {
               limit: 20000,
-              name: '[name].[ext]',
-              publicPath: './'
+              name: 'assets/[name].[ext]',
             }
           }
         ]

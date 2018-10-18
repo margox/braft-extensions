@@ -3,6 +3,7 @@
 ### 目前包含的模块列表
 1. 代码高亮模块 CodeHighlighter
 2. 高级取色器模块 ColorPicker
+3. 表情包扩展模块 Emoticon
 
 ### 安装
 ```bash
@@ -14,9 +15,8 @@ yarn add braft-extensions
 ### 使用
 需要分别import本模块包下面的各个模块，参见下方各模块的基本使用介绍
 
-
 ## 代码高亮模块
-使用[prismjs](https://github.com/PrismJS/prism)和[draft-js-prism](https://github.com/SamyPesse/draft-js-prism)开发的一个代码高亮模块，能在编辑器中实现代码高亮编辑功能，内置html、js和css语言支持，可扩展更多语言
+使用[prismjs](https://github.com/PrismJS/prism)和[draft-js-prism](https://github.com/SamyPesse/draft-js-prism)开发的一个代码高亮模块，能在编辑器中实现代码高亮编辑功能，内置html、js和css语言支持，可扩展更多语言，[在线演示](https://braft.margox.cn/demos/code-highlighter)
 
 #### 安装依赖
 ```bash
@@ -82,7 +82,7 @@ BraftEditor.use(CodeHighlighter(options))
 
 
 ## 高级取色器模块
-使用[react-color](https://github.com/casesandberg/react-color)来替换编辑器自身的颜色选择模块，设置颜色更自由！
+使用[react-color](https://github.com/casesandberg/react-color)来替换编辑器自身的颜色选择模块，设置颜色更自由！[在线演示](https://braft.margox.cn/demos/color-picker)
 
 #### 安装依赖
 ```bash
@@ -110,3 +110,36 @@ BraftEditor.use(ColorPicker(options))
 
 #### 使用注意事项
 - 使用该模块，必须引入braft-extensions/dist/color-picker.css文件
+
+
+## 表情包扩展模块
+替换内置的emoji组件，可以插入图片形式的表情，[在线演示](https://braft.margox.cn/demos/emoticon)
+
+#### 基本使用
+```js
+import 'braft-editor/dist/index.css'
+import BraftEditor from 'braft-editor'
+
+// 引入表情包扩展模块样式文件
+import 'braft-extensions/dist/emoticon.css'
+// 引入表情包扩展模块和默认表情包列表
+import Emoticon, { defaultEmoticons } from 'braft-extensions/dist/emoticon'
+
+// 转换默认表情包列表，让webpack可以正确加载到默认表情包中的图片，请确保已对png格式的文件配置了loader
+// 如果你使用的webpack版本不支持动态require，或者使用的其他打包工具，请勿使用此写法
+const emiticons = defaultEmoticons.map(item => require(`braft-extensions/dist/assets/${item}`))
+
+// 也可以使用自己的表情包资源，不受打包工具限制
+// const emiticons = ['http://path/to/emoticon-1.png', 'http://path/to/emoticon-2.png', 'http://path/to/emoticon-3.png', 'http://path/to/emoticon-4.png', ...]
+
+const options = {
+  includeEditors: ['editor-id-1'], // 指定该模块对哪些BraftEditor生效，不传此属性则对所有BraftEditor有效
+  excludeEditors: ['editor-id-2'],  // 指定该模块对哪些BraftEditor无效
+  emiticons: emiticons, // 指定可用表情图片列表，默认为空
+}
+
+BraftEditor.use(Emoticon(options))
+```
+
+#### 使用注意事项
+- 使用该模块，必须引入braft-extensions/dist/emoticon.css文件
