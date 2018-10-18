@@ -130,12 +130,12 @@ import Emoticon, { defaultEmoticons } from 'braft-extensions/dist/emoticon'
 const emiticons = defaultEmoticons.map(item => require(`braft-extensions/dist/assets/${item}`))
 
 // 也可以使用自己的表情包资源，不受打包工具限制
-// const emiticons = ['http://path/to/emoticon-1.png', 'http://path/to/emoticon-2.png', 'http://path/to/emoticon-3.png', 'http://path/to/emoticon-4.png', ...]
+// const emoticons = ['http://path/to/emoticon-1.png', 'http://path/to/emoticon-2.png', 'http://path/to/emoticon-3.png', 'http://path/to/emoticon-4.png', ...]
 
 const options = {
   includeEditors: ['editor-id-1'], // 指定该模块对哪些BraftEditor生效，不传此属性则对所有BraftEditor有效
   excludeEditors: ['editor-id-2'],  // 指定该模块对哪些BraftEditor无效
-  emiticons: emiticons, // 指定可用表情图片列表，默认为空
+  emoticons: emoticons, // 指定可用表情图片列表，默认为空
 }
 
 BraftEditor.use(Emoticon(options))
