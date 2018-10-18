@@ -127,7 +127,7 @@ import Emoticon, { defaultEmoticons } from 'braft-extensions/dist/emoticon'
 
 // 转换默认表情包列表，让webpack可以正确加载到默认表情包中的图片，请确保已对png格式的文件配置了loader
 // 如果你使用的webpack版本不支持动态require，或者使用的其他打包工具，请勿使用此写法
-const emiticons = defaultEmoticons.map(item => require(`braft-extensions/dist/assets/${item}`))
+const emoticons = defaultEmoticons.map(item => require(`braft-extensions/dist/assets/${item}`))
 
 // 也可以使用自己的表情包资源，不受打包工具限制
 // const emoticons = ['http://path/to/emoticon-1.png', 'http://path/to/emoticon-2.png', 'http://path/to/emoticon-3.png', 'http://path/to/emoticon-4.png', ...]
