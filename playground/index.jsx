@@ -7,11 +7,11 @@ import BraftEditor from 'braft-editor'
 
 // import '../dist/code-highlighter.css'
 // import '../dist/color-picker.css'
-import '../dist/emoticon.css'
+// import '../dist/emoticon.css'
 
 import CodeHighlighter from '../src/code-highlighter'
-import ColorPicker from '../src/color-picker'
-import Emoticon from '../dist/emoticon'
+// import ColorPicker from '../src/color-picker'
+import Emoticon from '../src/emoticon'
 
 import 'prismjs/components/prism-java'
 import 'prismjs/components/prism-php'
@@ -37,9 +37,9 @@ BraftEditor.use(CodeHighlighter({
   ]
 }))
 
-BraftEditor.use(ColorPicker({
-  theme: 'light'
-}))
+// BraftEditor.use(ColorPicker({
+//   theme: 'light'
+// }))
 
 BraftEditor.use(Emoticon())
 
@@ -50,9 +50,13 @@ class Demo extends React.Component {
     super(props)
 
     this.state = {
-      editorState: BraftEditor.createEditorState(null)
+      editorState: BraftEditor.createEditorState('<pre data-lang="javascript" class="lang-javascript"><code class="lang-javascript">function foo () {</code><code class="lang-javascript">  console.log(123)</code><code class="lang-javascript">}</code></pre>')
     }
 
+  }
+
+  logHTML = () => {
+    console.log(this.state.editorState.toHTML())
   }
 
   handleChange = (editorState) => {
@@ -66,7 +70,12 @@ class Demo extends React.Component {
     return (
       <div>
         <div className="demo-editor" id="demo">
-          <BraftEditor id="editor-1" onChange={this.handleChange} value={editorState} contentStyle={{height: 300}}/>
+          <BraftEditor id="editor-1" extendControls={[{
+            key: 'log-html',
+            type: 'button',
+            text: 'Log HTML',
+            onClick: this.logHTML
+          }]} onChange={this.handleChange} value={editorState} contentStyle={{height: 300}}/>
         </div>
       </div>
     )

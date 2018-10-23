@@ -524,6 +524,7 @@ var getCodeBlockRenderMap = function getCodeBlockRenderMap(options) {
       if (nodeName.toLowerCase() === 'pre') {
         try {
           var syntax = node.dataset.lang;
+          node.innerHTML = node.innerHTML.replace(/<\/code><code(.+?)>/g, '<br/>').replace(/<code(.+?)>/g, '').replace(/<\/code>/g, '');
           return syntax ? {
             type: 'code-block',
             data: {
@@ -548,30 +549,37 @@ var getCodeBlockRenderMap = function getCodeBlockRenderMap(options) {
       var nextBlockType = nextBlock && nextBlock.getType();
       var syntax = block.data.syntax || syntaxs[0].syntax;
 
-      if (previousBlockType !== 'code-block' && nextBlockType !== 'code-block') {
+      if (previousBlockType !== 'code-block' && nextBlockType === 'code-block') {
         return {
-          start: "<pre data-lang=\"".concat(syntax, "\" class=\"lang-").concat(syntax, "\">"),
-          end: '</pre>'
+          start: "<pre data-lang=\"".concat(syntax, "\" class=\"lang-").concat(syntax, "\"><code class=\"lang-").concat(syntax, "\">"),
+          end: '</code>'
+        };
+      }
+
+      if (previousBlockType === 'code-block' && nextBlockType !== 'code-block') {
+        return {
+          start: "<code class=\"lang-".concat(syntax, "\">"),
+          end: '</code></pre>'
         };
       }
 
       if (previousBlockType !== 'code-block') {
         return {
-          start: "<pre data-lang=\"".concat(syntax, "\" class=\"lang-").concat(syntax, "\">"),
-          end: '<br/>'
+          start: "<pre data-lang=\"".concat(syntax, "\" class=\"lang-").concat(syntax, "\"><code class=\"lang-").concat(syntax, "\">"),
+          end: '</code></pre>'
         };
       }
 
       if (nextBlockType !== 'code-block') {
         return {
-          start: '',
-          end: '</pre>'
+          start: "<pre data-lang=\"".concat(syntax, "\" class=\"lang-").concat(syntax, "\"><code class=\"lang-").concat(syntax, "\">"),
+          end: '</code></pre>'
         };
       }
 
       return {
-        start: '',
-        end: '<br/>'
+        start: "<code class=\"lang-".concat(syntax, "\">"),
+        end: '</code>'
       };
     }
   }, {

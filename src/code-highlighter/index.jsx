@@ -179,6 +179,7 @@ export default (options = {}) => {
           try {
 
             const syntax = node.dataset.lang
+            node.innerHTML = node.innerHTML.replace(/<\/code><code(.+?)>/g, '<br/>').replace(/<code(.+?)>/g, '').replace(/<\/code>/g, '')
 
             return syntax ? {
               type: 'code-block',
@@ -206,30 +207,37 @@ export default (options = {}) => {
         const nextBlockType = nextBlock && nextBlock.getType()
         const syntax = block.data.syntax || syntaxs[0].syntax
 
-        if (previousBlockType !== 'code-block' && nextBlockType !== 'code-block') {
+        if (previousBlockType !== 'code-block' && nextBlockType === 'code-block') {
           return {
-            start: `<pre data-lang="${syntax}" class="lang-${syntax}">`,
-            end: '</pre>'
+            start: `<pre data-lang="${syntax}" class="lang-${syntax}"><code class="lang-${syntax}">`,
+            end: '</code>'
           }
         }
-
+    
+        if (previousBlockType === 'code-block' && nextBlockType !== 'code-block') {
+          return {
+            start: `<code class="lang-${syntax}">`,
+            end: '</code></pre>'
+          }
+        }
+    
         if (previousBlockType !== 'code-block') {
           return {
-            start: `<pre data-lang="${syntax}" class="lang-${syntax}">`,
-            end: '<br/>'
+            start: `<pre data-lang="${syntax}" class="lang-${syntax}"><code class="lang-${syntax}">`,
+            end: '</code></pre>'
           }
         }
-
+    
         if (nextBlockType !== 'code-block') {
           return {
-            start: '',
-            end: '</pre>'
+            start: `<pre data-lang="${syntax}" class="lang-${syntax}"><code class="lang-${syntax}">`,
+            end: '</code></pre>'
           }
         }
-
+    
         return {
-          start: '',
-          end: '<br/>',
+          start: `<code class="lang-${syntax}">`,
+          end: '</code>'
         }
 
       }
