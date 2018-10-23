@@ -179,7 +179,7 @@ export default (options = {}) => {
           try {
 
             const syntax = node.dataset.lang
-            node.innerHTML = node.innerHTML.replace(/<\/code><code(.+?)>/g, '<br/>').replace(/<code(.+?)>/g, '').replace(/<\/code>/g, '')
+            node.innerHTML = node.innerHTML.replace(/<\/code><code(.*?)>/g, '<br/>').replace(/<code(.*?)>/g, '').replace(/<\/code>/g, '')
 
             return syntax ? {
               type: 'code-block',
