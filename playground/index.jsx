@@ -50,7 +50,7 @@ class Demo extends React.Component {
     super(props)
 
     this.state = {
-      editorState: BraftEditor.createEditorState('<pre data-lang="javascript" class="lang-javascript"><code class="lang-javascript">function foo () {</code><code class="lang-javascript">  console.log(123)</code><code class="lang-javascript">}</code></pre>')
+      editorState: BraftEditor.createEditorState(`<pre data-lang="php" class="lang-php"><code class="lang-php">function foo() {<br/>    echo &quot;123&quot;<br/>}<br/><br/>function bar() {<br/>    echo &quot;ABC&quot;<br/>}</code></pre>`)
     }
 
   }

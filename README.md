@@ -141,5 +141,7 @@ const options = {
 BraftEditor.use(Emoticon(options))
 ```
 
+#### 默认表情包来自https://www.iconfinder.com/iconsets/emoji-18 [[CC BY 3.0](https://creativecommons.org/licenses/by/3.0/#)]，由[Bukeicon](https://www.iconfinder.com/bukeicon)创建
+
 #### 使用注意事项
 - 使用该模块，必须引入braft-extensions/dist/emoticon.css文件
