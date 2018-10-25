@@ -4,6 +4,7 @@
 1. 代码高亮模块 CodeHighlighter
 2. 高级取色器模块 ColorPicker
 3. 表情包扩展模块 Emoticon
+4. 输入字数限制模块 MaxLength
 
 ### 安装
 ```bash
@@ -141,7 +142,37 @@ const options = {
 BraftEditor.use(Emoticon(options))
 ```
 
-#### 默认表情包来自https://www.iconfinder.com/iconsets/emoji-18 [[CC BY 3.0](https://creativecommons.org/licenses/by/3.0/#)]，由[Bukeicon](https://www.iconfinder.com/bukeicon)创建
+#### 默认表情图片来自https://www.iconfinder.com/iconsets/emoji-18 [[CC BY 3.0](https://creativecommons.org/licenses/by/3.0/#)]，由[Bukeicon](https://www.iconfinder.com/bukeicon)创建
 
 #### 使用注意事项
 - 使用该模块，必须引入braft-extensions/dist/emoticon.css文件
+
+## 输入字数限制模块
+为编辑器增加maxLength和onReachMaxLength属性，用于限制输入字数
+
+#### 基本使用
+```js
+import 'braft-editor/dist/index.css'
+
+import BraftEditor from 'braft-editor'
+import MaxLength from 'braft-extensions/dist/max-length'
+
+const options = {
+  defaultValue: 100, // 指定默认限制数，如不指定则为Infinity(无限)
+  includeEditors: ['editor-id-1'], // 指定该模块对哪些BraftEditor生效，不传此属性则对所有BraftEditor有效
+  excludeEditors: ['editor-id-2'],  // 指定该模块对哪些BraftEditor无效
+}
+
+BraftEditor.use(MaxLength(options))
+```
+使用MaxLength扩展之后，可为编辑器组件传入maxLength和onReachMaxLength:
+```jsx
+<BraftEditor maxLength={100} onReachMaxLength={() => console.log('不能再输入了！')} />
+```
+
+#### 该模块实现思路来自于[https://stackoverflow.com/a/46071494](https://stackoverflow.com/a/46071494)，如有更好的解决办法，欢迎PR！
+
+#### 使用注意事项
+- 粘贴内容时如果超过了限制字数，则整个粘贴内容都不会被粘贴到编辑器
+- 对于富文本编辑器，限制输入字符数并不是一个很适合的做法
+- 可通过editorState.toText().length获取到内容长度再进行友好提示

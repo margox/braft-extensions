@@ -12,9 +12,11 @@ import BraftEditor from 'braft-editor'
 import CodeHighlighter from '../src/code-highlighter'
 // import ColorPicker from '../src/color-picker'
 import Emoticon from '../src/emoticon'
+import MaxLength from '../src/max-length'
 
 import 'prismjs/components/prism-java'
 import 'prismjs/components/prism-php'
+import maxLength from '../src/max-length';
 
 BraftEditor.use(CodeHighlighter({
   syntaxs: [
@@ -36,6 +38,8 @@ BraftEditor.use(CodeHighlighter({
     }
   ]
 }))
+
+BraftEditor.use(MaxLength())
 
 // BraftEditor.use(ColorPicker({
 //   theme: 'light'
@@ -70,12 +74,18 @@ class Demo extends React.Component {
     return (
       <div>
         <div className="demo-editor" id="demo">
-          <BraftEditor id="editor-1" extendControls={[{
-            key: 'log-html',
-            type: 'button',
-            text: 'Log HTML',
-            onClick: this.logHTML
-          }]} onChange={this.handleChange} value={editorState} contentStyle={{height: 300}}/>
+          <BraftEditor
+            id="editor-1"
+            extendControls={[{
+              key: 'log-html',
+              type: 'button',
+              text: 'Log HTML',
+              onClick: this.logHTML
+            }]}
+            onChange={this.handleChange}
+            value={editorState}
+            contentStyle={{height: 300}}
+          />
         </div>
       </div>
     )

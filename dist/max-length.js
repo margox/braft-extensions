@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("react"), require("braft-utils"));
+		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
-		define(["react", "braft-utils"], factory);
+		define([], factory);
 	else {
-		var a = typeof exports === 'object' ? factory(require("react"), require("braft-utils")) : factory(root["react"], root["braft-utils"]);
+		var a = factory();
 		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
 	}
-})(window, function(__WEBPACK_EXTERNAL_MODULE__0__, __WEBPACK_EXTERNAL_MODULE__5__) {
+})(window, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -91,17 +91,10 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 23);
+/******/ 	return __webpack_require__(__webpack_require__.s = 24);
 /******/ })
 /************************************************************************/
 /******/ ({
-
-/***/ 0:
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE__0__;
-
-/***/ }),
 
 /***/ 1:
 /***/ (function(module, exports) {
@@ -153,127 +146,100 @@ module.exports = _objectSpread;
 
 /***/ }),
 
-/***/ 23:
+/***/ 24:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultEmoticons", function() { return defaultEmoticons; });
 /* harmony import */ var _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(0);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var braft_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
-/* harmony import */ var braft_utils__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(braft_utils__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _styles_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(29);
-/* harmony import */ var _styles_scss__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_styles_scss__WEBPACK_IMPORTED_MODULE_3__);
 
 
+var getSelectedTextLength = function getSelectedTextLength(editorState) {
+  var currentSelection = editorState.getSelection();
+  var isCollapsed = currentSelection.isCollapsed();
+  var length = 0;
 
- // https://www.iconfinder.com/iconsets/emoji-18
+  if (!isCollapsed) {
+    var currentContent = editorState.getCurrentContent();
+    var startKey = currentSelection.getStartKey();
+    var endKey = currentSelection.getEndKey();
+    var startBlock = currentContent.getBlockForKey(startKey);
+    var isStartAndEndBlockAreTheSame = startKey === endKey;
+    var startBlockTextLength = startBlock.getLength();
+    var startSelectedTextLength = startBlockTextLength - currentSelection.getStartOffset();
+    var endSelectedTextLength = currentSelection.getEndOffset();
+    var keyAfterEnd = currentContent.getKeyAfter(endKey);
 
-var defaultEmoticons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25].map(function (item) {
-  return "".concat(item, ".png");
-});
+    if (isStartAndEndBlockAreTheSame) {
+      length += currentSelection.getEndOffset() - currentSelection.getStartOffset();
+    } else {
+      var currentKey = startKey;
 
-var insertEmoticon = function insertEmoticon(editor, editorState, src) {
-  editor.setValue(braft_utils__WEBPACK_IMPORTED_MODULE_2__["ContentUtils"].insertText(editorState, ' ', null, {
-    type: 'EMOTICON',
-    mutability: 'IMMUTABLE',
-    data: {
-      src: src
+      while (currentKey && currentKey !== keyAfterEnd) {
+        if (currentKey === startKey) {
+          length += startSelectedTextLength + 1;
+        } else if (currentKey === endKey) {
+          length += endSelectedTextLength;
+        } else {
+          length += currentContent.getBlockForKey(currentKey).getLength() + 1;
+        }
+
+        currentKey = currentContent.getKeyAfter(currentKey);
+      }
     }
-  }));
+  }
+
+  return length;
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (function (options) {
   options = _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
-    emoticons: []
+    defaultValue: Infinity
   }, options);
   var _options = options,
-      emoticons = _options.emoticons,
       includeEditors = _options.includeEditors,
-      excludeEditors = _options.excludeEditors;
+      excludeEditors = _options.excludeEditors,
+      defaultValue = _options.defaultValue;
   return {
-    type: 'entity',
+    type: 'prop-interception',
     includeEditors: includeEditors,
     excludeEditors: excludeEditors,
-    name: 'EMOTICON',
-    control: function control(props) {
-      return {
-        key: 'EMOTICON',
-        replace: 'emoji',
-        type: 'dropdown',
-        text: react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
-          className: "bfi-emoji"
-        }),
-        showArrow: false,
-        component: react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-          className: "braft-emoticon-picker"
-        }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-          className: "braft-emoticons-list"
-        }, emoticons.map(function (item, index) {
-          return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("img", {
-            onClick: function onClick() {
-              return insertEmoticon(props.editor, props.editorState, item);
-            },
-            key: index,
-            src: item
-          });
-        })))
+    interceptor: function interceptor(editorProps) {
+      var maxLength = editorProps.maxLength || defaultValue;
+
+      editorProps.handleBeforeInput = function (_, editorState) {
+        if (maxLength === Infinity) {
+          return 'not-handled';
+        }
+
+        var currentContentLength = editorState.toText().length;
+        var selectedTextLength = getSelectedTextLength(editorState);
+
+        if (currentContentLength - selectedTextLength > maxLength - 1) {
+          editorProps.onReachMaxLength && editorProps.onReachMaxLength(maxLength);
+          return 'handled';
+        }
       };
-    },
-    mutability: 'IMMUTABLE',
-    component: function component(props) {
-      var entity = props.contentState.getEntity(props.entityKey);
 
-      var _entity$getData = entity.getData(),
-          src = _entity$getData.src;
+      editorProps.handlePastedText = function (pastedText, _, editorState) {
+        if (maxLength === Infinity) {
+          return 'not-handled';
+        }
 
-      return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
-        className: "braft-emoticon-in-editor"
-      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("img", {
-        src: src
-      }), props.children);
-    },
-    importer: function importer(nodeName, node) {
-      if (nodeName.toLowerCase() === 'span' && node.classList && node.classList.contains('braft-emoticon-wrap')) {
-        var imgNode = node.querySelector('img');
-        var src = imgNode.getAttribute('src'); // 移除img节点以避免生成atomic block
+        var currentContentLength = editorState.toText().length;
+        var selectedTextLength = getSelectedTextLength(editorState);
 
-        node.removeChild(imgNode);
-        return {
-          mutability: 'IMMUTABLE',
-          data: {
-            src: src
-          }
-        };
-      }
-    },
-    exporter: function exporter(entityObject, initialText) {
-      var src = entityObject.data.src;
-      return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
-        className: "braft-emoticon-wrap"
-      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("img", {
-        src: src
-      }), initialText);
+        if (currentContentLength + pastedText.length - selectedTextLength > maxLength) {
+          editorProps.onReachMaxLength && editorProps.onReachMaxLength(maxLength);
+          return 'handled';
+        }
+      };
+
+      return editorProps;
     }
   };
 });
-
-/***/ }),
-
-/***/ 29:
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-
-/***/ 5:
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE__5__;
 
 /***/ })
 
