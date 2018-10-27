@@ -5,6 +5,7 @@
 2. 高级取色器模块 ColorPicker
 3. 表情包扩展模块 Emoticon
 4. 输入字数限制模块 MaxLength
+5. 标题区块(h1-h6)id模块 HeaderId
 
 ### 安装
 ```bash
@@ -176,3 +177,21 @@ BraftEditor.use(MaxLength(options))
 - 粘贴内容时如果超过了限制字数，则整个粘贴内容都不会被粘贴到编辑器
 - 对于富文本编辑器，限制输入字符数并不是一个很适合的做法
 - 可通过editorState.toText().length获取到内容长度再进行友好提示
+
+## 标题区块(h1-h6)id模块
+为标题区块(h1-h6)增加随机的id，便于在展示页支持锚点跳转功能
+
+#### 基本使用
+```js
+import 'braft-editor/dist/index.css'
+
+import BraftEditor from 'braft-editor'
+import HeaderId from 'braft-extensions/dist/header-id'
+
+const options = {
+  includeEditors: ['editor-id-1'], // 指定该模块对哪些BraftEditor生效，不传此属性则对所有BraftEditor有效
+  excludeEditors: ['editor-id-2'],  // 指定该模块对哪些BraftEditor无效
+}
+
+BraftEditor.use(HeaderId(options))
+```

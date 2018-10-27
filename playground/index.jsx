@@ -12,11 +12,11 @@ import BraftEditor from 'braft-editor'
 import CodeHighlighter from '../src/code-highlighter'
 // import ColorPicker from '../src/color-picker'
 import Emoticon from '../src/emoticon'
-import MaxLength from '../src/max-length'
+import HeaderId from '../src/header-id'
 
 import 'prismjs/components/prism-java'
 import 'prismjs/components/prism-php'
-import maxLength from '../src/max-length';
+// import maxLength from '../src/max-length'
 
 BraftEditor.use(CodeHighlighter({
   syntaxs: [
@@ -39,7 +39,7 @@ BraftEditor.use(CodeHighlighter({
   ]
 }))
 
-BraftEditor.use(MaxLength())
+BraftEditor.use(HeaderId())
 
 // BraftEditor.use(ColorPicker({
 //   theme: 'light'
@@ -54,7 +54,7 @@ class Demo extends React.Component {
     super(props)
 
     this.state = {
-      editorState: BraftEditor.createEditorState(`<pre data-lang="php" class="lang-php"><code class="lang-php">function foo() {<br/>    echo &quot;123&quot;<br/>}<br/><br/>function bar() {<br/>    echo &quot;ABC&quot;<br/>}</code></pre>`)
+      editorState: BraftEditor.createEditorState('<h1 id="Hello World!">Hello World!</h1>')
     }
 
   }
