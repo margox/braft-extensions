@@ -81,6 +81,7 @@ BraftEditor.use(CodeHighlighter(options))
 #### 使用注意事项
 - 使用该模块，必须引入braft-extensions/dist/code-highlighter.css文件
 - 该模块仅用于对编辑器内的代码块进行高亮展示，并不会更改编辑器输出的实际内容，如果需要在展示页面进行代码高亮，请单独使用Prism.js或其他代码高亮方案进行处理
+- 在展示页使用PrismJS进行代码高亮的时候，需要参考[PrismJS/prism#598](https://github.com/PrismJS/prism/issues/598#issuecomment-113381183)做一下处理
 
 
 ## 高级取色器模块
