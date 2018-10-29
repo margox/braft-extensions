@@ -9,43 +9,47 @@ import BraftEditor from 'braft-editor'
 // import '../dist/color-picker.css'
 // import '../dist/emoticon.css'
 
-import CodeHighlighter from '../src/code-highlighter'
+// import CodeHighlighter from '../src/code-highlighter'
 // import ColorPicker from '../src/color-picker'
-import Emoticon from '../src/emoticon'
-import HeaderId from '../src/header-id'
+// import Emoticon from '../src/emoticon'
+// import HeaderId from '../src/header-id'
 
-import 'prismjs/components/prism-java'
-import 'prismjs/components/prism-php'
+// import 'prismjs/components/prism-java'
+// import 'prismjs/components/prism-php'
 // import maxLength from '../src/max-length'
 
-BraftEditor.use(CodeHighlighter({
-  syntaxs: [
-    {
-      name: 'JavaScript',
-      syntax: 'javascript'
-    }, {
-      name: 'HTML',
-      syntax: 'html'
-    }, {
-      name: 'CSS',
-      syntax: 'css'
-    }, {
-      name: 'Java',
-      syntax: 'java',
-    }, {
-      name: 'PHP',
-      syntax: 'php'
-    }
-  ]
-}))
+import Table from '../src/table'
 
-BraftEditor.use(HeaderId())
+// BraftEditor.use(CodeHighlighter({
+//   syntaxs: [
+//     {
+//       name: 'JavaScript',
+//       syntax: 'javascript'
+//     }, {
+//       name: 'HTML',
+//       syntax: 'html'
+//     }, {
+//       name: 'CSS',
+//       syntax: 'css'
+//     }, {
+//       name: 'Java',
+//       syntax: 'java',
+//     }, {
+//       name: 'PHP',
+//       syntax: 'php'
+//     }
+//   ]
+// }))
+
+// BraftEditor.use(HeaderId())
 
 // BraftEditor.use(ColorPicker({
 //   theme: 'light'
 // }))
 
-BraftEditor.use(Emoticon())
+// BraftEditor.use(Emoticon())
+
+BraftEditor.use(Table())
 
 class Demo extends React.Component {
 
@@ -54,7 +58,7 @@ class Demo extends React.Component {
     super(props)
 
     this.state = {
-      editorState: BraftEditor.createEditorState('<h1 id="Hello World!">Hello World!</h1>')
+      editorState: BraftEditor.createEditorState('<table><tr><td>Foo</td><td>Bar</td><td>Baz</td></tr><tr><td>Foo</td><td>Bar</td><td>Baz</td></tr></table>')
     }
 
   }

@@ -1,0 +1,26 @@
+.bf-table{
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  border-spacing: 0;
+  & + .bf-table{
+    margin-top: -1px;
+  }
+  th,td{  
+    border: 1px solid #d5d5d5;
+    padding: 10px 15px;
+    overflow: visible;
+    &:hover{
+      position: relative;
+      &::before{
+        position: absolute;
+        top: -1px;
+        right: -1px;
+        bottom: -1px;
+        left: -1px;
+        border: 1px solid #a5a5a5;
+        content: '';
+      }
+    }
+  }
+}
