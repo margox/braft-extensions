@@ -51,6 +51,36 @@ import Table from '../src/table'
 
 BraftEditor.use(Table())
 
+const blockExportFn = (contentState, block) => {
+
+  if (block.type.toLowerCase() === 'atomic') {
+
+    const contentBlock = contentState.getBlockForKey(block.key)
+    const entityKey = contentBlock.getEntityAt(0)
+    const entity = contentState.getEntity(entityKey)
+    const mediaType = entity.getType().toLowerCase()
+
+    let { url, link, link_target, width, height, meta } = entity.getData()
+
+    if (mediaType === 'image') {
+
+      if (link) {
+        return (
+          <a style={{display:'inline-block'}} href={link} target={link_target}>
+            <img {...meta} src={url} width={width} height={height} style={{width, height}} />
+          </a>
+        )
+      } else {
+        return (
+          <img {...meta} src={url} width={width} height={height} style={{width, height}}/>
+        )
+      }
+    }
+
+  }
+
+}
+
 class Demo extends React.Component {
 
   constructor(props) {
@@ -86,6 +116,7 @@ class Demo extends React.Component {
               text: 'Log HTML',
               onClick: this.logHTML
             }]}
+            converts={{ blockExportFn }}
             onChange={this.handleChange}
             value={editorState}
             contentStyle={{height: 300}}

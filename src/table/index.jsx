@@ -1,76 +1,16 @@
 import './style.scss'
 import React from 'react'
 import Immutable from 'immutable'
-
-// class TableDecorator {
-
-//   constructor (options) {
-
-//     this.options = options || {}
-
-//   }
-
-//   getDecorations (block) {
-
-//     const blockKey = block.getKey()
-//     const blockText = block.getText()
-//     const decorations = Array(blockText.length).fill(null)
-
-//     if (block.getType() !== 'table') {
-//       return Immutable.List(decorations)
-//     }
-
-
-
-//   }
-
-//   getComponentForKey () {
-
-//     return () => <td />
-
-//   }
-
-//   getPropsForKey () {
-
-//   }
-
-// }
-
-const getTabeCell = (superProps) => (props) => {
-
-  const blockKey = props['data-offset-key'].split('-')[0]
-  const block = superProps.editorState.getCurrentContent().getBlockForKey(blockKey)
-  const isHeadCell = block.getData().get('isHead')
-
-  if (isHeadCell) {
-    return <th className="bf-table-cell" {...props} />
-  } else {
-    return <td className="bf-table-cell" {...props} />
-  }
-
-}
-
-const BraftTable = (props) => {
-  return (
-    <table className="bf-table">
-      <tbody>
-        <tr>{props.children}</tr>
-      </tbody>
-    </table>
-  )
-}
+import { handleKeyCommand } from './handlers'
+import { getTabeCell, Table } from './component'
 
 const getTableCellRenderMap = (props) => {
 
   return Immutable.Map({
-    'table-cell-odd': {
+    'table-cell': {
       element: getTabeCell(props),
-      wrapper: <BraftTable />
+      wrapper: <Table editorState={props.editorState}/>
     },
-    'table-cell-even': {
-      element: getTabeCell(props),
-      wrapper: <BraftTable />
-    }
   })
 
 }
@@ -78,18 +18,22 @@ const getTableCellRenderMap = (props) => {
 export default (options) => {
 
   options = {
-    defaultRows: 3,
-    defalutColumns: 3,
     ...options
   }
 
   const { defaultRows, defalutColumns, includeEditors, excludeEditors } = options
-  console.log(defaultRows, defalutColumns)
 
   return [
     {
+      type: 'prop-interception',
+      includeEditors, excludeEditors,
+      interceptor: (editorProps) => {
+        editorProps.handleKeyCommand = handleKeyCommand
+        return editorProps
+      }
+    }, {
       type: 'block',
-      name: /table-cell(.*)/,
+      name: /table-cell/,
       includeEditors, excludeEditors,
       renderMap: getTableCellRenderMap,
       importer: (nodeName, node) => {
@@ -101,11 +45,15 @@ export default (options) => {
         if (nodeName === 'th' || nodeName === 'td') {
 
           const parentTrRowIndex = node.parentNode.dataset.bfTableRowIndex
+          const colSpan = node.getAttribute('colspan')
+          const rowSpan = node.getAttribute('rowspan')
 
           return {
-            type: parentTrRowIndex * 1 % 2 ? 'table-cell-even' : 'table-cell-odd',
+            type: 'table-cell',
             data: {
-              isHead: nodeName === 'th'
+              rowIndex: parentTrRowIndex,
+              isHead: nodeName === 'th',
+              colSpan, rowSpan
             }
           }
 
