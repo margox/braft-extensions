@@ -1,7 +1,7 @@
 import './style.scss'
 import React from 'react'
 import Immutable from 'immutable'
-import { handleKeyCommand } from './handlers'
+import { handleKeyCommand, handleReturn } from './handlers'
 import { getTabeCell, Table } from './component'
 
 const getTableCellRenderMap = (props) => {
@@ -21,7 +21,7 @@ export default (options) => {
     ...options
   }
 
-  const { defaultRows, defalutColumns, includeEditors, excludeEditors } = options
+  const { includeEditors, excludeEditors } = options
 
   return [
     {
@@ -29,11 +29,12 @@ export default (options) => {
       includeEditors, excludeEditors,
       interceptor: (editorProps) => {
         editorProps.handleKeyCommand = handleKeyCommand
+        editorProps.handleReturn = handleReturn
         return editorProps
       }
     }, {
       type: 'block',
-      name: /table-cell/,
+      name: 'table-cell',
       includeEditors, excludeEditors,
       renderMap: getTableCellRenderMap,
       importer: (nodeName, node) => {

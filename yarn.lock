@@ -1145,19 +1145,19 @@ braces@^2.3.0, braces@^2.3.1:
     to-regex "^3.0.1"
 
 braft-convert@^2.1.4:
-  version "2.1.5"
-  resolved "https://registry.yarnpkg.com/braft-convert/-/braft-convert-2.1.5.tgz#7a9bb40556319d679033587406e906f6ae437a16"
+  version "2.1.9"
+  resolved "https://registry.yarnpkg.com/braft-convert/-/braft-convert-2.1.9.tgz#fd756365528877e364196f3b7839680484d00172"
   dependencies:
     draft-convert "^2.0.0"
     draft-js "^0.10.3"
 
 braft-editor@^2.1.14:
-  version "2.1.18"
-  resolved "https://registry.yarnpkg.com/braft-editor/-/braft-editor-2.1.18.tgz#3a3edf1d1078d3b7c3949a172e806197b2820201"
+  version "2.1.24"
+  resolved "https://registry.yarnpkg.com/braft-editor/-/braft-editor-2.1.24.tgz#be03d428720b035c53210cc450dc97b19ee94454"
   dependencies:
     "@babel/runtime" "^7.0.0"
     braft-convert "^2.1.4"
-    braft-finder "^0.0.12"
+    braft-finder "^0.0.14"
     braft-utils "^3.0.4"
     draft-convert "^2.0.0"
     draft-js "^0.10.3"
@@ -1165,13 +1165,13 @@ braft-editor@^2.1.14:
     draftjs-utils "^0.9.4"
     immutable "~3.7.4"
 
-braft-finder@^0.0.12:
-  version "0.0.12"
-  resolved "https://registry.yarnpkg.com/braft-finder/-/braft-finder-0.0.12.tgz#d8b3164db0e62cf21ba9a0b53242536bfe5f5c6d"
+braft-finder@^0.0.14:
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/braft-finder/-/braft-finder-0.0.14.tgz#f5a65548a00dbe3193be58a90fffe5264f0a1184"
 
 braft-utils@^3.0.4:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/braft-utils/-/braft-utils-3.0.4.tgz#dd3d00b8fb4c5e6548a80cbd08389bcc40361756"
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/braft-utils/-/braft-utils-3.0.5.tgz#8b29ce42be8134a62fee59fba5971ad0fb73f56f"
 
 brorand@^1.0.1:
   version "1.1.0"
@@ -1694,7 +1694,7 @@ copy-webpack-plugin@^4.5.3:
 
 core-js@^1.0.0:
   version "1.2.7"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-1.2.7.tgz#652294c14651db28fa93bd2d5ff2983a4f08c636"
+  resolved "http://registry.npmjs.org/core-js/-/core-js-1.2.7.tgz#652294c14651db28fa93bd2d5ff2983a4f08c636"
 
 core-js@^2.4.0:
   version "2.5.7"
@@ -6085,8 +6085,8 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
 ua-parser-js@^0.7.18:
-  version "0.7.18"
-  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.18.tgz#a7bfd92f56edfb117083b69e31d2aa8882d4b1ed"
+  version "0.7.19"
+  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.19.tgz#94151be4c0a7fb1d001af7022fdaca4642659e4b"
 
 uglify-es@^3.3.4:
   version "3.3.10"

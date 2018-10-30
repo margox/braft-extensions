@@ -1,26 +1,118 @@
-.bf-table{
-  width: 100%;
-  table-layout: fixed;
-  border-collapse: collapse;
-  border-spacing: 0;
-  & + .bf-table{
-    margin-top: -1px;
-  }
-  th,td{  
-    border: 1px solid #d1d5d9;
-    padding: 10px 15px;
-    overflow: visible;
+.bf-table-container{
+  position: relative;
+  margin: 0 0 0 -10px;
+  padding: 10px 0 0 10px;
+
+  .bf-table-row-tools,
+  .bf-table-column-tools{
+    position: absolute;
+    z-index: 2;
+    border-radius: 3px;
+    background-color: #e1e5e9;
+    cursor: default;
     &:hover{
-      position: relative;
-      &::before{
-        position: absolute;
-        top: -1px;
-        right: -1px;
-        bottom: -1px;
-        left: -1px;
-        border: 1px solid #717579;
-        content: '';
+      z-index: 3;
+    }
+  }
+
+  .bf-table-row-tools{
+    top: 10px;
+    bottom: 0;
+    left: 0;
+    width: 8px;
+  }
+
+  .bf-table-column-tools{
+    top: 0;
+    right: 0;
+    left: 10px;
+    height: 8px;
+  }
+
+  .bf-row-tool-handler{
+    box-sizing: border-box;
+    background-color: #e1e5e9;
+    border-top: 1px solid #c1c5c9;
+    cursor: pointer;
+    &:first-child{
+      border-top: none;
+      border-radius: 3px 3px 0 0;
+    }
+    &:last-child{
+      border-radius: 0 0 3px 3px;
+    }
+    &:hover{
+      background-color: #c1c5c9;
+    }
+  }
+
+  .bf-row-tool-up,
+  .bf-row-tool-down{
+    position: relative;
+    height: 50%;
+    &:hover{
+      .bf-insert-row-before,
+      .bf-insert-row-after{
+        visibility: visible;
       }
     }
   }
+  .bf-insert-row-before,
+  .bf-insert-row-after{
+    visibility: hidden;
+    position: absolute;
+    right: -22px;
+    width: 20px;
+    height: 20px;
+    background-color: #21242a;
+    border-radius: 3px;
+    box-shadow: 0 2px 5px rgba(#21242a, .1);
+    color: #fff;
+    font-size: 14px;
+    line-height: 23px;
+    text-align: center;
+    &::before{
+      position: absolute;
+      top: 6px;
+      left: -6px;
+      border: 4px solid transparent;
+      border-right-color: #21242a;
+      content: '';
+    }
+  }
+  .bf-insert-row-before{
+    top: -10px;
+  }
+  .bf-insert-row-after{
+    bottom: -10px;
+  }
+
+  .bf-table{
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-spacing: 0;
+    & + .bf-table{
+      margin-top: -1px;
+    }
+    th,td{  
+      border: 1px solid #d1d5d9;
+      padding: 10px 15px;
+      overflow: visible;
+      cursor: text;
+      &.active{
+        position: relative;
+        &::before{
+          position: absolute;
+          top: -1px;
+          right: -1px;
+          bottom: -1px;
+          left: -1px;
+          border: 1px solid #717579;
+          content: '';
+        }
+      }
+    }
+  }
+
 }

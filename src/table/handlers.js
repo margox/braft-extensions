@@ -1,3 +1,4 @@
+import { RichUtils } from 'draft-js'
 import { ContentUtils } from 'braft-utils'
 
 export const handleKeyCommand = (command, editorState) => {
@@ -19,5 +20,18 @@ export const handleKeyCommand = (command, editorState) => {
   } else if (command === 'tab') {
     return 'handled'
   }
+
+}
+
+export const handleReturn = (event, editorState, editor) => {
+
+  const blockType = ContentUtils.getSelectionBlockType(editorState)
+
+  if (blockType !== 'table-cell') {
+    return 'not-handled'
+  }
+
+  editor.setValue(RichUtils.insertSoftNewline(editorState))
+  return 'handled'
 
 }

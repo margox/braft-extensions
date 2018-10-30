@@ -4,82 +4,9 @@ import './styles.scss'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import BraftEditor from 'braft-editor'
-
-// import '../dist/code-highlighter.css'
-// import '../dist/color-picker.css'
-// import '../dist/emoticon.css'
-
-// import CodeHighlighter from '../src/code-highlighter'
-// import ColorPicker from '../src/color-picker'
-// import Emoticon from '../src/emoticon'
-// import HeaderId from '../src/header-id'
-
-// import 'prismjs/components/prism-java'
-// import 'prismjs/components/prism-php'
-// import maxLength from '../src/max-length'
-
 import Table from '../src/table'
 
-// BraftEditor.use(CodeHighlighter({
-//   syntaxs: [
-//     {
-//       name: 'JavaScript',
-//       syntax: 'javascript'
-//     }, {
-//       name: 'HTML',
-//       syntax: 'html'
-//     }, {
-//       name: 'CSS',
-//       syntax: 'css'
-//     }, {
-//       name: 'Java',
-//       syntax: 'java',
-//     }, {
-//       name: 'PHP',
-//       syntax: 'php'
-//     }
-//   ]
-// }))
-
-// BraftEditor.use(HeaderId())
-
-// BraftEditor.use(ColorPicker({
-//   theme: 'light'
-// }))
-
-// BraftEditor.use(Emoticon())
-
 BraftEditor.use(Table())
-
-const blockExportFn = (contentState, block) => {
-
-  if (block.type.toLowerCase() === 'atomic') {
-
-    const contentBlock = contentState.getBlockForKey(block.key)
-    const entityKey = contentBlock.getEntityAt(0)
-    const entity = contentState.getEntity(entityKey)
-    const mediaType = entity.getType().toLowerCase()
-
-    let { url, link, link_target, width, height, meta } = entity.getData()
-
-    if (mediaType === 'image') {
-
-      if (link) {
-        return (
-          <a style={{display:'inline-block'}} href={link} target={link_target}>
-            <img {...meta} src={url} width={width} height={height} style={{width, height}} />
-          </a>
-        )
-      } else {
-        return (
-          <img {...meta} src={url} width={width} height={height} style={{width, height}}/>
-        )
-      }
-    }
-
-  }
-
-}
 
 class Demo extends React.Component {
 
@@ -88,7 +15,15 @@ class Demo extends React.Component {
     super(props)
 
     this.state = {
-      editorState: BraftEditor.createEditorState('<table><tr><td>Foo</td><td>Bar</td><td>Baz</td></tr><tr><td>Foo</td><td>Bar</td><td>Baz</td></tr></table>')
+      editorState: BraftEditor.createEditorState(`
+        <table>
+          <tr><td>Foo</td><td>Bar</td><td>Baz</td></tr>
+          <tr><td>Foo</td><td>Bar</td><td>Baz</td></tr>
+          <tr><td>Foo</td><td>Bar</td><td>Baz</td></tr>
+          <tr><td>Foo</td><td>Bar</td><td>Baz</td></tr>
+          <tr><td>Foo</td><td>Bar</td><td>Baz</td></tr>
+        </table>
+      `)
     }
 
   }
@@ -109,14 +44,12 @@ class Demo extends React.Component {
       <div>
         <div className="demo-editor" id="demo">
           <BraftEditor
-            id="editor-1"
             extendControls={[{
               key: 'log-html',
               type: 'button',
               text: 'Log HTML',
               onClick: this.logHTML
             }]}
-            converts={{ blockExportFn }}
             onChange={this.handleChange}
             value={editorState}
             contentStyle={{height: 300}}
