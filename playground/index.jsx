@@ -4,6 +4,7 @@ import './styles.scss'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import BraftEditor from 'braft-editor'
+import { ContentUtils } from 'braft-utils'
 
 // import '../dist/code-highlighter.css'
 // import '../dist/color-picker.css'
