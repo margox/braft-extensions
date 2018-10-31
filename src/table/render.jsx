@@ -1,21 +1,6 @@
 import React from 'react'
 import Immutable from 'immutable'
 
-// export const getTabeCell = ({ editorState }) => {
-
-//   return (props) => {
-
-//     return (
-//       <td
-//         {...props}
-//         className="bf-table-cell"
-//       />
-//     )
-
-//   }
-
-// }
-
 export class Table extends React.Component {
 
   state = {
@@ -34,6 +19,9 @@ export class Table extends React.Component {
 
   colResizeIndex = 0
   colResizeStartAt = 0
+
+  startCellKey = null
+  endCellKey = null
 
   handleToolbarMouseDown = (event) => {
     event.preventDefault()
@@ -159,9 +147,15 @@ export class Table extends React.Component {
 
     const { editorState, children } = props
 
+    console.log(editorState.getCurrentContent().getBlockMap())
+
+    this.startCellKey = children[0].key
+    this.endCellKey = children[children.length - 1].key
+
     children.forEach((cell, cellIndex) => {
 
       const cellBlock = editorState.getCurrentContent().getBlockForKey(cell.key)
+      const tableKey = cellBlock.getData().get('tableKey')
       const rowIndex = cellBlock.getData().get('rowIndex') * 1
       const isHead = cellBlock.getData().get('isHead')
       const colSpan = cellBlock.getData().get('colSpan')
@@ -184,6 +178,7 @@ export class Table extends React.Component {
         'data-is-head': isHead,
         'data-row-index': rowIndex,
         'data-cell-index': cellIndex,
+        'data-table-key': tableKey,
         className: 'bf-table-cell',
         colSpan: colSpan,
         rowSpan: rowSpan,
