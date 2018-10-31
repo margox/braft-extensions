@@ -25,7 +25,7 @@
     "babel-eslint": "^9.0.0",
     "babel-loader": "^8.0.0",
     "babel-plugin-transform-runtime": "^6.23.0",
-    "braft-editor": "^2.1.14",
+    "braft-editor": "^2.1.25",
     "copy-webpack-plugin": "^4.5.3",
     "css-loader": "^0.28.11",
     "draft-js-prism": "^1.0.6",
