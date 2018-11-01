@@ -1,4 +1,3 @@
-import { genKey } from 'draft-js'
 import { rebuildTable } from './utils'
 
 export const tableImportFn = (nodeName, node) => {
@@ -12,8 +11,8 @@ export const tableImportFn = (nodeName, node) => {
     const tableKey = node.dataset.tableKey
     const colIndex = node.dataset.colIndex * 1
     const rowIndex = node.dataset.rowIndex * 1
-    const colSpan = node.getAttribute('colspan')
-    const rowSpan = node.getAttribute('rowspan')
+    const colSpan = node.colSpan
+    const rowSpan = node.rowSpan
 
     return {
       type: 'table-cell',

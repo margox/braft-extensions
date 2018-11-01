@@ -199,7 +199,6 @@
       .bf-table-cell{  
         background-color: #fcfcfc;
         border: 1px solid #d1d5d9;
-        padding: 10px 15px;
         overflow: visible;
         cursor: text;
         &[data-active="true"]{
@@ -213,6 +212,9 @@
             border: 2px solid #07a9fe;
             content: '';
           }
+        }
+        &>div{
+          padding: 10px 15px;
         }
       }
     }

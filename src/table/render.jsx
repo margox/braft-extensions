@@ -78,9 +78,7 @@ export class Table extends React.Component {
   }
 
   insertRow = (event) => {
-
-    this.props.editor.setValue(TableUtils.insertRow(this.props.editorState, this.tableKey, event.currentTarget.dataset.index * 1))
-
+    this.props.editor.setValue(TableUtils.insertRow(this.props.editorState, this.tableKey, this.colLength, event.currentTarget.dataset.index * 1))
   }
 
   componentDidMount () {
@@ -146,8 +144,7 @@ export class Table extends React.Component {
 
     props = props || this.props
 
-    let colIndex = 0
-    let lastRowIndex = -1
+    this.colLength = 0
 
     const tableRows = []
     const colToolHandlers = []
@@ -161,23 +158,25 @@ export class Table extends React.Component {
     children.forEach((cell, cellIndex) => {
 
       const cellBlock = editorState.getCurrentContent().getBlockForKey(cell.key)
-      const tableKey = cellBlock.getData().get('tableKey')
-      const rowIndex = cellBlock.getData().get('rowIndex') * 1
-      const isHead = cellBlock.getData().get('isHead')
-      const colSpan = cellBlock.getData().get('colSpan')
-      const rowSpan = cellBlock.getData().get('rowSpan')
+      const cellBlockData = cellBlock.getData()
+      const tableKey = cellBlockData.get('tableKey')
+      const colIndex = cellBlockData.get('colIndex') * 1
+      const rowIndex = cellBlockData.get('rowIndex') * 1
+      const isHead = cellBlockData.get('isHead')
+      const colSpan = cellBlockData.get('colSpan')
+      const rowSpan = cellBlockData.get('rowSpan')
 
       this.tableKey = tableKey
 
       if (rowIndex === 0) {
 
-        const colSpan = (cellBlock.getData().get('colSpan') || 1) * 1  
+        const colSpan = (cellBlockData.get('colSpan') || 1) * 1  
 
-        for (var ii = colIndex;ii < colIndex + colSpan;ii ++) {
-          colToolHandlers[colIndex] = {key: cell.key, width: 0}
+        for (var ii = this.colLength;ii < this.colLength + colSpan;ii ++) {
+          colToolHandlers[this.colLength] = {key: cell.key, width: 0}
         }
 
-        colIndex += colSpan
+        this.colLength += colSpan
 
       }
 
@@ -185,10 +184,10 @@ export class Table extends React.Component {
         'data-active': cellIndex === this.state.activeCellIndex,
         'data-is-head': isHead,
         'data-row-index': rowIndex,
-        'data-col-index': (tableRows[rowIndex] || []).length,
+        'data-col-index': colIndex || (tableRows[rowIndex] || []).length,
         'data-cell-index': cellIndex,
         'data-table-key': tableKey,
-        className: 'bf-table-cell',
+        className: `bf-table-cell ${cell.props.className}`,
         colSpan: colSpan,
         rowSpan: rowSpan,
         onClick: this.handleCellClick
@@ -204,7 +203,7 @@ export class Table extends React.Component {
     })
 
     const tableWidth = this.tableRef.getBoundingClientRect().width
-    const defaultColWidth = tableWidth / colIndex
+    const defaultColWidth = tableWidth / this.colLength
 
     this.setState({ tableRows, colToolHandlers, rowToolHandlers, defaultColWidth }, this.adjustToolbarHandlers)
 
