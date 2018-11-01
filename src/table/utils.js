@@ -95,6 +95,14 @@ const updateTableBlocks = (contentState, selection, focusKey, tableBlocks, table
 
 }
 
+const filterBlocks = (contentBlocks, propName, propValue, operator = '==') => {
+
+  return contentBlocks.filter((block) => {
+    return valueComparison(block.getData().get(propName), propValue, operator)
+  })
+
+}
+
 export const rebuildTable = (tableNode) => {
 
   const tableKey = genKey()
@@ -107,12 +115,12 @@ export const rebuildTable = (tableNode) => {
       let colIndex = cellIndex
       let tx, ty
 
-      for(;cache[cellIndex] && cache[cellIndex][colIndex];++colIndex) {
-        for (tx = colIndex;tx < colIndex + (cell.colSpan || 1); ++ tx) {
-          for (ty = rowIndex; ty < rowIndex + (cell.rowSpan || 1); ++ ty) {
-            cache[ty] = cache[ty] || []
-            cache[ty][tx] = true
-          }
+      for(;cache[cellIndex] && cache[cellIndex][colIndex];++colIndex){/*_*/}
+
+      for (tx = colIndex;tx < colIndex + cell.colSpan; ++tx) {
+        for (ty = rowIndex; ty < rowIndex + cell.rowSpan; ++ty) {
+          cache[ty] = cache[ty] || []
+          cache[ty][tx] = true
         }
       }
 
@@ -126,17 +134,29 @@ export const rebuildTable = (tableNode) => {
 
 }
 
-export const filterBlocks = (contentBlocks, propName, propValue, operator = '==') => {
 
-  return contentBlocks.filter((block) => {
-    return valueComparison(block.getData().get(propName), propValue, operator)
-  })
+export const getCellCountForInsert = (tableBlocks, rowIndex) => {
+
+  return filterBlocks(tableBlocks, 'rowIndex', rowIndex).reduce((count, block) => {
+    return count + (block.getData().get('colSpan') || 1) * 1
+  }, 0)
 
 }
 
-// export const insertColumn = (editorState, tableKey, colIndex) => {
-//   // ...
-// }
+export const getCellCountOfColumn = (tableBlocks, colIndex) => {
+
+}
+
+export const insertColumn = (editorState, tableKey, colIndex) => {
+
+  const contentState = editorState.getCurrentContent()
+  const contentBlocks = contentState.getBlockMap().toSeq()
+
+  const tableBlocks = filterBlocks(contentBlocks, 'tableKey', tableKey)
+  const blocksBefore = filterBlocks(tableBlocks, 'colIndex', colIndex, '<').toSeq()
+  const blocksAfter = filterBlocks(tableBlocks, 'colIndex', colIndex, '>=').toSeq()
+
+}
 
 export const insertRow = (editorState, tableKey, counts, rowIndex) => {
 
@@ -158,7 +178,8 @@ export const insertRow = (editorState, tableKey, counts, rowIndex) => {
 
   }).toSeq()
 
-  const nextColLength = filterBlocks(tableBlocks, 'rowIndex', rowIndex).count()
+  const nextColLength = getCellCountForInsert(tableBlocks, rowIndex)
+  console.log(nextColLength)
   const rowBlocks = createRowBlocks(tableKey, rowIndex, nextColLength || counts)
   const firstCellKey = rowBlocks.first().getKey()
 

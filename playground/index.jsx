@@ -17,8 +17,9 @@ class Demo extends React.Component {
     this.state = {
       editorState: BraftEditor.createEditorState(`
         <table>
-          <tr><td>1</td><td rowspan="2">2</td><td>3</td></tr>
-          <tr><td>4</td><td>5</td></tr>
+          <tr><td>1</td><td>2</td><td>3</td></tr>
+          <tr><td colspan="2" rowspan="2">4</td><td>5</td></tr>
+          <tr><td>6</td></tr>
         </table>
       `)
     }
@@ -50,7 +51,7 @@ class Demo extends React.Component {
             }]}
             onChange={this.handleChange}
             value={editorState}
-            contentStyle={{height: 300}}
+            contentStyle={{height: 700}}
           />
         </div>
       </div>

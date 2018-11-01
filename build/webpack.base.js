@@ -2,6 +2,17 @@ var path = require('path')
   , fs = require('fs')
   , ExtractTextPlugin = require('extract-text-webpack-plugin')
 
+var jsLoader = [
+  {
+    loader: 'babel-loader',
+    options: {
+      ...JSON.parse(fs.readFileSync(path.resolve(__dirname, '../.babelrc'))),
+    },
+  }
+]
+
+process.env.NODE_ENV === 'production' && jsLoader.push('eslint-loader')
+
 module.exports = {
   module: {
     //加载器配置
@@ -9,30 +20,16 @@ module.exports = {
       { 
         test: /\.(scss|css)$/,
         use: ExtractTextPlugin.extract([
-          // 'style-loader',
           'css-loader',
           'sass-loader'
         ])
-        // use: [
-        //   'style-loader',
-        //   'css-loader',
-        //   'sass-loader'
-        // ]
       }, {
         test: /\.(js|jsx)$/,
         exclude: [
           /node_modules/,
           /dist/
         ],
-        use: [
-          {
-            loader: 'babel-loader',
-            options: {
-              ...JSON.parse(fs.readFileSync(path.resolve(__dirname, '../.babelrc'))),
-            },
-          },
-          'eslint-loader'
-        ]
+        use: jsLoader
       }, {
         test: /\.(png|svg)$/,
         use: [
