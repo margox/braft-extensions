@@ -1,5 +1,6 @@
 import React from 'react'
 import Immutable from 'immutable'
+import * as TableUtils from './utils'
 
 export class Table extends React.Component {
 
@@ -76,6 +77,12 @@ export class Table extends React.Component {
 
   }
 
+  insertRow = (event) => {
+
+    this.props.editor.setValue(TableUtils.insertRow(this.props.editorState, this.tableKey, event.currentTarget.dataset.index * 1))
+
+  }
+
   componentDidMount () {
 
     this.mapPropsToState(this.props)
@@ -118,9 +125,9 @@ export class Table extends React.Component {
     let needUpdate = false
     const rowToolHandlers = [ ...this.state.rowToolHandlers ]
 
-    Object.keys(this.rowRefs).forEach((key, index) => {
+    Object.keys(this.rowRefs).forEach((index) => {
 
-      const rowHeight = this.rowRefs[key].getBoundingClientRect().height
+      const rowHeight = this.rowRefs[index] ? this.rowRefs[index].getBoundingClientRect().height : 40
 
       if (rowToolHandlers[index] && rowToolHandlers[index].height !== rowHeight) {
         needUpdate = true
@@ -140,14 +147,13 @@ export class Table extends React.Component {
     props = props || this.props
 
     let colIndex = 0
+    let lastRowIndex = -1
 
     const tableRows = []
     const colToolHandlers = []
     const rowToolHandlers = []
 
     const { editorState, children } = props
-
-    console.log(editorState.getCurrentContent().getBlockMap())
 
     this.startCellKey = children[0].key
     this.endCellKey = children[children.length - 1].key
@@ -160,6 +166,8 @@ export class Table extends React.Component {
       const isHead = cellBlock.getData().get('isHead')
       const colSpan = cellBlock.getData().get('colSpan')
       const rowSpan = cellBlock.getData().get('rowSpan')
+
+      this.tableKey = tableKey
 
       if (rowIndex === 0) {
 
@@ -177,6 +185,7 @@ export class Table extends React.Component {
         'data-active': cellIndex === this.state.activeCellIndex,
         'data-is-head': isHead,
         'data-row-index': rowIndex,
+        'data-col-index': (tableRows[rowIndex] || []).length,
         'data-cell-index': cellIndex,
         'data-table-key': tableKey,
         className: 'bf-table-cell',
@@ -191,7 +200,7 @@ export class Table extends React.Component {
       } else {
         tableRows[rowIndex].push(newCell)
       }
-  
+
     })
 
     const tableWidth = this.tableRef.getBoundingClientRect().width
@@ -260,10 +269,10 @@ export class Table extends React.Component {
         {this.state.rowToolHandlers.map((item, index) => (
           <div className="bf-row-tool-handler" data-key={item.key} style={{height: item.height}} key={index}>
             <div className="bf-row-tool-up">
-              <div className="bf-insert-row-before"><i className="bfi-add"></i></div>
+              <div className="bf-insert-row-before" data-index={index} onClick={this.insertRow}><i className="bfi-add"></i></div>
             </div>
             <div className="bf-row-tool-down">
-              <div className="bf-insert-row-after"><i className="bfi-add"></i></div>
+              <div className="bf-insert-row-after" data-index={index + 1} onClick={this.insertRow}><i className="bfi-add"></i></div>
             </div>
           </div>
         ))}
@@ -298,7 +307,7 @@ export const getTableCellRenderMap = (props) => {
   return Immutable.Map({
     'table-cell': {
       element: 'td',
-      wrapper: <Table editorState={props.editorState}/>
+      wrapper: <Table editor={props.editor} editorState={props.editorState}/>
     },
   })
 

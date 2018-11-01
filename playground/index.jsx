@@ -29,7 +29,8 @@ class Demo extends React.Component {
   }
 
   logHTML = () => {
-    console.log(this.state.editorState.toHTML())
+    const blockMap = this.state.editorState.getCurrentContent().getBlockMap()
+    // console.log(this.state.editorState.toHTML())
   }
 
   handleChange = (editorState) => {
