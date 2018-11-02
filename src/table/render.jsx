@@ -112,6 +112,10 @@ export class Table extends React.Component {
 
   selectRow = (event) => {
 
+    if (event.target.dataset.role === 'insert-row') {
+      return false
+    }
+
     const selectedCells = [] 
     const selectedRowIndex = event.currentTarget.dataset.index * 1
 
@@ -128,7 +132,17 @@ export class Table extends React.Component {
   }
 
   insertRow = (event) => {
-    this.props.editor.setValue(TableUtils.insertRow(this.props.editorState, this.tableKey, this.colLength, event.currentTarget.dataset.index * 1))
+
+    const rowIndex = event.currentTarget.dataset.index * 1
+
+    this.setState({
+      selectedCells: [],
+      selectedRowIndex: null,
+      selectedColumnIndex: null
+    }, () => {
+      this.props.editor.setValue(TableUtils.insertRow(this.props.editorState, this.tableKey, this.colLength, rowIndex))
+    })
+
   }
 
   componentDidMount () {
@@ -319,14 +333,17 @@ export class Table extends React.Component {
     const { rowToolHandlers, selectedRowIndex } = this.state
 
     return (
-      <div className="bf-table-row-tools" onMouseDown={this.handleToolbarMouseDown} data-active={!!selectedRowIndex} contentEditable={false}>
+      <div className="bf-table-row-tools" onMouseDown={this.handleToolbarMouseDown} data-active={selectedRowIndex >= 0} contentEditable={false}>
         {rowToolHandlers.map((item, index) => (
           <div className="bf-row-tool-handler" data-active={selectedRowIndex == index} data-index={index} onClick={this.selectRow} data-key={item.key} style={{height: item.height}} key={index}>
             <div className="bf-row-tool-up">
-              <div className="bf-insert-row-before" data-index={index} onClick={this.insertRow}><i className="bfi-add"></i></div>
+              <div className="bf-insert-row-before" data-role="insert-row" data-index={index} onClick={this.insertRow}><i className="bfi-add"></i></div>
+            </div>
+            <div className="bf-row-tool-center">
+              <div className="bf-remove-row" data-role="remove-row" data-index={index} onClick={this.removeRow}><i className="bfi-bin"></i></div>
             </div>
             <div className="bf-row-tool-down">
-              <div className="bf-insert-row-after" data-index={index + 1} onClick={this.insertRow}><i className="bfi-add"></i></div>
+              <div className="bf-insert-row-after" data-role="insert-row" data-index={index + 1} onClick={this.insertRow}><i className="bfi-add"></i></div>
             </div>
           </div>
         ))}

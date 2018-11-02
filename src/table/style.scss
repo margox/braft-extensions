@@ -57,6 +57,13 @@
     }
     &[data-active="true"]{
       background-color: #07a9fe;
+      .bf-row-tool-up,
+      .bf-row-tool-down{
+        display: none;
+      }
+      .bf-row-tool-center{
+        display: block;
+      }
     }
   }
 
@@ -123,10 +130,22 @@
     }
   }
 
+  .bf-row-tool-center{
+    display: none;
+    position: relative;
+    height: 100%;
+    &:hover{
+      .bf-remove-row{
+        display: block;
+      }
+    }
+  }
+
   .bf-insert-col-before,
   .bf-insert-col-after,
   .bf-insert-row-before,
-  .bf-insert-row-after{
+  .bf-insert-row-after,
+  .bf-remove-row{
     display: none;
     box-sizing: content-box;
     position: absolute;
@@ -147,6 +166,7 @@
       background-color: currentColor;
       border-radius: 3px;
       box-shadow: 0 2px 5px rgba(#000, .1);
+      pointer-events: none;
       &::before{
         display: block;
         width: 20px;
@@ -171,7 +191,8 @@
   }
 
   .bf-insert-row-before,
-  .bf-insert-row-after{
+  .bf-insert-row-after,
+  .bf-remove-row{
     right: -25px;
     padding-left: 5px;
     &::before{
@@ -181,17 +202,24 @@
     }
   }
 
+  .bf-insert-col-before{
+    left: -10px;
+  }
+  .bf-insert-col-after{
+    right: -10px;
+  }
   .bf-insert-row-before{
     top: -10px;
   }
   .bf-insert-row-after{
     bottom: -10px;
   }
-  .bf-insert-col-before{
-    left: -10px;
-  }
-  .bf-insert-col-after{
-    right: -10px;
+  .bf-remove-row{
+    top: 50%;
+    transform: translateY(-50%);
+    &:hover{
+      color: #e74c3c;
+    }
   }
 
   .bf-table{
