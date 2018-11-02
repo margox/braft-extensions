@@ -11,10 +11,12 @@
     background-color: #f1f5f9;
     cursor: default;
     opacity: 0;
+    &[data-active="true"],
     &:hover{
       z-index: 3;
       opacity: 1;
     }
+    
   }
 
   .bf-table-row-tools{
@@ -52,6 +54,9 @@
     cursor: pointer;
     &:hover{
       background-color: #e1e5e9;
+    }
+    &[data-active="true"]{
+      background-color: #07a9fe;
     }
   }
 
@@ -197,10 +202,14 @@
     border-spacing: 0;
     tbody{
       .bf-table-cell{  
-        background-color: #fcfcfc;
+        background-color: #fff;
         border: 1px solid #d1d5d9;
         overflow: visible;
         cursor: text;
+        &[data-is-head="true"]{
+          background-color: #fafafa;
+          font-weight: bold;
+        }
         &[data-active="true"]{
           position: relative;
           &::before{
@@ -209,7 +218,7 @@
             right: -1px;
             bottom: -1px;
             left: -1px;
-            border: 2px solid #07a9fe;
+            border: 1px solid #07a9fe;
             content: '';
           }
         }

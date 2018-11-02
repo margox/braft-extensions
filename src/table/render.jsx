@@ -11,7 +11,9 @@ export class Table extends React.Component {
     defaultColWidth: 0,
     colResizing: false,
     colResizeOffset: 0,
-    activeCellIndex: -1
+    selectedCells: [],
+    selectedRowIndex: null,
+    selectedColumnIndex: null
   }
 
   tableRef = null
@@ -26,6 +28,24 @@ export class Table extends React.Component {
 
   handleToolbarMouseDown = (event) => {
     event.preventDefault()
+  }
+
+  handleKeyDown = (event) => {
+
+    const { selectedRowIndex } = this.state
+
+    if (selectedRowIndex && event.keyCode === 8) {
+
+      this.setState({
+        selectedRowIndex: null
+      }, () => {
+        this.props.editor.setValue(TableUtils.removeRow(this.props.editorState, this.tableKey, selectedRowIndex))
+      })
+
+      event.preventDefault()
+
+    }
+
   }
 
   handleMouseUp = () => {
@@ -69,11 +89,41 @@ export class Table extends React.Component {
 
   }
 
-  handleCellClick = (event) => {
+  selectCell = (event) => {
+
+    const { selectedCells } = this.state
+    const { cellKey } = event.currentTarget.dataset
+
+    let newSelectedCells = []
+
+    if (event.getModifierState('Shift')) {
+      newSelectedCells = ~selectedCells.indexOf(cellKey) ? selectedCells.filter(item => item !== cellKey) : [ ...selectedCells ,cellKey ]
+    } else {
+      newSelectedCells = ~selectedCells.indexOf(cellKey) ? [] : [cellKey]
+    }
 
     this.setState({
-      activeCellIndex: event.currentTarget.dataset.cellIndex * 1
+      selectedCells: newSelectedCells,
+      selectedRowIndex: null,
+      selectedColumnIndex: null,
     }, this.mapPropsToState)
+
+  }
+
+  selectRow = (event) => {
+
+    const selectedCells = [] 
+    const selectedRowIndex = event.currentTarget.dataset.index * 1
+
+    this.props.children.filter(cell => {
+      const cellBlock = this.props.editorState.getCurrentContent().getBlockForKey(cell.key)
+      const cellRowIndex = cellBlock.getData().get('rowIndex')
+      if (cellRowIndex == selectedRowIndex) {
+        selectedCells.push(cell.key)
+      }
+    })
+
+    this.setState({ selectedCells, selectedRowIndex, selectedColumnIndex: null }, this.mapPropsToState)
 
   }
 
@@ -85,6 +135,7 @@ export class Table extends React.Component {
 
     this.mapPropsToState(this.props)
 
+    document.body.addEventListener('keydown', this.handleKeyDown, false)
     document.body.addEventListener('mousemove', this.handleMouseMove, false)
     document.body.addEventListener('mouseup', this.handleMouseUp, false)
 
@@ -96,6 +147,7 @@ export class Table extends React.Component {
 
   componentWillUnmount () {
 
+    document.body.removeEventListener('keydown', this.handleKeyDown, false)
     document.body.removeEventListener('mousemove', this.handleMouseMove, false)
     document.body.removeEventListener('mouseup', this.handleMouseUp, false)
 
@@ -181,16 +233,17 @@ export class Table extends React.Component {
       }
 
       const newCell = React.cloneElement(cell, {
-        'data-active': cellIndex === this.state.activeCellIndex,
+        'data-active': !!~this.state.selectedCells.indexOf(cell.key),
         'data-is-head': isHead,
         'data-row-index': rowIndex,
         'data-col-index': colIndex || (tableRows[rowIndex] || []).length,
         'data-cell-index': cellIndex,
+        'data-cell-key': cell.key,
         'data-table-key': tableKey,
         className: `bf-table-cell ${cell.props.className}`,
         colSpan: colSpan,
         rowSpan: rowSpan,
-        onClick: this.handleCellClick
+        onClick: this.selectCell
       })
 
       if (!tableRows[rowIndex]) {
@@ -263,10 +316,12 @@ export class Table extends React.Component {
 
   createRowTools () {
 
+    const { rowToolHandlers, selectedRowIndex } = this.state
+
     return (
-      <div onMouseDown={this.handleToolbarMouseDown} contentEditable={false} className="bf-table-row-tools">
-        {this.state.rowToolHandlers.map((item, index) => (
-          <div className="bf-row-tool-handler" data-key={item.key} style={{height: item.height}} key={index}>
+      <div className="bf-table-row-tools" onMouseDown={this.handleToolbarMouseDown} data-active={!!selectedRowIndex} contentEditable={false}>
+        {rowToolHandlers.map((item, index) => (
+          <div className="bf-row-tool-handler" data-active={selectedRowIndex == index} data-index={index} onClick={this.selectRow} data-key={item.key} style={{height: item.height}} key={index}>
             <div className="bf-row-tool-up">
               <div className="bf-insert-row-before" data-index={index} onClick={this.insertRow}><i className="bfi-add"></i></div>
             </div>

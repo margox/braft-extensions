@@ -1,9 +1,9 @@
-import { rebuildTable } from './utils'
+import { rebuildTableNode } from './utils'
 
 export const tableImportFn = (nodeName, node) => {
 
   if (nodeName === 'table') {
-    rebuildTable(node)
+    rebuildTableNode(node)
   }
 
   if (nodeName === 'th' || nodeName === 'td') {
