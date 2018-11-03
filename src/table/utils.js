@@ -18,13 +18,22 @@ const valueComparison = (value1, value2, operator) => {
 
 }
 
-const createCellBlock = (tableKey, colIndex, rowIndex, text = '') => {
+const createCellBlock = (cell) => {
+
+  cell = {
+    colSpan: 1,
+    rowSpan: 1,
+    text: '',
+    ...cell
+  }
+
+  const { tableKey, colIndex, rowIndex, colSpan, rowSpan, text } = cell
 
   return new ContentBlock({
     key: genKey(),
     type: 'table-cell',
     text: text,
-    data: Immutable.Map({ tableKey, colIndex, rowIndex, colSpan: 1, rowSpan: 1 }),
+    data: Immutable.Map({ tableKey, colIndex, rowIndex, colSpan, rowSpan }),
     characterList: Immutable.List(Immutable.Repeat(CharacterMetadata.create(), text.length))
   })
 
@@ -33,8 +42,16 @@ const createCellBlock = (tableKey, colIndex, rowIndex, text = '') => {
 const createRowBlocks = (tableKey, rowIndex, rowLength, firstCellText = '') => {
 
   const cells = Immutable.Range(0, rowLength).map((index) => {
-    var cellBlock = createCellBlock(tableKey, index, rowIndex, index === 0 ? firstCellText : '')
+
+    var cellBlock = createCellBlock({
+      tableKey: tableKey,
+      colIndex: index,
+      rowIndex: rowIndex,
+      text: index === 0 ? firstCellText : ''
+    })
+
     return [cellBlock.getKey(), cellBlock]
+
   }).toArray()
 
   return Immutable.OrderedMap(cells)
@@ -158,7 +175,7 @@ export const rebuildTableNode = (tableNode) => {
       let colIndex = cellIndex
       let xx, yy
 
-      for (;skipedCells[rowIndex] && skipedCells[rowIndex][colIndex]; colIndex++) {}
+      for (;skipedCells[rowIndex] && skipedCells[rowIndex][colIndex]; colIndex++) {/*_*/}
 
       const { rowSpan, colSpan } = cell
 
@@ -189,6 +206,31 @@ export const getCellCountForInsert = (tableBlocks, rowIndex) => {
   return filterBlocks(tableBlocks, 'rowIndex', rowIndex).reduce((count, block) => {
     return count + (block.getData().get('colSpan') || 1) * 1
   }, 0)
+
+}
+
+export const insertCell = (tableBlocks, cell) => {
+
+  const blocksBefore = tableBlocks.takeUntil(block => {
+    return block.getData().get('rowIndex') >= cell.rowIndex && block.getData().get('colIndex') >= cell.colIndex
+  })
+
+  const blocksAfter = tableBlocks.skipUntil(block => {
+    return block.getData().get('rowIndex') >= cell.rowIndex && block.getData().get('colIndex') >= cell.colIndex
+  })
+
+  const cellBlock = createCellBlock(cell)
+
+  const nextTableBlocks = blocksBefore.concat(Immutable.OrderedMap([[cellBlock.getKey(), cellBlock]]).toSeq(), blocksAfter)
+  return nextTableBlocks
+
+}
+
+export const insertCells = (tableBlocks, cells = []) => {
+
+  return cells.reduce((nextTableBlocks, cell) => {
+    return insertCell(nextTableBlocks, cell)
+  }, tableBlocks)
 
 }
 
@@ -241,6 +283,26 @@ export const removeRow = (editorState, tableKey, rowIndex) => {
 
   const tableBlocks = filterBlocks(contentBlocks, 'tableKey', tableKey)
   const blocksBefore = filterBlocks(tableBlocks, 'rowIndex', rowIndex, '<').toSeq()
+
+  const cellsToBeAdded = filterBlocks(tableBlocks, 'rowIndex', rowIndex).reduce((cellsToBeAdded, block) => {
+
+    const { colIndex, rowIndex, colSpan, rowSpan } = block.getData().toJS()
+
+    if (rowSpan > 1) {
+      cellsToBeAdded.push({
+        text: block.getText(),
+        tableKey: tableKey,
+        colIndex: colIndex,
+        rowIndex: rowIndex,
+        colSpan: colSpan,
+        rowSpan: rowSpan - 1
+      })
+    }
+
+    return cellsToBeAdded
+
+  }, [])
+
   const blocksAfter = filterBlocks(tableBlocks, 'rowIndex', rowIndex, '>').map((block) => {
 
     const blockData = block.getData().toJS()
@@ -255,7 +317,7 @@ export const removeRow = (editorState, tableKey, rowIndex) => {
   }).toSeq()
 
   const focusCellKey = (blocksAfter.first() || blocksBefore.last()).getKey()
-  const nextTableBlocks = updateRowSpanedCells(blocksBefore.concat(blocksAfter), rowIndex - 1, 'decrease')
+  const nextTableBlocks = insertCells(updateRowSpanedCells(blocksBefore.concat(blocksAfter), rowIndex - 1, 'decrease'), cellsToBeAdded)
   const nextContentState = updateTableBlocks(contentState, editorState.getSelection(), focusCellKey, nextTableBlocks, tableKey)
 
   return EditorState.push(editorState, nextContentState, 'insert-table-row')

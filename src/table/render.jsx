@@ -12,8 +12,8 @@ export class Table extends React.Component {
     colResizing: false,
     colResizeOffset: 0,
     selectedCells: [],
-    selectedRowIndex: null,
-    selectedColumnIndex: null
+    selectedRowIndex: -1,
+    selectedColumnIndex: -1
   }
 
   tableRef = null
@@ -34,10 +34,10 @@ export class Table extends React.Component {
 
     const { selectedRowIndex } = this.state
 
-    if (selectedRowIndex && event.keyCode === 8) {
+    if (selectedRowIndex >= 0 && event.keyCode === 8) {
 
       this.setState({
-        selectedRowIndex: null
+        selectedRowIndex: -1
       }, () => {
         this.props.editor.setValue(TableUtils.removeRow(this.props.editorState, this.tableKey, selectedRowIndex))
       })
@@ -104,9 +104,9 @@ export class Table extends React.Component {
 
     this.setState({
       selectedCells: newSelectedCells,
-      selectedRowIndex: null,
-      selectedColumnIndex: null,
-    }, this.mapPropsToState)
+      selectedRowIndex: -1,
+      selectedColumnIndex: -1,
+    }, this.renderCells)
 
   }
 
@@ -119,6 +119,14 @@ export class Table extends React.Component {
     const selectedCells = [] 
     const selectedRowIndex = event.currentTarget.dataset.index * 1
 
+    if (this.state.selectedRowIndex === selectedRowIndex) {
+      this.setState({
+        selectedCells: [],
+        selectedRowIndex: -1
+      }, this.renderCells)
+      return false
+    }
+
     this.props.children.filter(cell => {
       const cellBlock = this.props.editorState.getCurrentContent().getBlockForKey(cell.key)
       const cellRowIndex = cellBlock.getData().get('rowIndex')
@@ -127,7 +135,7 @@ export class Table extends React.Component {
       }
     })
 
-    this.setState({ selectedCells, selectedRowIndex, selectedColumnIndex: null }, this.mapPropsToState)
+    this.setState({ selectedCells, selectedRowIndex, selectedColumnIndex: null }, this.renderCells)
 
   }
 
@@ -147,7 +155,7 @@ export class Table extends React.Component {
 
   componentDidMount () {
 
-    this.mapPropsToState(this.props)
+    this.renderCells(this.props)
 
     document.body.addEventListener('keydown', this.handleKeyDown, false)
     document.body.addEventListener('mousemove', this.handleMouseMove, false)
@@ -156,7 +164,7 @@ export class Table extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    this.mapPropsToState(nextProps)
+    this.renderCells(nextProps)
   }
 
   componentWillUnmount () {
@@ -206,7 +214,7 @@ export class Table extends React.Component {
 
   }
 
-  mapPropsToState (props) {
+  renderCells (props) {
 
     props = props || this.props
 
