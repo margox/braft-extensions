@@ -13,7 +13,8 @@ export class Table extends React.Component {
     colResizeOffset: 0,
     selectedCells: [],
     selectedRowIndex: -1,
-    selectedColumnIndex: -1
+    selectedColumnIndex: -1,
+    setFirstRowAsHead: false
   }
 
   tableRef = null
@@ -32,18 +33,8 @@ export class Table extends React.Component {
 
   handleKeyDown = (event) => {
 
-    const { selectedRowIndex } = this.state
-
-    if (selectedRowIndex >= 0 && event.keyCode === 8) {
-
-      this.setState({
-        selectedRowIndex: -1
-      }, () => {
-        this.props.editor.setValue(TableUtils.removeRow(this.props.editorState, this.tableKey, selectedRowIndex))
-      })
-
-      event.preventDefault()
-
+    if (event.keyCode === 8) {
+      this.removeRow(event)
     }
 
   }
@@ -139,6 +130,20 @@ export class Table extends React.Component {
 
   }
 
+  insertColumn = (event) => {
+
+    const columnIndex = event.currentTarget.dataset.index * 1
+
+    this.setState({
+      selectedCells: [],
+      selectedRowIndex: null,
+      selectedColumnIndex: null
+    }, () => {
+      this.props.editor.setValue(TableUtils.insertColumn(this.props.editorState, this.tableKey, this.state.tableRows.length, columnIndex))
+    })
+
+  }
+
   insertRow = (event) => {
 
     const rowIndex = event.currentTarget.dataset.index * 1
@@ -150,6 +155,27 @@ export class Table extends React.Component {
     }, () => {
       this.props.editor.setValue(TableUtils.insertRow(this.props.editorState, this.tableKey, this.colLength, rowIndex))
     })
+
+  }
+
+  removeRow = (keyEvent) => {
+  
+    const { selectedRowIndex } = this.state
+
+    if (selectedRowIndex >= 0) {
+
+      this.setState({
+        selectedRowIndex: -1
+      }, () => {
+        this.props.editor.draftInstance.blur()
+        setImmediate(() => {
+          this.props.editor.setValue(TableUtils.removeRow(this.props.editorState, this.tableKey, selectedRowIndex))
+        })
+      })
+
+      keyEvent && keyEvent.preventDefault()
+
+    }
 
   }
 
@@ -256,7 +282,7 @@ export class Table extends React.Component {
 
       const newCell = React.cloneElement(cell, {
         'data-active': !!~this.state.selectedCells.indexOf(cell.key),
-        'data-is-head': isHead,
+        // 'data-is-head': isHead,
         'data-row-index': rowIndex,
         'data-col-index': colIndex || (tableRows[rowIndex] || []).length,
         'data-cell-index': cellIndex,
@@ -324,10 +350,10 @@ export class Table extends React.Component {
               ></div>
             ) : null}
             <div className="bf-col-tool-left">
-              <div className="bf-insert-col-before"><i className="bfi-add"></i></div>
+              <div className="bf-insert-col-before" data-role="insert-column" data-index={index} onClick={this.insertColumn}><i className="bfi-add"></i></div>
             </div>
             <div className="bf-col-tool-right">
-              <div className="bf-insert-col-after"><i className="bfi-add"></i></div>
+              <div className="bf-insert-col-after" data-role="insert-column" data-index={index + 1} onClick={this.insertColumn}><i className="bfi-add"></i></div>
             </div>
           </div>
         ))}

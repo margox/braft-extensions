@@ -27,13 +27,13 @@ const createCellBlock = (cell) => {
     ...cell
   }
 
-  const { tableKey, colIndex, rowIndex, colSpan, rowSpan, text } = cell
+  const { tableKey, key, colIndex, rowIndex, colSpan, rowSpan, text, isHead } = cell
 
   return new ContentBlock({
-    key: genKey(),
+    key: key || genKey(),
     type: 'table-cell',
     text: text,
-    data: Immutable.Map({ tableKey, colIndex, rowIndex, colSpan, rowSpan }),
+    data: Immutable.Map({ tableKey, colIndex, rowIndex, colSpan, rowSpan, isHead }),
     characterList: Immutable.List(Immutable.Repeat(CharacterMetadata.create(), text.length))
   })
 
@@ -54,33 +54,7 @@ const createRowBlocks = (tableKey, rowIndex, rowLength, firstCellText = '') => {
 
   }).toArray()
 
-  return Immutable.OrderedMap(cells)
-
-}
-
-const updateRowSpanedCells = (tableBlocks, rowIndex, operator = 'increase') => {
-
-  return tableBlocks.map((block) => {
-
-    const blockData = block.getData().toJS()
-    const { rowIndex: blockRowIndex, rowSpan: blockRowSpan } = blockData
-
-    if (blockRowIndex > rowIndex) {
-      return block
-    } else {
-
-      const needUpdate = blockRowSpan && blockRowIndex + blockRowSpan > rowIndex + 1
-      const newRowSpan = needUpdate ? (operator === 'increase' ? blockRowSpan * 1 + 1 : blockRowSpan * 1 - 1) : blockRowSpan
-
-      return block.merge({
-        'data': Immutable.Map({
-          ...blockData, rowSpan: newRowSpan
-        })
-      })
-
-    }
-
-  })
+  return Immutable.OrderedMap(cells).toSeq()
 
 }
 
@@ -102,9 +76,10 @@ const updateTableBlocks = (contentState, selection, focusKey, tableBlocks, table
     selectionBefore: selection,
     selectionAfter: selection.merge({
       anchorKey: focusKey,
-      anchorOffset: selection.getStartOffset(),
+      anchorOffset: 0,
       focusKey: focusKey,
-      focusOffset: selection.getStartOffset(),
+      focusOffset: 0,
+      hasFocus: false,
       isBackward: false
     })
   })
@@ -119,12 +94,12 @@ const filterBlocks = (contentBlocks, propName, propValue, operator = '==') => {
 
 }
 
-const rebuilTableBlocks = (tableBlocks) => {
+export const rebuilTableBlocks = (tableBlocks) => {
 
   const skipedCells = {}
   const cellCountOfRow = []
 
-  tableBlocks.map(block => {
+  return tableBlocks.map(block => {
 
     const blockData = block.getData()
     const rowIndex = blockData.get('rowIndex')
@@ -139,7 +114,7 @@ const rebuilTableBlocks = (tableBlocks) => {
     let colIndex = cellIndex
     let xx, yy
 
-    for (;skipedCells[rowIndex] && skipedCells[rowIndex][colIndex]; colIndex++) {}
+    for (;skipedCells[rowIndex] && skipedCells[rowIndex][colIndex]; colIndex++);
 
     if (rowSpan > 1 || colSpan > 1) {
 
@@ -200,7 +175,6 @@ export const rebuildTableNode = (tableNode) => {
 
 }
 
-
 export const getCellCountForInsert = (tableBlocks, rowIndex) => {
 
   return filterBlocks(tableBlocks, 'rowIndex', rowIndex).reduce((count, block) => {
@@ -234,25 +208,106 @@ export const insertCells = (tableBlocks, cells = []) => {
 
 }
 
-export const insertColumn = (editorState, tableKey, colIndex) => {
+export const insertColumn = (editorState, tableKey, cellCounts, colIndex) => {
 
   const contentState = editorState.getCurrentContent()
-  const contentBlocks = contentState.getBlockMap().toSeq()
-
+  const contentBlocks = contentState.getBlockMap()
   const tableBlocks = filterBlocks(contentBlocks, 'tableKey', tableKey)
-  const blocksBefore = filterBlocks(tableBlocks, 'colIndex', colIndex, '<').toSeq()
-  const blocksAfter = filterBlocks(tableBlocks, 'colIndex', colIndex, '>=').toSeq()
+  const cellsToBeAdded = []
+
+  if (colIndex === 0) {
+
+    for (let ii = 0;ii < cellCounts; ii ++) {
+      cellsToBeAdded.push({
+        text: '',
+        colIndex: 0,
+        rowIndex: ii,
+        colSpan: 1,
+        rowSpan: 1,
+        tableKey: tableKey
+      })
+    }
+
+  }
+
+  const nextTableBlocks = tableBlocks.map(block => {
+
+    const blockData = block.getData().toJS()
+    const { colIndex: blockColIndex, rowIndex: blockRowIndex, colSpan: blockColSpan, rowSpan: blockRowSpan } = blockData
+    const nextColIndex = blockColIndex < colIndex ? blockColIndex : blockColIndex + 1
+    const nextColSpan = blockColIndex < colIndex && blockColSpan > 1 && blockColIndex + blockColSpan > colIndex ? blockColSpan + 1 : blockColSpan
+
+    const needUpdate = nextColIndex !== blockColIndex || nextColSpan !== blockColSpan
+
+    if ((blockColSpan === 1 && blockColIndex === colIndex - 1) || (blockColSpan > 1 && blockColIndex + blockColSpan === colIndex)) {
+
+      for (let jj = blockRowIndex;jj < blockRowIndex + blockRowSpan;jj++) {
+        cellsToBeAdded.push({
+          text: '',
+          colIndex: colIndex,
+          rowIndex: jj,
+          colSpan: 1,
+          rowSpan: 1,
+          tableKey: tableKey
+        })
+      }
+
+    }
+
+    return needUpdate ? block.merge({
+      data: Immutable.Map({
+        ...blockData,
+        colIndex: nextColIndex,
+        colSpan: nextColSpan
+      })
+    }) : block
+
+  })
+
+  if (cellsToBeAdded.length === 0) {
+    return editorState
+  }
+
+  const focusCellKey = cellsToBeAdded[0].key = genKey()
+  const nextContentState = updateTableBlocks(contentState, editorState.getSelection(), focusCellKey, insertCells(nextTableBlocks, cellsToBeAdded), tableKey)
+
+  return EditorState.push(editorState, nextContentState, 'insert-table-column')
 
 }
 
-export const insertRow = (editorState, tableKey, counts, rowIndex) => {
+export const removeColumn = (editorState, tableKey, colIndex) => {
+  console.log(editorState, tableKey, colIndex)
+}
+
+export const insertRow = (editorState, tableKey, cellCounts, rowIndex) => {
 
   const contentState = editorState.getCurrentContent()
   const contentBlocks = contentState.getBlockMap().toSeq()
-
   const tableBlocks = filterBlocks(contentBlocks, 'tableKey', tableKey)
-  const blocksBefore = filterBlocks(tableBlocks, 'rowIndex', rowIndex, '<').toSeq()
-  const blocksAfter = filterBlocks(tableBlocks, 'rowIndex', rowIndex, '>=').map((block) => {
+
+  const blocksBefore = filterBlocks(tableBlocks, 'rowIndex', rowIndex, '<').map(block => {
+
+    const blockData = block.getData().toJS()
+    const { rowIndex: blockRowIndex, rowSpan: blockRowSpan } = blockData
+
+    if (blockRowIndex > rowIndex) {
+      return block
+    } else {
+
+      const needUpdate = blockRowSpan && blockRowIndex + blockRowSpan > rowIndex
+      const newRowSpan = needUpdate ? blockRowSpan * 1 + 1 : blockRowSpan
+
+      return block.merge({
+        'data': Immutable.Map({
+          ...blockData, rowSpan: newRowSpan
+        })
+      })
+
+    }
+
+  })
+
+  const blocksAfter = filterBlocks(tableBlocks, 'rowIndex', rowIndex, '>=').map(block => {
 
     const blockData = block.getData().toJS()
 
@@ -263,13 +318,13 @@ export const insertRow = (editorState, tableKey, counts, rowIndex) => {
       })
     })
 
-  }).toSeq()
+  })
 
-  const nextColLength = getCellCountForInsert(tableBlocks, rowIndex)
-  const rowBlocks = createRowBlocks(tableKey, rowIndex, nextColLength || counts)
+  const colCellLength = getCellCountForInsert(tableBlocks, rowIndex)
+  const rowBlocks = createRowBlocks(tableKey, rowIndex, colCellLength || cellCounts)
   const focusCellKey = rowBlocks.first().getKey()
 
-  const nextTableBlocks = updateRowSpanedCells(blocksBefore.concat(rowBlocks.toSeq(), blocksAfter), rowIndex - 1)
+  const nextTableBlocks = rebuilTableBlocks(blocksBefore.concat(rowBlocks, blocksAfter))
   const nextContentState = updateTableBlocks(contentState, editorState.getSelection(), focusCellKey, nextTableBlocks, tableKey)
 
   return EditorState.push(editorState, nextContentState, 'insert-table-row')
@@ -280,9 +335,42 @@ export const removeRow = (editorState, tableKey, rowIndex) => {
 
   const contentState = editorState.getCurrentContent()
   const contentBlocks = contentState.getBlockMap().toSeq()
-
   const tableBlocks = filterBlocks(contentBlocks, 'tableKey', tableKey)
-  const blocksBefore = filterBlocks(tableBlocks, 'rowIndex', rowIndex, '<').toSeq()
+
+  const blocksBefore = filterBlocks(tableBlocks, 'rowIndex', rowIndex, '<').map(block => {
+
+    const blockData = block.getData().toJS()
+    const { rowIndex: blockRowIndex, rowSpan: blockRowSpan } = blockData
+
+    if (blockRowIndex > rowIndex) {
+      return block
+    } else {
+
+      const needUpdate = blockRowSpan && blockRowIndex + blockRowSpan > rowIndex
+      const newRowSpan = needUpdate ? blockRowSpan * 1 - 1 : blockRowSpan
+
+      return block.merge({
+        'data': Immutable.Map({
+          ...blockData, rowSpan: newRowSpan
+        })
+      })
+
+    }
+
+  })
+
+  const blocksAfter = filterBlocks(tableBlocks, 'rowIndex', rowIndex, '>').map(block => {
+
+    const blockData = block.getData().toJS()
+
+    return block.merge({
+      'data': Immutable.Map({
+        ...blockData,
+        rowIndex: blockData.rowIndex * 1 - 1
+      })
+    })
+
+  })
 
   const cellsToBeAdded = filterBlocks(tableBlocks, 'rowIndex', rowIndex).reduce((cellsToBeAdded, block) => {
 
@@ -303,23 +391,10 @@ export const removeRow = (editorState, tableKey, rowIndex) => {
 
   }, [])
 
-  const blocksAfter = filterBlocks(tableBlocks, 'rowIndex', rowIndex, '>').map((block) => {
-
-    const blockData = block.getData().toJS()
-
-    return block.merge({
-      'data': Immutable.Map({
-        ...blockData,
-        rowIndex: blockData.rowIndex * 1 - 1
-      })
-    })
-
-  }).toSeq()
-
   const focusCellKey = (blocksAfter.first() || blocksBefore.last()).getKey()
-  const nextTableBlocks = insertCells(updateRowSpanedCells(blocksBefore.concat(blocksAfter), rowIndex - 1, 'decrease'), cellsToBeAdded)
-  const nextContentState = updateTableBlocks(contentState, editorState.getSelection(), focusCellKey, nextTableBlocks, tableKey)
+  const nextTableBlocks = insertCells(blocksBefore.concat(blocksAfter), cellsToBeAdded)
+  const nextContentState = updateTableBlocks(contentState, editorState.getSelection(), focusCellKey, nextTableBlocks, tableKey, true)
 
-  return EditorState.push(editorState, nextContentState, 'insert-table-row')
+  return EditorState.push(editorState, nextContentState, 'remove-table-row')
 
 }

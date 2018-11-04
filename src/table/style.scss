@@ -13,10 +13,11 @@
     opacity: 0;
     &[data-active="true"],
     &:hover{
-      z-index: 3;
       opacity: 1;
     }
-    
+    &:hover{
+      z-index: 4;
+    }
   }
 
   .bf-table-row-tools{
@@ -31,6 +32,8 @@
     right: 0;
     left: 10px;
     height: 8px;
+    line-height: 0;
+    white-space: nowrap;
     &.resizing {
       opacity: 1;
       .bf-col-tool-handler{
@@ -68,8 +71,10 @@
   }
 
   .bf-col-tool-handler{
-    float: left;
+    display: inline-block;
     height: 8px;
+    line-height: 0;
+    font-size: 0;
     border-left: 1px solid #e1e5e9;
     &:first-child{
       border-left: none;
@@ -77,6 +82,9 @@
     }
     &:last-child{
       border-radius: 0 3px 3px 0;
+    }
+    &:first-child:last-child{
+      border-radius: 3px;
     }
   }
 
@@ -101,6 +109,9 @@
     }
     &:last-child{
       border-radius: 0 0 3px 3px;
+    }
+    &:first-child:last-child{
+      border-radius: 3px;
     }
   }
 
@@ -225,13 +236,21 @@
   .bf-table{
     width: 100%;
     table-layout: fixed;
-    border: 1px solid #c1c5c9;
+    border-style: hidden;
     border-collapse: collapse;
     border-spacing: 0;
+    border: 1px solid #07a9fe;
+    border-width: 0.5px;
     tbody{
+      tr:nth-child(even) {
+        td{
+          background-color: #fafafa;
+        }
+      }
       .bf-table-cell{  
         background-color: #fff;
         border: 1px solid #d1d5d9;
+        border-width: 0.5px;
         overflow: visible;
         cursor: text;
         &[data-is-head="true"]{
@@ -247,6 +266,7 @@
             bottom: -1px;
             left: -1px;
             border: 1px solid #07a9fe;
+            border-width: 0.5px;
             content: '';
           }
         }

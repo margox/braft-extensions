@@ -18,9 +18,10 @@ class Demo extends React.Component {
       editorState: BraftEditor.createEditorState(`
         <table>
           <tr><th>1</th><th>2</th><th>3</th><th>4</th></tr>
-          <tr><td>5</td><td colspan="2" rowspan="2">6</td><td>7</td></tr>
-          <tr><td>8</td><td>9</td></tr>
+          <tr><td>5</td><td colspan="2">6</td><td>7</td></tr>
+          <tr><td>8</td><td>9</td><td>10</td><td>11</td></tr>
           <tr><td>10</td><td>11</td><td>12</td><td>13</td></tr>
+          <tr><td>14</td><td>15</td><td>16</td><td>17</td></tr>
         </table>
       `)
     }
