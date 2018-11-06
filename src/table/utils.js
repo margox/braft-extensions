@@ -1,6 +1,7 @@
 import { EditorState, ContentBlock, CharacterMetadata, genKey } from 'draft-js'
 import Immutable from 'immutable'
 
+// 简易的值比较方法
 const valueComparison = (value1, value2, operator) => {
 
   switch (operator) {
@@ -18,6 +19,7 @@ const valueComparison = (value1, value2, operator) => {
 
 }
 
+// 创建并返回一个单元格block
 const createCellBlock = (cell) => {
 
   cell = {
@@ -39,6 +41,7 @@ const createCellBlock = (cell) => {
 
 }
 
+// 创建并返回一行单元格block
 const createRowBlocks = (tableKey, rowIndex, rowLength, firstCellText = '') => {
 
   const cells = Immutable.Range(0, rowLength).map((index) => {
@@ -58,6 +61,7 @@ const createRowBlocks = (tableKey, rowIndex, rowLength, firstCellText = '') => {
 
 }
 
+// 将表格block更新到contentState
 const updateTableBlocks = (contentState, selection, focusKey, tableBlocks, tableKey) => {
 
   const contentBlocks = contentState.getBlockMap().toSeq()
@@ -86,6 +90,7 @@ const updateTableBlocks = (contentState, selection, focusKey, tableBlocks, table
 
 }
 
+// 使用简易值比较函数筛选符合条件的block
 const filterBlocks = (contentBlocks, propName, propValue, operator = '==') => {
 
   return contentBlocks.filter((block) => {
@@ -94,6 +99,7 @@ const filterBlocks = (contentBlocks, propName, propValue, operator = '==') => {
 
 }
 
+// 遍历以修正单元格的colSpan和rowSpan属性（表格blocks专用）
 export const rebuilTableBlocks = (tableBlocks) => {
 
   const skipedCells = {}
@@ -138,6 +144,7 @@ export const rebuilTableBlocks = (tableBlocks) => {
 
 }
 
+// 遍历以修正单元格的colSpan和rowSpan属性（表格DOM专用）
 export const rebuildTableNode = (tableNode) => {
 
   const tableKey = genKey()
@@ -175,6 +182,7 @@ export const rebuildTableNode = (tableNode) => {
 
 }
 
+// 获取需要插入到某一行的单元格的数量
 export const getCellCountForInsert = (tableBlocks, rowIndex) => {
 
   return filterBlocks(tableBlocks, 'rowIndex', rowIndex).reduce((count, block) => {
@@ -183,6 +191,7 @@ export const getCellCountForInsert = (tableBlocks, rowIndex) => {
 
 }
 
+// 插入一个单元格block到表格的block列表中
 export const insertCell = (tableBlocks, cell) => {
 
   const blocksBefore = tableBlocks.takeUntil(block => {
@@ -200,6 +209,7 @@ export const insertCell = (tableBlocks, cell) => {
 
 }
 
+// 插入多个单元格block到表格的block列表中
 export const insertCells = (tableBlocks, cells = []) => {
 
   return cells.reduce((nextTableBlocks, cell) => {
@@ -208,6 +218,7 @@ export const insertCells = (tableBlocks, cells = []) => {
 
 }
 
+// 插入一列单元格到表格中
 export const insertColumn = (editorState, tableKey, cellCounts, colIndex) => {
 
   const contentState = editorState.getCurrentContent()
@@ -275,10 +286,23 @@ export const insertColumn = (editorState, tableKey, cellCounts, colIndex) => {
 
 }
 
+// 从表格中移除指定的某一列
 export const removeColumn = (editorState, tableKey, colIndex) => {
-  console.log(editorState, tableKey, colIndex)
+
+  const contentState = editorState.getCurrentContent()
+  const contentBlocks = contentState.getBlockMap().toSeq()
+  const tableBlocks = filterBlocks(contentBlocks, 'tableKey', tableKey).filter(block => {
+    return block.getData().get('colIndex') * 1 !== colIndex
+  })
+
+  const focusCellKey = tableBlocks.first().getKey()
+  const nextContentState = updateTableBlocks(contentState, editorState.getSelection(), focusCellKey, tableBlocks, tableKey)
+
+  return EditorState.push(editorState, nextContentState, 'insert-table-row')
+
 }
 
+// 插入一行单元格到表格中
 export const insertRow = (editorState, tableKey, cellCounts, rowIndex) => {
 
   const contentState = editorState.getCurrentContent()
@@ -331,6 +355,7 @@ export const insertRow = (editorState, tableKey, cellCounts, rowIndex) => {
 
 }
 
+// 从表格中移除指定的某一行
 export const removeRow = (editorState, tableKey, rowIndex) => {
 
   const contentState = editorState.getCurrentContent()

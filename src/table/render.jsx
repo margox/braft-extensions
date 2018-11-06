@@ -2,6 +2,20 @@ import React from 'react'
 import Immutable from 'immutable'
 import * as TableUtils from './utils'
 
+const getIndexFromEvent = (event, ignoredTarget = '') => {
+
+  if (!isNaN(event)) {
+    return event * 1
+  } else if (ignoredTarget && event && event.target && event.target.dataset.role === ignoredTarget) {
+    return false
+  } else if (event && event.currentTarget && event.currentTarget.dataset.index) {
+    return event.currentTarget.dataset.index * 1
+  }
+
+  return false
+
+}
+
 export class Table extends React.Component {
 
   state = {
@@ -85,30 +99,53 @@ export class Table extends React.Component {
     const { selectedCells } = this.state
     const { cellKey } = event.currentTarget.dataset
 
-    let newSelectedCells = []
-
-    if (event.getModifierState('Shift')) {
-      newSelectedCells = ~selectedCells.indexOf(cellKey) ? selectedCells.filter(item => item !== cellKey) : [ ...selectedCells ,cellKey ]
-    } else {
-      newSelectedCells = ~selectedCells.indexOf(cellKey) ? [] : [cellKey]
-    }
-
     this.setState({
-      selectedCells: newSelectedCells,
+      selectedCells:  ~selectedCells.indexOf(cellKey) ? [] : [cellKey],
       selectedRowIndex: -1,
       selectedColumnIndex: -1,
     }, this.renderCells)
 
   }
 
-  selectRow = (event) => {
+  selectColumn = (event) => {
 
-    if (event.target.dataset.role === 'insert-row') {
+    const selectedColumnIndex = getIndexFromEvent(event, 'insert-column')
+
+    if (selectedColumnIndex === false) {
       return false
     }
 
     const selectedCells = [] 
-    const selectedRowIndex = event.currentTarget.dataset.index * 1
+
+    if (this.state.selectedColumnIndex === selectedColumnIndex) {
+      this.setState({
+        selectedCells: [],
+        selectedColumnIndex: -1
+      }, this.renderCells)
+      return false
+    }
+
+    this.props.children.filter(cell => {
+      const cellBlock = this.props.editorState.getCurrentContent().getBlockForKey(cell.key)
+      const cellColIndex = cellBlock.getData().get('colIndex')
+      if (cellColIndex == selectedColumnIndex) {
+        selectedCells.push(cell.key)
+      }
+    })
+
+    this.setState({ selectedCells, selectedColumnIndex, selectedRowIndex: -1 }, this.renderCells)
+
+  }
+
+  selectRow = (event) => {
+
+    const selectedRowIndex = getIndexFromEvent(event, 'insert-row')
+
+    if (selectedRowIndex === false) {
+      return false
+    }
+
+    const selectedCells = [] 
 
     if (this.state.selectedRowIndex === selectedRowIndex) {
       this.setState({
@@ -126,18 +163,22 @@ export class Table extends React.Component {
       }
     })
 
-    this.setState({ selectedCells, selectedRowIndex, selectedColumnIndex: null }, this.renderCells)
+    this.setState({ selectedCells, selectedRowIndex, selectedColumnIndex: -1 }, this.renderCells)
 
   }
 
   insertColumn = (event) => {
 
-    const columnIndex = event.currentTarget.dataset.index * 1
+    const columnIndex = getIndexFromEvent(event)
+
+    if (columnIndex === false) {
+      return false
+    }
 
     this.setState({
       selectedCells: [],
-      selectedRowIndex: null,
-      selectedColumnIndex: null
+      selectedRowIndex: -1,
+      selectedColumnIndex: -1
     }, () => {
       this.props.editor.setValue(TableUtils.insertColumn(this.props.editorState, this.tableKey, this.state.tableRows.length, columnIndex))
     })
@@ -146,12 +187,16 @@ export class Table extends React.Component {
 
   insertRow = (event) => {
 
-    const rowIndex = event.currentTarget.dataset.index * 1
+    const rowIndex = getIndexFromEvent(event)
+
+    if (rowIndex === false) {
+      return false
+    }
 
     this.setState({
       selectedCells: [],
-      selectedRowIndex: null,
-      selectedColumnIndex: null
+      selectedRowIndex: -1,
+      selectedColumnIndex: -1
     }, () => {
       this.props.editor.setValue(TableUtils.insertRow(this.props.editorState, this.tableKey, this.colLength, rowIndex))
     })
@@ -208,8 +253,8 @@ export class Table extends React.Component {
 
     const { colToolHandlers, defaultColWidth } = this.state
 
-    leftLimit = -1 * ((colToolHandlers[this.colResizeIndex - 1].width || defaultColWidth) - 50)
-    rightLimit = (colToolHandlers[this.colResizeIndex].width || defaultColWidth) - 50
+    leftLimit = -1 * ((colToolHandlers[this.colResizeIndex - 1].width || defaultColWidth) - 30)
+    rightLimit = (colToolHandlers[this.colResizeIndex].width || defaultColWidth) - 30
 
     offset = offset < leftLimit ? leftLimit : offset
     offset = offset > rightLimit ? rightLimit : offset
@@ -262,7 +307,7 @@ export class Table extends React.Component {
       const tableKey = cellBlockData.get('tableKey')
       const colIndex = cellBlockData.get('colIndex') * 1
       const rowIndex = cellBlockData.get('rowIndex') * 1
-      const isHead = cellBlockData.get('isHead')
+      // const isHead = cellBlockData.get('isHead')
       const colSpan = cellBlockData.get('colSpan')
       const rowSpan = cellBlockData.get('rowSpan')
 
@@ -324,10 +369,11 @@ export class Table extends React.Component {
 
   createColTools () {
 
-    const { colResizing, colResizeOffset, colToolHandlers, defaultColWidth } = this.state
+    const { colResizing, colResizeOffset, colToolHandlers, selectedColumnIndex, defaultColWidth } = this.state
 
     return (
       <div
+        data-active={selectedColumnIndex >= 0}
         contentEditable={false}
         data-key="bf-col-toolbar"
         className={`bf-table-column-tools${colResizing ? ' resizing' : ''}`}
@@ -337,8 +383,11 @@ export class Table extends React.Component {
           <div
             key={index}
             data-key={item.key}
+            data-index={index}
+            data-active={selectedColumnIndex == index}
             className="bf-col-tool-handler"
             style={{width: item.width || defaultColWidth}}
+            onClick={this.selectColumn}
           >
             {index !== 0 ? (
               <div
@@ -350,10 +399,24 @@ export class Table extends React.Component {
               ></div>
             ) : null}
             <div className="bf-col-tool-left">
-              <div className="bf-insert-col-before" data-role="insert-column" data-index={index} onClick={this.insertColumn}><i className="bfi-add"></i></div>
+              <div
+                data-index={index}
+                data-role="insert-column"
+                className="bf-insert-col-before"
+                onClick={this.insertColumn}
+              >
+                <i className="bfi-add"></i>
+              </div>
             </div>
             <div className="bf-col-tool-right">
-              <div className="bf-insert-col-after" data-role="insert-column" data-index={index + 1} onClick={this.insertColumn}><i className="bfi-add"></i></div>
+              <div
+                data-index={index + 1}
+                data-role="insert-column"
+                className="bf-insert-col-after"
+                onClick={this.insertColumn}
+              >
+                <i className="bfi-add"></i>
+              </div>
             </div>
           </div>
         ))}
@@ -367,17 +430,51 @@ export class Table extends React.Component {
     const { rowToolHandlers, selectedRowIndex } = this.state
 
     return (
-      <div className="bf-table-row-tools" onMouseDown={this.handleToolbarMouseDown} data-active={selectedRowIndex >= 0} contentEditable={false}>
+      <div
+        data-active={selectedRowIndex >= 0}
+        contentEditable={false}
+        className="bf-table-row-tools"
+        onMouseDown={this.handleToolbarMouseDown}
+      >
         {rowToolHandlers.map((item, index) => (
-          <div className="bf-row-tool-handler" data-active={selectedRowIndex == index} data-index={index} onClick={this.selectRow} data-key={item.key} style={{height: item.height}} key={index}>
+          <div
+            key={index}
+            data-key={item.key}
+            data-index={index}
+            data-active={selectedRowIndex == index}
+            className="bf-row-tool-handler"
+            style={{height: item.height}}
+            onClick={this.selectRow}
+          >
             <div className="bf-row-tool-up">
-              <div className="bf-insert-row-before" data-role="insert-row" data-index={index} onClick={this.insertRow}><i className="bfi-add"></i></div>
+              <div
+                data-index={index}
+                data-role="insert-row"
+                className="bf-insert-row-before"
+                onClick={this.insertRow}
+              >
+                <i className="bfi-add"></i>
+              </div>
             </div>
             <div className="bf-row-tool-center">
-              <div className="bf-remove-row" data-role="remove-row" data-index={index} onClick={this.removeRow}><i className="bfi-bin"></i></div>
+              <div
+                data-index={index}
+                data-role="remove-row"
+                className="bf-remove-row"
+                onClick={this.removeRow}
+              >
+                <i className="bfi-bin"></i>
+              </div>
             </div>
             <div className="bf-row-tool-down">
-              <div className="bf-insert-row-after" data-role="insert-row" data-index={index + 1} onClick={this.insertRow}><i className="bfi-add"></i></div>
+              <div
+                data-index={index + 1}
+                data-role="insert-row"
+                className="bf-insert-row-after"
+                onClick={this.insertRow}
+              >
+                <i className="bfi-add"></i>
+              </div>
             </div>
           </div>
         ))}
