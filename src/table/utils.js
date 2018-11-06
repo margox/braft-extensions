@@ -286,7 +286,7 @@ export const insertColumn = (editorState, tableKey, cellCounts, colIndex) => {
 
 }
 
-// 从表格中移除指定的某一列
+// 从表格中移除指定的某一列单元格
 export const removeColumn = (editorState, tableKey, colIndex) => {
 
   const contentState = editorState.getCurrentContent()
@@ -393,7 +393,7 @@ export const insertRow = (editorState, tableKey, cellCounts, rowIndex) => {
 
 }
 
-// 从表格中移除指定的某一行
+// 从表格中移除指定的某一行单元格
 export const removeRow = (editorState, tableKey, rowIndex) => {
 
   const contentState = editorState.getCurrentContent()
