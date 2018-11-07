@@ -3,8 +3,8 @@
   margin: 0 0 0 -10px;
   padding: 10px 0 0 10px;
 
-  .bf-table-row-tools,
-  .bf-table-column-tools{
+  .bf-table-col-tools,
+  .bf-table-row-tools{
     position: absolute;
     z-index: 2;
     border-radius: 3px;
@@ -20,14 +20,7 @@
     }
   }
 
-  .bf-table-row-tools{
-    top: 10px;
-    bottom: 0;
-    left: 0;
-    width: 8px;
-  }
-
-  .bf-table-column-tools{
+  .bf-table-col-tools{
     top: 0;
     right: 0;
     left: 10px;
@@ -49,6 +42,13 @@
     }
   }
 
+  .bf-table-row-tools{
+    top: 10px;
+    bottom: 0;
+    left: 0;
+    width: 8px;
+  }
+
   .bf-col-tool-handler,
   .bf-row-tool-handler{
     position: relative;
@@ -60,10 +60,13 @@
     }
     &[data-active="true"]{
       background-color: #07a9fe;
+      .bf-col-tool-left,
+      .bf-col-tool-right,
       .bf-row-tool-up,
       .bf-row-tool-down{
         display: none;
       }
+      .bf-col-tool-center,
       .bf-row-tool-center{
         display: block;
       }
@@ -245,6 +248,15 @@
     }
   }
 
+  .dragging-rect{
+    position: absolute;
+    z-index: 10;
+    box-sizing: border-box;
+    background-color: rgba(#07a9fe, .05);
+    border: 1px solid rgba(#07a9fe, .6);
+    pointer-events: none;
+  }
+
   .bf-table{
     width: 100%;
     table-layout: fixed;
@@ -253,6 +265,11 @@
     border-spacing: 0;
     border: 1px solid #07a9fe;
     border-width: 0.5px;
+    &.dragging{
+      tbody .bf-table-cell{
+        cursor: default !important;
+      }
+    }
     tbody{
       tr:nth-child(even) {
         td{

@@ -28,18 +28,28 @@ export class Table extends React.Component {
     selectedCells: [],
     selectedRowIndex: -1,
     selectedColumnIndex: -1,
-    setFirstRowAsHead: false
+    setFirstRowAsHead: false,
+    dragSelecting: false,
+    draggingRectBounding: null
   }
 
-  tableRef = null
-  colRefs = {}
-  rowRefs = {}
+  __tableRef = null
+  __colRefs = {}
+  __rowRefs = {}
 
-  colResizeIndex = 0
-  colResizeStartAt = 0
+  __colResizeIndex = 0
+  __colResizeStartAt = 0
 
-  startCellKey = null
-  endCellKey = null
+  __startCellKey = null
+  __endCellKey = null
+
+  __dragSelecting = false
+  __dragSelectingStartCellIndex = null
+  __dragSelectingStartCellKey = null
+  __dragSelectingEndCellIndex = null
+  __dragSelectingEndCellKey = null
+  __draggingRectBoundingUpdating = false
+  __selectedCellsCleared = false
 
   handleToolbarMouseDown = (event) => {
     event.preventDefault()
@@ -70,11 +80,11 @@ export class Table extends React.Component {
       const { defaultColWidth, colToolHandlers, colResizeOffset } = this.state
       const nextColToolHandlers = [ ...colToolHandlers ]
 
-      nextColToolHandlers[this.colResizeIndex - 1].width = (nextColToolHandlers[this.colResizeIndex - 1].width || defaultColWidth) + colResizeOffset
-      nextColToolHandlers[this.colResizeIndex].width = (nextColToolHandlers[this.colResizeIndex].width || defaultColWidth) - colResizeOffset
+      nextColToolHandlers[this.__colResizeIndex - 1].width = (nextColToolHandlers[this.__colResizeIndex - 1].width || defaultColWidth) + colResizeOffset
+      nextColToolHandlers[this.__colResizeIndex].width = (nextColToolHandlers[this.__colResizeIndex].width || defaultColWidth) - colResizeOffset
 
-      this.colResizeIndex = 0
-      this.colResizeStartAt = 0
+      this.__colResizeIndex = 0
+      this.__colResizeStartAt = 0
 
       this.setState({
         colToolHandlers: nextColToolHandlers,
@@ -90,7 +100,7 @@ export class Table extends React.Component {
 
     if (this.state.colResizing) {
       this.setState({
-        colResizeOffset: this.getResizeOffset(event.clientX - this.colResizeStartAt)
+        colResizeOffset: this.getResizeOffset(event.clientX - this.__colResizeStartAt)
       })
     }
 
@@ -98,9 +108,104 @@ export class Table extends React.Component {
 
   handleColResizerMouseDown = (event) => {
 
-    this.colResizeIndex = event.currentTarget.dataset.index * 1
-    this.colResizeStartAt = event.clientX
+    this.__colResizeIndex = event.currentTarget.dataset.index * 1
+    this.__colResizeStartAt = event.clientX
     this.setState({ colResizing: true })
+
+  }
+
+  handleCellMouseDown = (event) => {
+
+    this.__dragSelecting = true
+    this.__dragSelectingStartCellIndex = event.currentTarget.dataset.cellIndex
+    this.__dragSelectingStartCellKey = event.currentTarget.dataset.cellKey
+
+    this.__draggingStartPoint = {
+      x: event.clientX,
+      y: event.clientY
+    }
+
+    this.setState({
+      dragSelecting: true
+    })
+
+  }
+
+  handleCellMouseUp = (event) => {
+
+    this.__dragSelecting = false
+    this.__dragSelectingEndCellIndex = event.currentTarget.dataset.cellIndex
+    this.__dragSelectingEndCellKey = event.currentTarget.dataset.cellKey
+
+    this.setState({
+      dragSelecting: false,
+      draggingRectBounding: null
+    })
+
+  }
+
+  handleTableMouseMove = (event) => {
+
+    if (this.__dragSelecting) {
+      this.updateDraggingRectBounding(event)
+      event.preventDefault()
+    }
+
+  }
+
+  handleTableMouseOut = (event) => {
+
+    if (this.__dragSelecting && event.target.dataset.role === 'table') {
+
+      this.__dragSelecting = false
+      this.__dragSelectingStartCellIndex = null
+      this.__dragSelectingStartCellKey = null
+      this.__dragSelectingEndCellIndex = null
+      this.__dragSelectingEndCellKey = null
+
+      this.setState({
+        dragSelecting: false,
+        draggingRectBounding: null
+      })
+
+    }
+
+  }
+
+  updateDraggingRectBounding = (mouseEvent) => {
+
+    if (this.__draggingRectBoundingUpdating || !this.__dragSelecting) {
+      return false
+    }
+
+    this.__draggingRectBoundingUpdating = true
+
+    const tableBounding = this.__tableRef.getBoundingClientRect()
+    const { x: startX, y: startY } = this.__draggingStartPoint
+    const { clientX: currentX, clientY: currentY } = mouseEvent
+
+    const draggingRectBounding = {}
+
+    if (currentX <= startX) {
+      draggingRectBounding.right = tableBounding.left + tableBounding.width - startX
+    } else {
+      draggingRectBounding.left = startX - tableBounding.left + 9
+    }
+
+    if (currentY <= startY) {
+      draggingRectBounding.bottom = tableBounding.top + tableBounding.height - startY
+    } else {
+      draggingRectBounding.top = startY - tableBounding.top + 9
+    }
+
+    draggingRectBounding.width = Math.abs(currentX - startX)
+    draggingRectBounding.height = Math.abs(currentY - startY)
+
+    this.setState({ draggingRectBounding }, () => {
+      setTimeout(() => {
+        this.__draggingRectBoundingUpdating = false
+      }, 100)
+    })
 
   }
 
@@ -280,8 +385,8 @@ export class Table extends React.Component {
 
     const { colToolHandlers, defaultColWidth } = this.state
 
-    leftLimit = -1 * ((colToolHandlers[this.colResizeIndex - 1].width || defaultColWidth) - 30)
-    rightLimit = (colToolHandlers[this.colResizeIndex].width || defaultColWidth) - 30
+    leftLimit = -1 * ((colToolHandlers[this.__colResizeIndex - 1].width || defaultColWidth) - 30)
+    rightLimit = (colToolHandlers[this.__colResizeIndex].width || defaultColWidth) - 30
 
     offset = offset < leftLimit ? leftLimit : offset
     offset = offset > rightLimit ? rightLimit : offset
@@ -295,9 +400,9 @@ export class Table extends React.Component {
     let needUpdate = false
     const rowToolHandlers = [ ...this.state.rowToolHandlers ]
 
-    Object.keys(this.rowRefs).forEach((index) => {
+    Object.keys(this.__rowRefs).forEach((index) => {
 
-      const rowHeight = this.rowRefs[index] ? this.rowRefs[index].getBoundingClientRect().height : 40
+      const rowHeight = this.__rowRefs[index] ? this.__rowRefs[index].getBoundingClientRect().height : 40
 
       if (rowToolHandlers[index] && rowToolHandlers[index].height !== rowHeight) {
         needUpdate = true
@@ -324,8 +429,8 @@ export class Table extends React.Component {
 
     const { editorState, children } = props
 
-    this.startCellKey = children[0].key
-    this.endCellKey = children[children.length - 1].key
+    this.__startCellKey = children[0].key
+    this.__endCellKey = children[children.length - 1].key
 
     children.forEach((cell, cellIndex) => {
 
@@ -363,7 +468,9 @@ export class Table extends React.Component {
         className: `bf-table-cell ${cell.props.className}`,
         colSpan: colSpan,
         rowSpan: rowSpan,
-        onClick: this.selectCell
+        onClick: this.selectCell,
+        onMouseDown: this.handleCellMouseDown,
+        onMouseUp: this.handleCellMouseUp
       })
 
       if (!tableRows[rowIndex]) {
@@ -375,7 +482,7 @@ export class Table extends React.Component {
 
     })
 
-    const tableWidth = this.tableRef.getBoundingClientRect().width
+    const tableWidth = this.__tableRef.getBoundingClientRect().width
     const defaultColWidth = tableWidth / this.colLength
 
     this.setState({ tableRows, colToolHandlers, rowToolHandlers, defaultColWidth }, this.adjustToolbarHandlers)
@@ -387,7 +494,7 @@ export class Table extends React.Component {
     return (
       <colgroup>
         {this.state.colToolHandlers.map((item, index) => (
-          <col ref={ref => this.colRefs[index] = ref} width={item.width || this.state.defaultColWidth} key={index}></col>
+          <col ref={ref => this.__colRefs[index] = ref} width={item.width || this.state.defaultColWidth} key={index}></col>
         ))}
       </colgroup>
     )
@@ -403,7 +510,7 @@ export class Table extends React.Component {
         data-active={selectedColumnIndex >= 0}
         contentEditable={false}
         data-key="bf-col-toolbar"
-        className={`bf-table-column-tools${colResizing ? ' resizing' : ''}`}
+        className={`bf-table-col-tools${colResizing ? ' resizing' : ''}`}
         onMouseDown={this.handleToolbarMouseDown}
       >
         {colToolHandlers.map((item, index) => (
@@ -420,8 +527,8 @@ export class Table extends React.Component {
               <div
                 data-index={index}
                 data-key={item.key} 
-                className={`bf-col-resizer${colResizing && this.colResizeIndex === index ? ' active' : ''}`}
-                style={colResizing && this.colResizeIndex === index ? {transform: `translateX(${colResizeOffset}px)`} : null}
+                className={`bf-col-resizer${colResizing && this.__colResizeIndex === index ? ' active' : ''}`}
+                style={colResizing && this.__colResizeIndex === index ? {transform: `translateX(${colResizeOffset}px)`} : null}
                 onMouseDown={this.handleColResizerMouseDown}
               ></div>
             ) : null}
@@ -522,16 +629,27 @@ export class Table extends React.Component {
 
   render () {
 
+    const { tableRows, dragSelecting, draggingRectBounding } = this.state
+
     return (
       <div className="bf-table-container">
-        <table ref={ref => this.tableRef = ref} className="bf-table">
+        <table
+          data-role="table"
+          className={`bf-table${dragSelecting ? ' dragging' : ''}`}
+          ref={ref => this.__tableRef = ref}
+          onMouseDown={this.handleTableMouseDown}
+          onMouseUp={this.hanldeTableMouseUp}
+          onMouseMove={this.handleTableMouseMove}
+          onMouseOut={this.handleTableMouseOut}
+        >
           {this.createColGroup()}
           <tbody>
-            {this.state.tableRows.map((cells, rowIndex) => (
-              <tr ref={ref => this.rowRefs[rowIndex] = ref} key={rowIndex}>{cells}</tr>
+            {tableRows.map((cells, rowIndex) => (
+              <tr ref={ref => this.__rowRefs[rowIndex] = ref} key={rowIndex}>{cells}</tr>
             ))}
           </tbody>
         </table>
+        {dragSelecting ? <div className="dragging-rect" style={draggingRectBounding}/> : null}
         {this.createColTools()}
         {this.createRowTools()}
       </div>
