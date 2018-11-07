@@ -91,7 +91,7 @@ const updateTableBlocks = (contentState, selection, focusKey, tableBlocks, table
 }
 
 // 使用简易值比较函数筛选符合条件的block
-const filterBlocks = (contentBlocks, propName, propValue, operator = '==') => {
+const findBlocks = (contentBlocks, propName, propValue, operator = '==') => {
 
   return contentBlocks.filter((block) => {
     return valueComparison(block.getData().get(propName), propValue, operator)
@@ -185,7 +185,7 @@ export const rebuildTableNode = (tableNode) => {
 // 获取需要插入到某一行的单元格的数量
 export const getCellCountForInsert = (tableBlocks, rowIndex) => {
 
-  return filterBlocks(tableBlocks, 'rowIndex', rowIndex).reduce((count, block) => {
+  return findBlocks(tableBlocks, 'rowIndex', rowIndex).reduce((count, block) => {
     return count + (block.getData().get('colSpan') || 1) * 1
   }, 0)
 
@@ -223,7 +223,7 @@ export const insertColumn = (editorState, tableKey, cellCounts, colIndex) => {
 
   const contentState = editorState.getCurrentContent()
   const contentBlocks = contentState.getBlockMap()
-  const tableBlocks = filterBlocks(contentBlocks, 'tableKey', tableKey)
+  const tableBlocks = findBlocks(contentBlocks, 'tableKey', tableKey)
   const cellsToBeAdded = []
 
   if (colIndex === 0) {
@@ -291,14 +291,52 @@ export const removeColumn = (editorState, tableKey, colIndex) => {
 
   const contentState = editorState.getCurrentContent()
   const contentBlocks = contentState.getBlockMap().toSeq()
-  const tableBlocks = filterBlocks(contentBlocks, 'tableKey', tableKey).filter(block => {
+  const tableBlocks = findBlocks(contentBlocks, 'tableKey', tableKey)
+
+  const cellsToBeAdded = findBlocks(tableBlocks, 'colIndex', colIndex).reduce((cellsToBeAdded, block) => {
+
+    const { colIndex, rowIndex, colSpan, rowSpan } = block.getData().toJS()
+
+    if (colSpan > 1) {
+      cellsToBeAdded.push({
+        text: block.getText(),
+        tableKey: tableKey,
+        colIndex: colIndex,
+        rowIndex: rowIndex,
+        colSpan: colSpan - 1,
+        rowSpan: rowSpan
+      })
+    }
+
+    return cellsToBeAdded
+
+  }, [])
+
+  const nextTableBlocks = tableBlocks.filter(block => {
     return block.getData().get('colIndex') * 1 !== colIndex
+  }).map(block => {
+
+    const blockData = block.getData().toJS()
+    const { colIndex: blockColIndex, colSpan: blockColSpan } = blockData
+
+    const newColIndex = blockColIndex > colIndex ? blockColIndex - 1 : blockColIndex
+    const newColSpan = blockColIndex < colIndex && blockColIndex + blockColSpan > colIndex ? blockColSpan - 1 : blockColSpan
+    const needUpdate = newColIndex !== blockColIndex || newColSpan !== blockColSpan
+
+    return needUpdate ? block.merge({
+      'data': {
+        ...blockData,
+        colIndex: newColIndex,
+        colSpan: newColSpan
+      } 
+    }) : block
+
   })
 
   const focusCellKey = tableBlocks.first().getKey()
-  const nextContentState = updateTableBlocks(contentState, editorState.getSelection(), focusCellKey, tableBlocks, tableKey)
+  const nextContentState = updateTableBlocks(contentState, editorState.getSelection(), focusCellKey, insertCells(nextTableBlocks, cellsToBeAdded), tableKey)
 
-  return EditorState.push(editorState, nextContentState, 'insert-table-row')
+  return EditorState.push(editorState, nextContentState, 'remove-table-column')
 
 }
 
@@ -307,9 +345,9 @@ export const insertRow = (editorState, tableKey, cellCounts, rowIndex) => {
 
   const contentState = editorState.getCurrentContent()
   const contentBlocks = contentState.getBlockMap().toSeq()
-  const tableBlocks = filterBlocks(contentBlocks, 'tableKey', tableKey)
+  const tableBlocks = findBlocks(contentBlocks, 'tableKey', tableKey)
 
-  const blocksBefore = filterBlocks(tableBlocks, 'rowIndex', rowIndex, '<').map(block => {
+  const blocksBefore = findBlocks(tableBlocks, 'rowIndex', rowIndex, '<').map(block => {
 
     const blockData = block.getData().toJS()
     const { rowIndex: blockRowIndex, rowSpan: blockRowSpan } = blockData
@@ -331,7 +369,7 @@ export const insertRow = (editorState, tableKey, cellCounts, rowIndex) => {
 
   })
 
-  const blocksAfter = filterBlocks(tableBlocks, 'rowIndex', rowIndex, '>=').map(block => {
+  const blocksAfter = findBlocks(tableBlocks, 'rowIndex', rowIndex, '>=').map(block => {
 
     const blockData = block.getData().toJS()
 
@@ -360,9 +398,9 @@ export const removeRow = (editorState, tableKey, rowIndex) => {
 
   const contentState = editorState.getCurrentContent()
   const contentBlocks = contentState.getBlockMap().toSeq()
-  const tableBlocks = filterBlocks(contentBlocks, 'tableKey', tableKey)
+  const tableBlocks = findBlocks(contentBlocks, 'tableKey', tableKey)
 
-  const blocksBefore = filterBlocks(tableBlocks, 'rowIndex', rowIndex, '<').map(block => {
+  const blocksBefore = findBlocks(tableBlocks, 'rowIndex', rowIndex, '<').map(block => {
 
     const blockData = block.getData().toJS()
     const { rowIndex: blockRowIndex, rowSpan: blockRowSpan } = blockData
@@ -384,7 +422,7 @@ export const removeRow = (editorState, tableKey, rowIndex) => {
 
   })
 
-  const blocksAfter = filterBlocks(tableBlocks, 'rowIndex', rowIndex, '>').map(block => {
+  const blocksAfter = findBlocks(tableBlocks, 'rowIndex', rowIndex, '>').map(block => {
 
     const blockData = block.getData().toJS()
 
@@ -397,7 +435,7 @@ export const removeRow = (editorState, tableKey, rowIndex) => {
 
   })
 
-  const cellsToBeAdded = filterBlocks(tableBlocks, 'rowIndex', rowIndex).reduce((cellsToBeAdded, block) => {
+  const cellsToBeAdded = findBlocks(tableBlocks, 'rowIndex', rowIndex).reduce((cellsToBeAdded, block) => {
 
     const { colIndex, rowIndex, colSpan, rowSpan } = block.getData().toJS()
 

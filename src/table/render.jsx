@@ -48,7 +48,17 @@ export class Table extends React.Component {
   handleKeyDown = (event) => {
 
     if (event.keyCode === 8) {
-      this.removeRow(event)
+
+      const { selectedColumnIndex, selectedRowIndex } = this.state
+
+      if (selectedColumnIndex > -1) {
+        this.removeColumn()
+        event.preventDefault()
+      } else if (selectedRowIndex > -1) {
+        this.removeRow()
+        event.preventDefault()
+      }
+
     }
 
   }
@@ -185,6 +195,25 @@ export class Table extends React.Component {
 
   }
 
+  removeColumn = () => {
+
+    const { selectedColumnIndex } = this.state
+
+    if (selectedColumnIndex >= 0) {
+
+      this.setState({
+        selectedColumnIndex: -1
+      }, () => {
+        this.props.editor.draftInstance.blur()
+        setImmediate(() => {
+          this.props.editor.setValue(TableUtils.removeColumn(this.props.editorState, this.tableKey, selectedColumnIndex))
+        })
+      })
+
+    }
+
+  }
+
   insertRow = (event) => {
 
     const rowIndex = getIndexFromEvent(event)
@@ -203,8 +232,8 @@ export class Table extends React.Component {
 
   }
 
-  removeRow = (keyEvent) => {
-  
+  removeRow = () => {
+
     const { selectedRowIndex } = this.state
 
     if (selectedRowIndex >= 0) {
@@ -217,8 +246,6 @@ export class Table extends React.Component {
           this.props.editor.setValue(TableUtils.removeRow(this.props.editorState, this.tableKey, selectedRowIndex))
         })
       })
-
-      keyEvent && keyEvent.preventDefault()
 
     }
 
@@ -406,6 +433,16 @@ export class Table extends React.Component {
                 onClick={this.insertColumn}
               >
                 <i className="bfi-add"></i>
+              </div>
+            </div>
+            <div className="bf-col-tool-center">
+              <div
+                data-index={index}
+                data-role="remove-col"
+                className="bf-remove-col"
+                onClick={this.removeColumn}
+              >
+                <i className="bfi-bin"></i>
               </div>
             </div>
             <div className="bf-col-tool-right">

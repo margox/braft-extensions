@@ -141,11 +141,14 @@
     }
   }
 
+  .bf-col-tool-center,
   .bf-row-tool-center{
     display: none;
     position: relative;
+    width: 100%;
     height: 100%;
     &:hover{
+      .bf-remove-col,
       .bf-remove-row{
         display: block;
       }
@@ -156,6 +159,7 @@
   .bf-insert-col-after,
   .bf-insert-row-before,
   .bf-insert-row-after,
+  .bf-remove-col,
   .bf-remove-row{
     display: none;
     box-sizing: content-box;
@@ -191,7 +195,8 @@
   }
 
   .bf-insert-col-before,
-  .bf-insert-col-after{
+  .bf-insert-col-after,
+  .bf-remove-col{
     bottom: -25px;
     padding-top: 5px;
     &::before{
@@ -218,6 +223,13 @@
   }
   .bf-insert-col-after{
     right: -10px;
+  }
+  .bf-remove-col{
+    left: 50%;
+    transform: translateX(-50%);
+    &:hover{
+      color: #e74c3c;
+    }
   }
   .bf-insert-row-before{
     top: -10px;
