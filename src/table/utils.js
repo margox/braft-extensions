@@ -192,8 +192,69 @@ export const getCellCountForInsert = (tableBlocks, rowIndex) => {
 }
 
 // 获取指定范围内的单元格block
-export const getCellsInsideRect = () => {
-  // ...
+export const getCellsInsideRect = (editorState, tableKey, startLocation, endLocation) => {
+
+  const [startColIndex, startRowIndex] = startLocation
+  const [endColIndex, endRowIndex] = endLocation
+
+  const leftColIndex = Math.min(startColIndex, endColIndex)
+  const rightColIndex = Math.max(startColIndex, endColIndex)
+  const upRowIndex = Math.min(startRowIndex, endRowIndex)
+  const downRowIndex = Math.max(startRowIndex, endRowIndex)
+
+  const matchedCellLocations = []
+
+  for (let ii = leftColIndex;ii <= rightColIndex;ii++) {
+    for (let jj = upRowIndex;jj <= downRowIndex;jj ++) {
+      matchedCellLocations.push([ii, jj])
+    }
+  }
+
+  if (matchedCellLocations.length === 0) {
+    return Immutable.OrderedMap([])
+  } 
+
+  const contentState = editorState.getCurrentContent()
+  const contentBlocks = contentState.getBlockMap()
+  const tableBlocks = findBlocks(contentBlocks, 'tableKey', tableKey)
+
+  const matchedCellBlockKeys = []
+  const spanedCellBlockKeys = []
+
+  let matchedCellBlocks = Immutable.List([])
+  let spanedCellBlocks = Immutable.List([])
+
+  tableBlocks.forEach(block => {
+
+    const blockData = block.getData()
+    const blockKey = block.getKey()
+    const colIndex = blockData.get('colIndex')
+    const rowIndex = blockData.get('rowIndex')
+    const colSpan = blockData.get('colSpan')
+    const rowSpan = blockData.get('rowSpan')
+
+    matchedCellLocations.forEach(([x, y]) => {
+
+      if (colIndex === x && rowIndex === y) {
+        matchedCellBlockKeys.indexOf(blockKey) === -1 && (matchedCellBlocks = matchedCellBlocks.push(block)) && matchedCellBlockKeys.push(blockKey);
+        (colSpan > 1 || rowSpan > 1) && (spanedCellBlockKeys.indexOf(blockKey) === -1) && (spanedCellBlocks = spanedCellBlocks.push(block)) && spanedCellBlockKeys.push(blockKey)
+      } else if (colSpan > 1 || rowSpan > 1) {
+
+        if (colIndex < x && colIndex + colSpan > x && rowIndex < y && rowIndex + rowSpan > y) {
+          (spanedCellBlockKeys.indexOf(blockKey) === -1) && (spanedCellBlocks = spanedCellBlocks.push(block)) && spanedCellBlockKeys.push(blockKey)
+        }
+
+      }
+
+    })
+
+  })
+
+  console.log(matchedCellBlockKeys)
+  console.log(matchedCellBlocks)
+
+  return matchedCellBlocks
+
 }
 
 // 插入一个单元格block到表格的block列表中

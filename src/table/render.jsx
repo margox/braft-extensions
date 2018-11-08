@@ -131,16 +131,31 @@ export class Table extends React.Component {
 
   }
 
-  handleCellMouseUp = (event) => {
+  handleCellMouseUp = () => {
 
     this.__dragSelecting = false
-    this.__dragSelectingEndColumnIndex = event.currentTarget.dataset.colIndex
-    this.__dragSelectingEndRowIndex = event.currentTarget.dataset.rowIndex
+    this.__dragSelectingStartColumnIndex = null
+    this.__dragSelectingStartRowIndex = null
+    this.__dragSelectingEndColumnIndex = null
+    this.__dragSelectingEndRowIndex = null
 
     this.setState({
       dragSelecting: false,
       draggingRectBounding: null
     })
+
+  }
+
+  handleCellMouseEnter = (event) => {
+
+    if (this.__dragSelecting) {
+
+      this.__dragSelectingEndColumnIndex = event.currentTarget.dataset.colIndex
+      this.__dragSelectingEndRowIndex = event.currentTarget.dataset.rowIndex
+
+      this.confirmDragSelecting()
+
+    }
 
   }
 
@@ -156,19 +171,7 @@ export class Table extends React.Component {
   handleTableMouseLeave = (event) => {
 
     if (this.__dragSelecting && event.currentTarget && event.currentTarget.dataset.role === 'table') {
-
-      this.__dragSelecting = false
-      this.__dragSelectingStartColumnIndex = null
-      this.__dragSelectingStartRowIndex = null
-      this.__dragSelectingEndColumnIndex = null
-      this.__dragSelectingEndRowIndex = null
-
-      this.setState({
-        dragSelecting: false,
-        draggingRectBounding: null
-      })
-
-
+      this.handleCellMouseUp()
     }
 
     event.preventDefault()
@@ -182,9 +185,10 @@ export class Table extends React.Component {
     }
 
     const selectedCells = TableUtils.getCellsInsideRect(
+      this.props.editorState, this.tableKey,
       [this.__dragSelectingStartColumnIndex, this.__dragSelectingStartRowIndex],
       [this.__dragSelectingEndColumnIndex, this.__dragSelectingEndRowIndex]
-    ).map(block => block.getKey())
+    ).map(block => block.getKey()).toList().toJS()
 
     if (selectedCells.length < 2) {
       return false
@@ -496,7 +500,8 @@ export class Table extends React.Component {
         rowSpan: rowSpan,
         onClick: this.selectCell,
         onMouseDown: this.handleCellMouseDown,
-        onMouseUp: this.handleCellMouseUp
+        onMouseUp: this.handleCellMouseUp,
+        onMouseEnter: this.handleCellMouseEnter
       })
 
       if (!tableRows[rowIndex]) {
