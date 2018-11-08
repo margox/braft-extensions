@@ -191,6 +191,11 @@ export const getCellCountForInsert = (tableBlocks, rowIndex) => {
 
 }
 
+// 获取指定范围内的单元格block
+export const getCellsInsideRect = () => {
+  // ...
+}
+
 // 插入一个单元格block到表格的block列表中
 export const insertCell = (tableBlocks, cell) => {
 

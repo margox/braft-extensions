@@ -44,10 +44,10 @@ export class Table extends React.Component {
   __endCellKey = null
 
   __dragSelecting = false
-  __dragSelectingStartCellIndex = null
-  __dragSelectingStartCellKey = null
-  __dragSelectingEndCellIndex = null
-  __dragSelectingEndCellKey = null
+  __dragSelectingStartColumnIndex = null
+  __dragSelectingStartRowIndex = null
+  __dragSelectingEndColumnIndex = null
+  __dragSelectingEndRowIndex = null
   __draggingRectBoundingUpdating = false
   __selectedCellsCleared = false
 
@@ -117,8 +117,8 @@ export class Table extends React.Component {
   handleCellMouseDown = (event) => {
 
     this.__dragSelecting = true
-    this.__dragSelectingStartCellIndex = event.currentTarget.dataset.cellIndex
-    this.__dragSelectingStartCellKey = event.currentTarget.dataset.cellKey
+    this.__dragSelectingStartColumnIndex = event.currentTarget.dataset.colIndex
+    this.__dragSelectingStartRowIndex = event.currentTarget.dataset.rowIndex
 
     this.__draggingStartPoint = {
       x: event.clientX,
@@ -134,8 +134,8 @@ export class Table extends React.Component {
   handleCellMouseUp = (event) => {
 
     this.__dragSelecting = false
-    this.__dragSelectingEndCellIndex = event.currentTarget.dataset.cellIndex
-    this.__dragSelectingEndCellKey = event.currentTarget.dataset.cellKey
+    this.__dragSelectingEndColumnIndex = event.currentTarget.dataset.colIndex
+    this.__dragSelectingEndRowIndex = event.currentTarget.dataset.rowIndex
 
     this.setState({
       dragSelecting: false,
@@ -153,22 +153,48 @@ export class Table extends React.Component {
 
   }
 
-  handleTableMouseOut = (event) => {
+  handleTableMouseLeave = (event) => {
 
-    if (this.__dragSelecting && event.target.dataset.role === 'table') {
+    if (this.__dragSelecting && event.currentTarget && event.currentTarget.dataset.role === 'table') {
 
       this.__dragSelecting = false
-      this.__dragSelectingStartCellIndex = null
-      this.__dragSelectingStartCellKey = null
-      this.__dragSelectingEndCellIndex = null
-      this.__dragSelectingEndCellKey = null
+      this.__dragSelectingStartColumnIndex = null
+      this.__dragSelectingStartRowIndex = null
+      this.__dragSelectingEndColumnIndex = null
+      this.__dragSelectingEndRowIndex = null
 
       this.setState({
         dragSelecting: false,
         draggingRectBounding: null
       })
 
+
     }
+
+    event.preventDefault()
+
+  }
+
+  confirmDragSelecting = () => {
+
+    if (!this.__dragSelectingStartColumnIndex || !this.__dragSelectingStartRowIndex || !this.__dragSelectingEndColumnIndex || !this.__dragSelectingEndRowIndex) {
+      return false
+    }
+
+    const selectedCells = TableUtils.getCellsInsideRect(
+      [this.__dragSelectingStartColumnIndex, this.__dragSelectingStartRowIndex],
+      [this.__dragSelectingEndColumnIndex, this.__dragSelectingEndRowIndex]
+    ).map(block => block.getKey())
+
+    if (selectedCells.length < 2) {
+      return false
+    }
+
+    this.setState({
+      selectedColumnIndex: -1,
+      selectedRowIndex: -1,
+      selectedCells: selectedCells
+    }, this.renderCells)
 
   }
 
@@ -640,7 +666,7 @@ export class Table extends React.Component {
           onMouseDown={this.handleTableMouseDown}
           onMouseUp={this.hanldeTableMouseUp}
           onMouseMove={this.handleTableMouseMove}
-          onMouseOut={this.handleTableMouseOut}
+          onMouseLeave={this.handleTableMouseLeave}
         >
           {this.createColGroup()}
           <tbody>
