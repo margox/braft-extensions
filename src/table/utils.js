@@ -219,10 +219,10 @@ export const getCellsInsideRect = (editorState, tableKey, startLocation, endLoca
   const tableBlocks = findBlocks(contentBlocks, 'tableKey', tableKey)
 
   const matchedCellBlockKeys = []
-  const spanedCellBlockKeys = []
+  const spannedCellBlockKeys = []
 
   let matchedCellBlocks = Immutable.List([])
-  let spanedCellBlocks = Immutable.List([])
+  let spannedCellBlocks = Immutable.List([])
 
   tableBlocks.forEach(block => {
 
@@ -237,11 +237,11 @@ export const getCellsInsideRect = (editorState, tableKey, startLocation, endLoca
 
       if (colIndex === x && rowIndex === y) {
         matchedCellBlockKeys.indexOf(blockKey) === -1 && (matchedCellBlocks = matchedCellBlocks.push(block)) && matchedCellBlockKeys.push(blockKey);
-        (colSpan > 1 || rowSpan > 1) && (spanedCellBlockKeys.indexOf(blockKey) === -1) && (spanedCellBlocks = spanedCellBlocks.push(block)) && spanedCellBlockKeys.push(blockKey)
+        (colSpan > 1 || rowSpan > 1) && (spannedCellBlockKeys.indexOf(blockKey) === -1) && (spannedCellBlocks = spannedCellBlocks.push(block)) && spannedCellBlockKeys.push(blockKey)
       } else if (colSpan > 1 || rowSpan > 1) {
 
         if (colIndex < x && colIndex + colSpan > x && rowIndex < y && rowIndex + rowSpan > y) {
-          (spanedCellBlockKeys.indexOf(blockKey) === -1) && (spanedCellBlocks = spanedCellBlocks.push(block)) && spanedCellBlockKeys.push(blockKey)
+          (spannedCellBlockKeys.indexOf(blockKey) === -1) && (spannedCellBlocks = spannedCellBlocks.push(block)) && spannedCellBlockKeys.push(blockKey)
         }
 
       }
@@ -250,10 +250,12 @@ export const getCellsInsideRect = (editorState, tableKey, startLocation, endLoca
 
   })
 
-  console.log(matchedCellBlockKeys)
-  console.log(matchedCellBlocks)
-
-  return matchedCellBlocks
+  return {
+    cellBlocks: matchedCellBlocks,
+    cellKeys: matchedCellBlockKeys,
+    spannedCellBlocks: spannedCellBlocks,
+    spannedCellBlockKeys: spannedCellBlockKeys
+  }
 
 }
 

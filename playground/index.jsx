@@ -16,6 +16,7 @@ class Demo extends React.Component {
 
     this.state = {
       editorState: BraftEditor.createEditorState(`
+        <p></p>
         <table>
           <tr><th>1</th><th>2</th><th>3</th><th>4</th></tr>
           <tr><td>5</td><td colspan="2" rowspan="2">6</td><td>7</td></tr>
@@ -23,6 +24,7 @@ class Demo extends React.Component {
           <tr><td>10</td><td>11</td><td>12</td><td>13</td></tr>
           <tr><td>14</td><td>15</td><td>16</td><td>17</td></tr>
         </table>
+        <p></p>
       `)
     }
 
@@ -51,6 +53,7 @@ class Demo extends React.Component {
               text: 'Log HTML',
               onClick: this.logHTML
             }]}
+            controls={['undo', 'redo', 'font-family']}
             onChange={this.handleChange}
             value={editorState}
             contentStyle={{height: 700}}

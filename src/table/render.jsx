@@ -30,7 +30,9 @@ export class Table extends React.Component {
     selectedColumnIndex: -1,
     setFirstRowAsHead: false,
     dragSelecting: false,
-    draggingRectBounding: null
+    draggingRectBounding: null,
+    cellsMergeable: false,
+    cellSplittable: false
   }
 
   __tableRef = null
@@ -114,6 +116,13 @@ export class Table extends React.Component {
 
   }
 
+  handleCellContexrMenu = (event) => {
+
+    console.log(event.clientX, event.clientY)
+    event.preventDefault()
+
+  }
+
   handleCellMouseDown = (event) => {
 
     this.__dragSelecting = true
@@ -184,11 +193,11 @@ export class Table extends React.Component {
       return false
     }
 
-    const selectedCells = TableUtils.getCellsInsideRect(
+    const { cellKeys: selectedCells, spannedCellBlockKeys } = TableUtils.getCellsInsideRect(
       this.props.editorState, this.tableKey,
       [this.__dragSelectingStartColumnIndex, this.__dragSelectingStartRowIndex],
       [this.__dragSelectingEndColumnIndex, this.__dragSelectingEndRowIndex]
-    ).map(block => block.getKey()).toList().toJS()
+    )
 
     if (selectedCells.length < 2) {
       return false
@@ -197,6 +206,7 @@ export class Table extends React.Component {
     this.setState({
       selectedColumnIndex: -1,
       selectedRowIndex: -1,
+      cellsMergeable: spannedCellBlockKeys.length === 0,
       selectedCells: selectedCells
     }, this.renderCells)
 
@@ -243,9 +253,14 @@ export class Table extends React.Component {
 
     const { selectedCells } = this.state
     const { cellKey } = event.currentTarget.dataset
+    const { colSpan, rowSpan } = event.currentTarget
+
+    const nextSelectedCells = ~selectedCells.indexOf(cellKey) ? [] : [cellKey]
+    const cellSplittable = nextSelectedCells.length && (colSpan > 1 || rowSpan > 1)
 
     this.setState({
-      selectedCells:  ~selectedCells.indexOf(cellKey) ? [] : [cellKey],
+      selectedCells: nextSelectedCells,
+      cellSplittable: cellSplittable,
       selectedRowIndex: -1,
       selectedColumnIndex: -1,
     }, this.renderCells)
@@ -260,8 +275,6 @@ export class Table extends React.Component {
       return false
     }
 
-    const selectedCells = [] 
-
     if (this.state.selectedColumnIndex === selectedColumnIndex) {
       this.setState({
         selectedCells: [],
@@ -270,15 +283,18 @@ export class Table extends React.Component {
       return false
     }
 
-    this.props.children.filter(cell => {
-      const cellBlock = this.props.editorState.getCurrentContent().getBlockForKey(cell.key)
-      const cellColIndex = cellBlock.getData().get('colIndex')
-      if (cellColIndex == selectedColumnIndex) {
-        selectedCells.push(cell.key)
-      }
-    })
+    const { cellKeys: selectedCells, spannedCellBlockKeys } = TableUtils.getCellsInsideRect(
+      this.props.editorState, this.tableKey,
+      [selectedColumnIndex, 0],
+      [selectedColumnIndex, this.state.rowToolHandlers.length - 1]
+    )
 
-    this.setState({ selectedCells, selectedColumnIndex, selectedRowIndex: -1 }, this.renderCells)
+    this.setState({
+      selectedColumnIndex: selectedColumnIndex,
+      selectedRowIndex: -1,
+      cellsMergeable: spannedCellBlockKeys.length === 0,
+      selectedCells: selectedCells
+    }, this.renderCells)
 
   }
 
@@ -290,8 +306,6 @@ export class Table extends React.Component {
       return false
     }
 
-    const selectedCells = [] 
-
     if (this.state.selectedRowIndex === selectedRowIndex) {
       this.setState({
         selectedCells: [],
@@ -300,15 +314,18 @@ export class Table extends React.Component {
       return false
     }
 
-    this.props.children.filter(cell => {
-      const cellBlock = this.props.editorState.getCurrentContent().getBlockForKey(cell.key)
-      const cellRowIndex = cellBlock.getData().get('rowIndex')
-      if (cellRowIndex == selectedRowIndex) {
-        selectedCells.push(cell.key)
-      }
-    })
+    const { cellKeys: selectedCells, spannedCellBlockKeys } = TableUtils.getCellsInsideRect(
+      this.props.editorState, this.tableKey,
+      [0, selectedRowIndex],
+      [this.state.colToolHandlers.length, selectedRowIndex]
+    )
 
-    this.setState({ selectedCells, selectedRowIndex, selectedColumnIndex: -1 }, this.renderCells)
+    this.setState({
+      selectedColumnIndex: -1,
+      selectedRowIndex: selectedRowIndex,
+      cellsMergeable: spannedCellBlockKeys.length === 0,
+      selectedCells: selectedCells
+    }, this.renderCells)
 
   }
 
@@ -499,6 +516,7 @@ export class Table extends React.Component {
         colSpan: colSpan,
         rowSpan: rowSpan,
         onClick: this.selectCell,
+        onContextMenu: this.handleCellContexrMenu,
         onMouseDown: this.handleCellMouseDown,
         onMouseUp: this.handleCellMouseUp,
         onMouseEnter: this.handleCellMouseEnter
@@ -653,6 +671,22 @@ export class Table extends React.Component {
             </div>
           </div>
         ))}
+      </div>
+    )
+
+  }
+
+  createContextMenu (cellKey) {
+
+    const { selectedCells, cellsMergeable, cellSplittable } = this.state
+
+    return (
+      <div className="bf-table-context-menu">
+        <div className="context-menu-item">清空单元格</div>
+        <div className="context-menu-item">合并单元格</div>
+        <div className="context-menu-item">拆分单元格</div>
+        <div className="context-menu-item">插入行</div>
+        <div className="context-menu-item">插入列</div>
       </div>
     )
 

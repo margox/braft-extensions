@@ -252,8 +252,7 @@
     position: absolute;
     z-index: 10;
     box-sizing: border-box;
-    background-color: rgba(#07a9fe, .15);
-    // border: 1px solid rgba(#000, .2);
+    background-color: rgba(#07a9fe, .2);
     pointer-events: none;
   }
 
@@ -271,14 +270,9 @@
       }
     }
     tbody{
-      tr:nth-child(even) {
-        td{
-          background-color: #fafafa;
-        }
-      }
       .bf-table-cell{  
         background-color: #fff;
-        border: 1px solid #d1d5d9;
+        border: 1px solid #c5c5c5;
         border-width: 0.5px;
         overflow: visible;
         cursor: text;
