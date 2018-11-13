@@ -32,7 +32,8 @@ export class Table extends React.Component {
     dragSelecting: false,
     draggingRectBounding: null,
     cellsMergeable: false,
-    cellSplittable: false
+    cellSplittable: false,
+    contextMenuPosition: null
   }
 
   __tableRef = null
@@ -75,7 +76,11 @@ export class Table extends React.Component {
 
   }
 
-  handleMouseUp = () => {
+  handleMouseUp = (event) => {
+
+    if (event.button !== 0) {
+      return false
+    }
 
     if (this.state.colResizing) {
 
@@ -89,11 +94,16 @@ export class Table extends React.Component {
       this.__colResizeStartAt = 0
 
       this.setState({
+        contextMenuPosition: null,
         colToolHandlers: nextColToolHandlers,
         colResizeOffset: 0,
         colResizing: false
       })
 
+    } else {
+      this.setState({
+        contextMenuPosition: null
+      })
     }
 
   }
@@ -118,9 +128,32 @@ export class Table extends React.Component {
 
   handleCellContexrMenu = (event) => {
 
-    console.log(event.clientX, event.clientY)
+    const { selectedCells } = this.state
+    const { cellKey } = event.currentTarget.dataset
+
+    if (!~selectedCells.indexOf(cellKey)) {
+      this.selectCell(event)
+    }
+
+    const { top: tableTop, left: tableLeft, width: tableWidth } = this.__tableRef.getBoundingClientRect()
+
+    let top = event.clientY - tableTop + 15
+    let left = event.clientX - tableLeft + 10
+
+    if (left + 150 > tableWidth) {
+      left = tableWidth - 150
+    }
+
+    this.setState({
+      contextMenuPosition: { top, left }
+    })
+
     event.preventDefault()
 
+  }
+
+  handleContextMenuContextMenu = (event) => {
+    event.preventDefault()
   }
 
   handleCellMouseDown = (event) => {
@@ -207,6 +240,7 @@ export class Table extends React.Component {
       selectedColumnIndex: -1,
       selectedRowIndex: -1,
       cellsMergeable: spannedCellBlockKeys.length === 0,
+      cellSplittable: false,
       selectedCells: selectedCells
     }, this.renderCells)
 
@@ -261,6 +295,7 @@ export class Table extends React.Component {
     this.setState({
       selectedCells: nextSelectedCells,
       cellSplittable: cellSplittable,
+      cellsMergeable: false,
       selectedRowIndex: -1,
       selectedColumnIndex: -1,
     }, this.renderCells)
@@ -276,11 +311,15 @@ export class Table extends React.Component {
     }
 
     if (this.state.selectedColumnIndex === selectedColumnIndex) {
+
       this.setState({
         selectedCells: [],
+        cellsMergeable: false,
+        cellSplittable: false,
         selectedColumnIndex: -1
       }, this.renderCells)
       return false
+
     }
 
     const { cellKeys: selectedCells, spannedCellBlockKeys } = TableUtils.getCellsInsideRect(
@@ -292,6 +331,7 @@ export class Table extends React.Component {
     this.setState({
       selectedColumnIndex: selectedColumnIndex,
       selectedRowIndex: -1,
+      cellSplittable: false,
       cellsMergeable: spannedCellBlockKeys.length === 0,
       selectedCells: selectedCells
     }, this.renderCells)
@@ -309,6 +349,8 @@ export class Table extends React.Component {
     if (this.state.selectedRowIndex === selectedRowIndex) {
       this.setState({
         selectedCells: [],
+        cellsMergeable: false,
+        cellSplittable: false,
         selectedRowIndex: -1
       }, this.renderCells)
       return false
@@ -323,6 +365,7 @@ export class Table extends React.Component {
     this.setState({
       selectedColumnIndex: -1,
       selectedRowIndex: selectedRowIndex,
+      cellSplittable: false,
       cellsMergeable: spannedCellBlockKeys.length === 0,
       selectedCells: selectedCells
     }, this.renderCells)
@@ -676,17 +719,22 @@ export class Table extends React.Component {
 
   }
 
-  createContextMenu (cellKey) {
+  createContextMenu () {
 
-    const { selectedCells, cellsMergeable, cellSplittable } = this.state
+    const { selectedCells, cellsMergeable, cellSplittable, contextMenuPosition } = this.state
+
+    if (!contextMenuPosition) {
+      return null
+    }
 
     return (
-      <div className="bf-table-context-menu">
+      <div className="bf-table-context-menu" onContextMenu={this.handleContextMenuContextMenu} contentEditable={false} style={contextMenuPosition}>
         <div className="context-menu-item">清空单元格</div>
-        <div className="context-menu-item">合并单元格</div>
-        <div className="context-menu-item">拆分单元格</div>
-        <div className="context-menu-item">插入行</div>
-        <div className="context-menu-item">插入列</div>
+        <div className="context-menu-item" data-disabled={!cellsMergeable}>合并单元格</div>
+        <div className="context-menu-item seperator" data-disabled={!cellSplittable}>拆分单元格</div>
+        <div className="context-menu-item" data-disabled={selectedCells.length > 1}>删除所在行</div>
+        <div className="context-menu-item" data-disabled={selectedCells.length > 1}>删除所在列</div>
+        <div className="context-menu-item">删除该表格</div>
       </div>
     )
 
@@ -715,6 +763,7 @@ export class Table extends React.Component {
           </tbody>
         </table>
         {dragSelecting ? <div className="dragging-rect" style={draggingRectBounding}/> : null}
+        {this.createContextMenu()}
         {this.createColTools()}
         {this.createRowTools()}
       </div>

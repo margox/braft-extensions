@@ -239,11 +239,9 @@ export const getCellsInsideRect = (editorState, tableKey, startLocation, endLoca
         matchedCellBlockKeys.indexOf(blockKey) === -1 && (matchedCellBlocks = matchedCellBlocks.push(block)) && matchedCellBlockKeys.push(blockKey);
         (colSpan > 1 || rowSpan > 1) && (spannedCellBlockKeys.indexOf(blockKey) === -1) && (spannedCellBlocks = spannedCellBlocks.push(block)) && spannedCellBlockKeys.push(blockKey)
       } else if (colSpan > 1 || rowSpan > 1) {
-
-        if (colIndex < x && colIndex + colSpan > x && rowIndex < y && rowIndex + rowSpan > y) {
+        if ((colIndex <= x && colIndex + colSpan > x && rowIndex <= y && rowIndex + rowSpan > y)) {
           (spannedCellBlockKeys.indexOf(blockKey) === -1) && (spannedCellBlocks = spannedCellBlocks.push(block)) && spannedCellBlockKeys.push(blockKey)
         }
-
       }
 
     })
@@ -251,8 +249,8 @@ export const getCellsInsideRect = (editorState, tableKey, startLocation, endLoca
   })
 
   return {
-    cellBlocks: matchedCellBlocks,
-    cellKeys: matchedCellBlockKeys,
+    cellBlocks: matchedCellBlocks.merge(spannedCellBlocks),
+    cellKeys: [ ...matchedCellBlockKeys, ...spannedCellBlockKeys ], // todo: 去重复
     spannedCellBlocks: spannedCellBlocks,
     spannedCellBlockKeys: spannedCellBlockKeys
   }

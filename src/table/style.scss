@@ -256,6 +256,38 @@
     pointer-events: none;
   }
 
+  .bf-table-context-menu{
+    position: absolute;
+    z-index: 10;
+    top: 20px;
+    right: 20px;
+    width: 150px;
+    overflow: hidden;
+    background-color: #21242a;
+    border-radius: 3px;
+    box-shadow: 0 5px 25px rgba(#000, .2);
+    user-select: none;
+    cursor: default;
+    .context-menu-item{
+      padding: 0 15px;
+      border-top: 1px solid #31343a;
+      line-height: 38px;
+      color: #919599;
+      font-size: 14px;
+      cursor: pointer;
+      &:first-child{
+        border: none;
+      }
+      &[data-disabled="true"]{
+        cursor: not-allowed;
+        color: #414549;
+      }
+      &:hover{
+        background-color: rgba(#000, .3);
+      }
+    }
+  }
+
   .bf-table{
     width: 100%;
     table-layout: fixed;
