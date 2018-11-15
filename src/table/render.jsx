@@ -47,6 +47,7 @@ export class Table extends React.Component {
   __endCellKey = null
 
   __dragSelecting = false
+  __dragSelected = false
   __dragSelectingStartColumnIndex = null
   __dragSelectingStartRowIndex = null
   __dragSelectingEndColumnIndex = null
@@ -176,6 +177,7 @@ export class Table extends React.Component {
   handleCellMouseUp = () => {
 
     this.__dragSelecting = false
+    this.__dragSelected = false
     this.__dragSelectingStartColumnIndex = null
     this.__dragSelectingStartRowIndex = null
     this.__dragSelectingEndColumnIndex = null
@@ -195,6 +197,13 @@ export class Table extends React.Component {
       this.__dragSelectingEndColumnIndex = event.currentTarget.dataset.colIndex
       this.__dragSelectingEndRowIndex = event.currentTarget.dataset.rowIndex
 
+      if (this.__dragSelectingEndColumnIndex !== this.__dragSelectingStartColumnIndex || this.__dragSelectingEndRowIndex !== this.__dragSelectingStartRowIndex) {
+        this.__dragSelected = true
+        event.preventDefault()
+      } else {
+        this.__dragSelected = false
+      }
+
       this.confirmDragSelecting()
 
     }
@@ -203,7 +212,7 @@ export class Table extends React.Component {
 
   handleTableMouseMove = (event) => {
 
-    if (this.__dragSelecting) {
+    if (this.__dragSelecting && this.__dragSelected) {
       this.updateDraggingRectBounding(event)
       event.preventDefault()
     }
@@ -226,7 +235,7 @@ export class Table extends React.Component {
       return false
     }
 
-    const { cellKeys: selectedCells, spannedCellBlockKeys } = TableUtils.getCellsInsideRect(
+    const { cellBlocks, cellKeys: selectedCells, spannedCellBlockKeys } = TableUtils.getCellsInsideRect(
       this.props.editorState, this.tableKey,
       [this.__dragSelectingStartColumnIndex, this.__dragSelectingStartRowIndex],
       [this.__dragSelectingEndColumnIndex, this.__dragSelectingEndRowIndex]
@@ -442,6 +451,15 @@ export class Table extends React.Component {
         })
       })
 
+    }
+
+  }
+
+  mergeCells = () => {
+
+    const { selectedCells, cellsMergeable } = this.state
+    if (cellsMergeable && selectedCells.length > 1) {
+      TableUtils.mergeCells(this.props.editorState, this.tableKey, selectedCells)
     }
 
   }
@@ -730,7 +748,7 @@ export class Table extends React.Component {
     return (
       <div className="bf-table-context-menu" onContextMenu={this.handleContextMenuContextMenu} contentEditable={false} style={contextMenuPosition}>
         <div className="context-menu-item">清空单元格</div>
-        <div className="context-menu-item" data-disabled={!cellsMergeable}>合并单元格</div>
+        <div className="context-menu-item" onMouseDown={this.mergeCells} data-disabled={!cellsMergeable}>合并单元格</div>
         <div className="context-menu-item seperator" data-disabled={!cellSplittable}>拆分单元格</div>
         <div className="context-menu-item" data-disabled={selectedCells.length > 1}>删除所在行</div>
         <div className="context-menu-item" data-disabled={selectedCells.length > 1}>删除所在列</div>

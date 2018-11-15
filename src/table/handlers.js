@@ -9,15 +9,19 @@ import { ContentUtils } from 'braft-utils'
 
 export const handleKeyCommand = (command, editorState) => {
 
-  const blockType = ContentUtils.getSelectionBlockType(editorState)
+  const selectedBlocks = ContentUtils.getSelectedBlocks(editorState)
 
-  if (blockType !== 'table-cell') {
+  if (!selectedBlocks.find(block => block.getType() === 'table-cell')) {
     return 'not-handled'
   }
 
   const currentBlock = ContentUtils.getSelectionBlock(editorState)
 
   if (command === 'backspace') {
+
+    if (selectedBlocks.length > 1) {
+      return 'handled'
+    }
 
     if (currentBlock.getText().length === 0) {
       return 'handled'

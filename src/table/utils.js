@@ -1,5 +1,6 @@
 import { EditorState, ContentBlock, CharacterMetadata, genKey } from 'draft-js'
 import Immutable from 'immutable'
+import { bindCallback } from 'rxjs';
 
 // 简易的值比较方法
 const valueComparison = (value1, value2, operator) => {
@@ -73,7 +74,7 @@ const updateTableBlocks = (contentState, selection, focusKey, tableBlocks, table
   const blocksAfter = contentBlocks.skipUntil((block, key) => {
     const nextBlockKey = contentState.getKeyAfter(key)
     return block.getData().get('tableKey') === tableKey && nextBlockKey && contentState.getBlockForKey(nextBlockKey).getData().get('tableKey') !== tableKey
-  })
+  }).rest()
 
   return contentState.merge({
     blockMap: blocksBefore.concat(tableBlocks, blocksAfter).toOrderedMap(),
@@ -525,5 +526,45 @@ export const removeRow = (editorState, tableKey, rowIndex) => {
   const nextContentState = updateTableBlocks(contentState, editorState.getSelection(), focusCellKey, nextTableBlocks, tableKey, true)
 
   return EditorState.push(editorState, nextContentState, 'remove-table-row')
+
+}
+
+export const mergeCells = (editorState, tableKey, cellKeys) => {
+
+  const contentState = editorState.getCurrentContent()
+  const contentBlocks = contentState.getBlockMap()
+
+  // const cellBlocks = Immutable.OrderedMap([])
+  const cellBlockProps = []
+  let mergedText = ''
+
+  const tableBlocks = findBlocks(contentBlocks, 'tableKey', tableKey).filter(block => {
+
+    if (~cellKeys.indexOf(block.getKey())) {
+
+      mergedText += block.getText()
+
+      cellBlockProps.push({
+        key: block.getKey(),
+        colIndex: block.getData().get('colIndex'),
+        rowIndex: block.getData().get('rowIndex'),
+      })
+
+      return false
+
+    } else {
+      return true
+    }
+
+  })
+
+  const sortedCellProps = cellBlockProps.sort((prev, next) => (next.colIndex + next.rowIndex) - (prev.colIndex + prev.rowIndex))
+  const firstCellProp = sortedCellProps.slice(-1)[0]
+  const lastCellProp = sortedCellProps[0]
+  const mergedCell = contentState.getBlockForKey(firstCellProp.key)
+
+  console.log(firstCellProp)
+  console.log(lastCellProp)
+  console.log(mergedCell)
 
 }

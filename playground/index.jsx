@@ -53,7 +53,6 @@ class Demo extends React.Component {
               text: 'Log HTML',
               onClick: this.logHTML
             }]}
-            controls={['undo', 'redo', 'font-family']}
             onChange={this.handleChange}
             value={editorState}
             contentStyle={{height: 700}}
