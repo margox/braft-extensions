@@ -235,7 +235,7 @@ export class Table extends React.Component {
       return false
     }
 
-    const { cellBlocks, cellKeys: selectedCells, spannedCellBlockKeys } = TableUtils.getCellsInsideRect(
+    const { cellKeys: selectedCells, spannedCellBlockKeys } = TableUtils.getCellsInsideRect(
       this.props.editorState, this.tableKey,
       [this.__dragSelectingStartColumnIndex, this.__dragSelectingStartRowIndex],
       [this.__dragSelectingEndColumnIndex, this.__dragSelectingEndRowIndex]
@@ -459,7 +459,17 @@ export class Table extends React.Component {
 
     const { selectedCells, cellsMergeable } = this.state
     if (cellsMergeable && selectedCells.length > 1) {
-      TableUtils.mergeCells(this.props.editorState, this.tableKey, selectedCells)
+
+      this.setState({
+        selectedCells: [selectedCells[0]],
+        cellSplittable: false,
+        cellsMergeable: false,
+        selectedRowIndex: -1,
+        selectedColumnIndex: -1,
+      }, () => {
+        this.props.editor.setValue(TableUtils.mergeCells(this.props.editorState, this.tableKey, selectedCells))
+      })
+
     }
 
   }
@@ -558,7 +568,7 @@ export class Table extends React.Component {
         const colSpan = (cellBlockData.get('colSpan') || 1) * 1  
 
         for (var ii = this.colLength;ii < this.colLength + colSpan;ii ++) {
-          colToolHandlers[this.colLength] = {key: cell.key, width: 0}
+          colToolHandlers[ii] = {key: cell.key, width: 0}
         }
 
         this.colLength += colSpan
@@ -583,14 +593,22 @@ export class Table extends React.Component {
         onMouseEnter: this.handleCellMouseEnter
       })
 
+      
+
+      for (var jj = rowIndex;jj < rowIndex + rowSpan; jj ++) {
+        rowToolHandlers[jj] = {key: cell.key, height: 0}
+        tableRows[jj] = tableRows[jj] || []
+      }
+
       if (!tableRows[rowIndex]) {
-        rowToolHandlers[rowIndex] = {key: cell.key, height: 0}
         tableRows[rowIndex] = [newCell]
       } else {
         tableRows[rowIndex].push(newCell)
       }
 
     })
+
+    console.log(tableRows)
 
     const tableWidth = this.__tableRef.getBoundingClientRect().width
     const defaultColWidth = tableWidth / this.colLength

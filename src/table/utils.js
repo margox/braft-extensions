@@ -261,20 +261,32 @@ export const getCellsInsideRect = (editorState, tableKey, startLocation, endLoca
 // 插入一个单元格block到表格的block列表中
 export const insertCell = (tableBlocks, cell) => {
 
+  let colIndex, rowIndex, cellBlock
+
+  if (cell instanceof ContentBlock) {
+    colIndex = cell.getData().get('colIndex')
+    rowIndex = cell.getData().get('rowIndex')
+    cellBlock = cell
+  } else {
+    colIndex = cell.colIndex
+    rowIndex = cell.rowIndex
+    cellBlock = createCellBlock(cell)
+  }
+
   const blocksBefore = tableBlocks.takeUntil(block => {
-    return block.getData().get('rowIndex') >= cell.rowIndex && block.getData().get('colIndex') >= cell.colIndex
+    return block.getData().get('rowIndex') >= rowIndex && block.getData().get('colIndex') >= colIndex
   })
 
   const blocksAfter = tableBlocks.skipUntil(block => {
-    return block.getData().get('rowIndex') >= cell.rowIndex && block.getData().get('colIndex') >= cell.colIndex
+    return block.getData().get('rowIndex') >= rowIndex && block.getData().get('colIndex') >= colIndex
   })
 
-  const cellBlock = createCellBlock(cell)
-
   const nextTableBlocks = blocksBefore.concat(Immutable.OrderedMap([[cellBlock.getKey(), cellBlock]]).toSeq(), blocksAfter)
+
   return nextTableBlocks
 
 }
+
 
 // 插入多个单元格block到表格的block列表中
 export const insertCells = (tableBlocks, cells = []) => {
@@ -534,8 +546,7 @@ export const mergeCells = (editorState, tableKey, cellKeys) => {
   const contentState = editorState.getCurrentContent()
   const contentBlocks = contentState.getBlockMap()
 
-  // const cellBlocks = Immutable.OrderedMap([])
-  const cellBlockProps = []
+  const cellBlocksData = []
   let mergedText = ''
 
   const tableBlocks = findBlocks(contentBlocks, 'tableKey', tableKey).filter(block => {
@@ -544,10 +555,9 @@ export const mergeCells = (editorState, tableKey, cellKeys) => {
 
       mergedText += block.getText()
 
-      cellBlockProps.push({
+      cellBlocksData.push({
         key: block.getKey(),
-        colIndex: block.getData().get('colIndex'),
-        rowIndex: block.getData().get('rowIndex'),
+        ...block.getData().toJS()
       })
 
       return false
@@ -558,13 +568,21 @@ export const mergeCells = (editorState, tableKey, cellKeys) => {
 
   })
 
-  const sortedCellProps = cellBlockProps.sort((prev, next) => (next.colIndex + next.rowIndex) - (prev.colIndex + prev.rowIndex))
-  const firstCellProp = sortedCellProps.slice(-1)[0]
-  const lastCellProp = sortedCellProps[0]
-  const mergedCell = contentState.getBlockForKey(firstCellProp.key)
+  const sortedCellBlocksData = cellBlocksData.sort((prev, next) => (next.colIndex + next.rowIndex) - (prev.colIndex + prev.rowIndex))
 
-  console.log(firstCellProp)
-  console.log(lastCellProp)
-  console.log(mergedCell)
+  const firstCellData = sortedCellBlocksData.slice(-1)[0]
+  const lastCellData = sortedCellBlocksData[0]
+  const mergedCell = contentState.getBlockForKey(firstCellData.key).merge({
+    'text': mergedText,
+    'data': Immutable.Map({
+      ...firstCellData,
+      colSpan: lastCellData.colIndex - firstCellData.colIndex + 1,
+      rowSpan: lastCellData.rowIndex - firstCellData.rowIndex + 1
+    })
+  })
+
+  const nextContentState = updateTableBlocks(contentState, editorState.getSelection(), firstCellData.key, insertCell(tableBlocks, mergedCell), tableKey)
+
+  return EditorState.push(editorState, nextContentState, 'merge-table-cell')
 
 }

@@ -1,7 +1,7 @@
 .bf-table-container{
   position: relative;
   margin: 0 0 0 -10px;
-  padding: 10px 0 0 10px;
+  padding: 10px 0 10px 10px;
 
   .bf-table-col-tools,
   .bf-table-row-tools{
@@ -302,6 +302,9 @@
       }
     }
     tbody{
+      tr:empty{
+        padding: 10px;
+      }
       .bf-table-cell{  
         background-color: #fff;
         border: 1px solid #c5c5c5;
