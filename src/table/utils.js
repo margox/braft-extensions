@@ -578,10 +578,64 @@ export const mergeCells = (editorState, tableKey, cellKeys) => {
       ...firstCellData,
       colSpan: lastCellData.colIndex - firstCellData.colIndex + 1,
       rowSpan: lastCellData.rowIndex - firstCellData.rowIndex + 1
-    })
+    }),
+    characterList: Immutable.List(Immutable.Repeat(CharacterMetadata.create(), mergedText.length))
   })
 
   const nextContentState = updateTableBlocks(contentState, editorState.getSelection(), firstCellData.key, insertCell(tableBlocks, mergedCell), tableKey)
+
+  return EditorState.push(editorState, nextContentState, 'merge-table-cell')
+
+}
+
+export const splitCell = (editorState, tableKey, cellKey) => {
+
+  const contentState = editorState.getCurrentContent()
+  const contentBlocks = contentState.getBlockMap()
+
+  const cellsToBeAdded = []
+
+  const tableBlocks = findBlocks(contentBlocks, 'tableKey', tableKey).map(block => {
+
+    if (block.getKey() === cellKey) {
+
+      const blockData = block.getData().toJS()
+      const { colIndex, rowIndex, colSpan, rowSpan } = blockData
+
+      if (colSpan === 1 && rowSpan === 1) {
+        return block
+      }
+
+      for (var ii = colIndex;ii < colIndex + colSpan;ii++) {
+        for (var jj = rowIndex;jj < rowIndex + rowSpan;jj++) {
+          if (ii !== colIndex || jj !== rowIndex) {
+            cellsToBeAdded.push({
+              text: '',
+              tableKey: tableKey,
+              colIndex: ii,
+              rowIndex: jj,
+              colSpan: 1,
+              rowSpan: 1
+            })
+          }
+        }
+      }
+
+      return block.merge({
+        'data': Immutable.Map({
+          ...blockData,
+          colSpan: 1,
+          rowSpan: 1
+        })
+      })
+
+    } else {
+      return block
+    }
+
+  })
+
+  const nextContentState = updateTableBlocks(contentState, editorState.getSelection(), cellKey, insertCells(tableBlocks, cellsToBeAdded), tableKey)
 
   return EditorState.push(editorState, nextContentState, 'merge-table-cell')
 

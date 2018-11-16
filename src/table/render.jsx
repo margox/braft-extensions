@@ -458,16 +458,36 @@ export class Table extends React.Component {
   mergeCells = () => {
 
     const { selectedCells, cellsMergeable } = this.state
+
     if (cellsMergeable && selectedCells.length > 1) {
 
       this.setState({
         selectedCells: [selectedCells[0]],
-        cellSplittable: false,
+        cellSplittable: true,
         cellsMergeable: false,
         selectedRowIndex: -1,
         selectedColumnIndex: -1,
       }, () => {
         this.props.editor.setValue(TableUtils.mergeCells(this.props.editorState, this.tableKey, selectedCells))
+      })
+
+    }
+
+  }
+
+  splitCell = () => {
+
+    const { selectedCells, cellSplittable } = this.state
+
+    if (cellSplittable && selectedCells.length === 1) {
+
+      this.setState({
+        cellSplittable: false,
+        cellsMergeable: false,
+        selectedRowIndex: -1,
+        selectedColumnIndex: -1,
+      }, () => {
+        this.props.editor.setValue(TableUtils.splitCell(this.props.editorState, this.tableKey, selectedCells[0]))
       })
 
     }
@@ -607,8 +627,6 @@ export class Table extends React.Component {
       }
 
     })
-
-    console.log(tableRows)
 
     const tableWidth = this.__tableRef.getBoundingClientRect().width
     const defaultColWidth = tableWidth / this.colLength
@@ -767,7 +785,7 @@ export class Table extends React.Component {
       <div className="bf-table-context-menu" onContextMenu={this.handleContextMenuContextMenu} contentEditable={false} style={contextMenuPosition}>
         <div className="context-menu-item">清空单元格</div>
         <div className="context-menu-item" onMouseDown={this.mergeCells} data-disabled={!cellsMergeable}>合并单元格</div>
-        <div className="context-menu-item seperator" data-disabled={!cellSplittable}>拆分单元格</div>
+        <div className="context-menu-item" onMouseDown={this.splitCell} data-disabled={!cellSplittable}>拆分单元格</div>
         <div className="context-menu-item" data-disabled={selectedCells.length > 1}>删除所在行</div>
         <div className="context-menu-item" data-disabled={selectedCells.length > 1}>删除所在列</div>
         <div className="context-menu-item">删除该表格</div>
