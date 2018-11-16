@@ -541,6 +541,7 @@ export const removeRow = (editorState, tableKey, rowIndex) => {
 
 }
 
+// 合并单元格
 export const mergeCells = (editorState, tableKey, cellKeys) => {
 
   const contentState = editorState.getCurrentContent()
@@ -588,6 +589,7 @@ export const mergeCells = (editorState, tableKey, cellKeys) => {
 
 }
 
+// 拆分单元格
 export const splitCell = (editorState, tableKey, cellKey) => {
 
   const contentState = editorState.getCurrentContent()

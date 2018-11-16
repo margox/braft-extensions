@@ -1,7 +1,10 @@
 import './style.scss'
-import { handleKeyCommand, handleReturn } from './handlers'
-import { getTableCellRenderMap } from './render'
+import { ContentUtils } from 'braft-utils'
+import { handleKeyCommand, handleReturn, handleDroppedFiles, handlePastedFiles, handlePastedText, handleChangeBlockType } from './handlers'
+import { tableRenderMap } from './render'
 import { tableImportFn, tableExportFn } from './converts'
+
+ContentUtils.registerStrictBlockType('table-cell')
 
 export default (options) => {
 
@@ -15,16 +18,19 @@ export default (options) => {
     {
       type: 'prop-interception',
       includeEditors, excludeEditors,
-      interceptor: (editorProps) => {
-        editorProps.handleKeyCommand = handleKeyCommand
-        editorProps.handleReturn = handleReturn
+      interceptor: (editorProps, editor) => {
+        editorProps.handleKeyCommand = handleKeyCommand(editorProps.handleKeyCommand)
+        editorProps.handleReturn = handleReturn(editorProps.handleReturn)
+        editorProps.handleDroppedFiles = handleDroppedFiles(editorProps.handleDroppedFiles)
+        editorProps.handlePastedFiles = handlePastedFiles(editorProps.handlePastedFiles)
+        editorProps.handlePastedText = handlePastedText(editorProps.handlePastedText)
         return editorProps
       }
     }, {
       type: 'block',
       name: 'table-cell',
       includeEditors, excludeEditors,
-      renderMap: getTableCellRenderMap,
+      renderMap: tableRenderMap,
       importer: tableImportFn,
       exporter: tableExportFn
     }

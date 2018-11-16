@@ -827,7 +827,7 @@ export class Table extends React.Component {
 
 }
 
-export const getTableCellRenderMap = (props) => {
+export const tableRenderMap = (props) => {
 
   return Immutable.Map({
     'table-cell': {
