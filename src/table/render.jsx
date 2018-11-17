@@ -494,6 +494,10 @@ export class Table extends React.Component {
 
   }
 
+  removeTable = () => {
+    this.props.editor.setValue(TableUtils.removeTable(this.props.editorState, this.tableKey))
+  }
+
   componentDidMount () {
 
     this.renderCells(this.props)
@@ -775,7 +779,7 @@ export class Table extends React.Component {
 
   createContextMenu () {
 
-    const { selectedCells, cellsMergeable, cellSplittable, contextMenuPosition } = this.state
+    const { cellsMergeable, cellSplittable, contextMenuPosition } = this.state
 
     if (!contextMenuPosition) {
       return null
@@ -783,12 +787,9 @@ export class Table extends React.Component {
 
     return (
       <div className="bf-table-context-menu" onContextMenu={this.handleContextMenuContextMenu} contentEditable={false} style={contextMenuPosition}>
-        <div className="context-menu-item">清空单元格</div>
         <div className="context-menu-item" onMouseDown={this.mergeCells} data-disabled={!cellsMergeable}>合并单元格</div>
         <div className="context-menu-item" onMouseDown={this.splitCell} data-disabled={!cellSplittable}>拆分单元格</div>
-        <div className="context-menu-item" data-disabled={selectedCells.length > 1}>删除所在行</div>
-        <div className="context-menu-item" data-disabled={selectedCells.length > 1}>删除所在列</div>
-        <div className="context-menu-item">删除该表格</div>
+        <div className="context-menu-item" onMouseDown={this.removeTable}>删除该表格</div>
       </div>
     )
 

@@ -1,6 +1,6 @@
 import { EditorState, ContentBlock, CharacterMetadata, genKey } from 'draft-js'
 import Immutable from 'immutable'
-import { bindCallback } from 'rxjs';
+import { ContentUtils } from 'braft-utils'
 
 // 简易的值比较方法
 const valueComparison = (value1, value2, operator) => {
@@ -40,6 +40,17 @@ const createCellBlock = (cell) => {
     characterList: Immutable.List(Immutable.Repeat(CharacterMetadata.create(), text.length))
   })
 
+}
+
+const createUnstyledBlock = () => {
+  const key = genKey()
+  return [key, new ContentBlock({
+    key: key,
+    type: 'unstyled',
+    text: '',
+    data: Immutable.Map({}),
+    characterList: Immutable.List([])
+  })]
 }
 
 // 创建并返回一行单元格block
@@ -294,6 +305,101 @@ export const insertCells = (tableBlocks, cells = []) => {
   return cells.reduce((nextTableBlocks, cell) => {
     return insertCell(nextTableBlocks, cell)
   }, tableBlocks)
+
+}
+
+export const insertTable = (editorState, columns = 3, rows = 3) => {
+
+  if (ContentUtils.selectionContainsStrictBlock(editorState)) {
+    return editorState
+  }
+
+  const selectionState = editorState.getSelection()
+  const contentState = editorState.getCurrentContent()
+  const contentBlocks = contentState.getBlockMap()
+
+  const tableKey = genKey()
+  const cellBlocks = [createUnstyledBlock()]
+
+  for (var ii = 0;ii < columns; ii ++) {
+    for (var jj = 0;jj < rows;jj ++) {
+      let cellBlock = createCellBlock({
+        tableKey: tableKey,
+        colIndex: ii,
+        rowIndex: jj,
+      })
+      cellBlocks.push([cellBlock.getKey(), cellBlock])
+    }
+  }
+
+  cellBlocks.push(createUnstyledBlock())
+
+  const startKey = selectionState.getStartKey()
+  const currentBlock = contentState.getBlockForKey(startKey)
+
+  const blocksBefore = contentBlocks.toSeq().takeUntil((block) => {
+    return block === currentBlock
+  })
+
+  const blocksAfter = contentBlocks.toSeq().skipUntil((block) => {
+    return block === currentBlock
+  }).rest()
+
+  const tableBlocks = Immutable.OrderedMap(cellBlocks).toSeq()
+
+  const firstCellKey = cellBlocks[1][0]
+  const nextContentBlocks = blocksBefore.concat(tableBlocks, blocksAfter).toOrderedMap()
+
+  const nextContentState = contentState.merge({
+    blockMap: nextContentBlocks,
+    selectionBefore: selectionState,
+    selectionAfter: selectionState.merge({
+      anchorKey: firstCellKey,
+      anchorOffset: selectionState.getStartOffset(),
+      focusKey: firstCellKey,
+      focusOffset: selectionState.getStartOffset(),
+      isBackward: false
+    })
+  })
+
+  return EditorState.push(editorState, nextContentState, 'insert-table')
+
+}
+
+export const removeTable = (editorState, tableKey) => {
+
+  if (!tableKey) {
+    return editorState
+  }
+
+  const selectionState = editorState.getSelection()
+  const contentState = editorState.getCurrentContent()
+  const contentBlocks = contentState.getBlockMap()
+  const tableBlocks = findBlocks(contentBlocks, 'tableKey', tableKey)
+
+  const nextContentBlocks = contentBlocks.filter(block => {
+    if (block.getType() === 'table-cell' && block.getData().get('tableKey') === tableKey) {
+      return false
+    } else {
+      return true
+    }
+  })
+
+  const focusCellKey = (tableBlocks.first() ? (contentState.getBlockBefore(tableBlocks.first().getKey()) || nextContentBlocks.first()) : nextContentBlocks.first()).getKey()
+
+  const nextContentState = contentState.merge({
+    blockMap: nextContentBlocks,
+    selectionBefore: selectionState,
+    selectionAfter: selectionState.merge({
+      anchorKey: focusCellKey,
+      anchorOffset: selectionState.getStartOffset(),
+      focusKey: focusCellKey,
+      focusOffset: selectionState.getStartOffset(),
+      isBackward: false
+    })
+  })
+
+  return EditorState.push(editorState, nextContentState, 'remove-table')
 
 }
 
