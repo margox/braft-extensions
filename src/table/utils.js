@@ -298,7 +298,6 @@ export const insertCell = (tableBlocks, cell) => {
 
 }
 
-
 // 插入多个单元格block到表格的block列表中
 export const insertCells = (tableBlocks, cells = []) => {
 
@@ -308,6 +307,7 @@ export const insertCells = (tableBlocks, cells = []) => {
 
 }
 
+// 插入表格
 export const insertTable = (editorState, columns = 3, rows = 3) => {
 
   if (ContentUtils.selectionContainsStrictBlock(editorState)) {
@@ -366,6 +366,7 @@ export const insertTable = (editorState, columns = 3, rows = 3) => {
 
 }
 
+// 删除整个表格
 export const removeTable = (editorState, tableKey) => {
 
   if (!tableKey) {
@@ -518,7 +519,7 @@ export const removeColumn = (editorState, tableKey, colIndex) => {
 
   })
 
-  const focusCellKey = tableBlocks.first().getKey()
+  const focusCellKey = (nextTableBlocks.first() || contentState.getBlockBefore(tableBlocks.first().getKey()) || contentState.getBlockAfter(tableBlocks.first().getKey())).getKey()
   const nextContentState = updateTableBlocks(contentState, editorState.getSelection(), focusCellKey, insertCells(nextTableBlocks, cellsToBeAdded), tableKey)
 
   return EditorState.push(editorState, nextContentState, 'remove-table-column')
@@ -639,7 +640,7 @@ export const removeRow = (editorState, tableKey, rowIndex) => {
 
   }, [])
 
-  const focusCellKey = (blocksAfter.first() || blocksBefore.last()).getKey()
+  const focusCellKey = (blocksAfter.first() || blocksBefore.last() || contentBlocks.first()).getKey()
   const nextTableBlocks = insertCells(blocksBefore.concat(blocksAfter), cellsToBeAdded)
   const nextContentState = updateTableBlocks(contentState, editorState.getSelection(), focusCellKey, nextTableBlocks, tableKey, true)
 

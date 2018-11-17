@@ -28,6 +28,38 @@ export const tableImportFn = (nodeName, node) => {
 
 }
 
-export const tableExportFn = () => {
+export const tableExportFn = (contentState, block) => {
+
+  if (block.type.toLowerCase() !== 'table-cell') {
+    return null
+  }
+
+  const previousBlock = contentState.getBlockBefore(block.key)
+  const nextBlock = contentState.getBlockAfter(block.key)
+  const previousBlockType = previousBlock ? previousBlock.getType() : null
+  const previousBlockData = previousBlock ? previousBlock.getData().toJS() : {}
+  const nextBlockType = nextBlock ? nextBlock.getType() : null
+  const nextBlockData = nextBlock ? nextBlock.getData().toJS() : {}
+
+  let start = ''
+  let end = ''
+
+  if (previousBlockType !== 'table-cell') {
+    start = `<table><tr><td colSpan="${block.data.colSpan}" rowSpan="${block.data.rowSpan}">`
+  } else if (previousBlockData.rowIndex !== block.data.rowIndex) {
+    start = `<tr><td colSpan="${block.data.colSpan}" rowSpan="${block.data.rowSpan}">`
+  } else {
+    start = `<td colSpan="${block.data.colSpan}" rowSpan="${block.data.rowSpan}">`
+  }
+
+  if (nextBlockType !== 'table-cell') {
+    end = '</td></tr></table>'
+  } else if (nextBlockData.rowIndex !== block.data.rowIndex) {
+    end = '</td></tr>'
+  } else {
+    end = '</td>'
+  }
+
+  return { start, end }
 
 }

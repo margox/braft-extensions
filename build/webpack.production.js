@@ -5,7 +5,7 @@ var merge = require('webpack-merge')
   , path = require('path')
   , baseConfigs = require('./webpack.base')
 
-var entryNames = ['code-highlighter', 'color-picker', 'emoticon', 'max-length', 'header-id']
+var entryNames = ['code-highlighter', 'color-picker', 'emoticon', 'max-length', 'header-id', 'table']
 var entries = {
   index: './index.js'
 }

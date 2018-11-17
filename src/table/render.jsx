@@ -1,5 +1,6 @@
 import React from 'react'
 import Immutable from 'immutable'
+import languages from './languages'
 import * as TableUtils from './utils'
 
 const getIndexFromEvent = (event, ignoredTarget = '') => {
@@ -16,7 +17,27 @@ const getIndexFromEvent = (event, ignoredTarget = '') => {
 
 }
 
+export const getLanguage = (editor) => {
+
+  const lang = editor.editorProps.language
+
+  if (typeof lang === 'function') {
+    return lang(languages, 'braft-table')
+  } else {
+    return languages[lang] || languages['zh']
+  }
+
+}
+
+
 export class Table extends React.Component {
+
+  constructor (props) {
+
+    super(props)
+    this.language = getLanguage(props.editor)
+
+  }
 
   state = {
     tableRows: [],
@@ -581,7 +602,6 @@ export class Table extends React.Component {
       const tableKey = cellBlockData.get('tableKey')
       const colIndex = cellBlockData.get('colIndex') * 1
       const rowIndex = cellBlockData.get('rowIndex') * 1
-      // const isHead = cellBlockData.get('isHead')
       const colSpan = cellBlockData.get('colSpan')
       const rowSpan = cellBlockData.get('rowSpan')
 
@@ -601,7 +621,6 @@ export class Table extends React.Component {
 
       const newCell = React.cloneElement(cell, {
         'data-active': !!~this.state.selectedCells.indexOf(cell.key),
-        // 'data-is-head': isHead,
         'data-row-index': rowIndex,
         'data-col-index': colIndex || (tableRows[rowIndex] || []).length,
         'data-cell-index': cellIndex,
@@ -653,7 +672,7 @@ export class Table extends React.Component {
 
   createColTools () {
 
-    const { colResizing, colResizeOffset, colToolHandlers, selectedColumnIndex, defaultColWidth } = this.state
+    const { colResizing, /*colResizeOffset,*/ colToolHandlers, selectedColumnIndex, defaultColWidth } = this.state
 
     return (
       <div
@@ -673,7 +692,7 @@ export class Table extends React.Component {
             style={{width: item.width || defaultColWidth}}
             onClick={this.selectColumn}
           >
-            {index !== 0 ? (
+            {/*index !== 0 && ? (
               <div
                 data-index={index}
                 data-key={item.key} 
@@ -681,7 +700,7 @@ export class Table extends React.Component {
                 style={colResizing && this.__colResizeIndex === index ? {transform: `translateX(${colResizeOffset}px)`} : null}
                 onMouseDown={this.handleColResizerMouseDown}
               ></div>
-            ) : null}
+            ) : null*/}
             <div className="bf-col-tool-left">
               <div
                 data-index={index}
@@ -787,9 +806,9 @@ export class Table extends React.Component {
 
     return (
       <div className="bf-table-context-menu" onContextMenu={this.handleContextMenuContextMenu} contentEditable={false} style={contextMenuPosition}>
-        <div className="context-menu-item" onMouseDown={this.mergeCells} data-disabled={!cellsMergeable}>合并单元格</div>
-        <div className="context-menu-item" onMouseDown={this.splitCell} data-disabled={!cellSplittable}>拆分单元格</div>
-        <div className="context-menu-item" onMouseDown={this.removeTable}>删除该表格</div>
+        <div className="context-menu-item" onMouseDown={this.mergeCells} data-disabled={!cellsMergeable}>{this.language.mergeCells}</div>
+        <div className="context-menu-item" onMouseDown={this.splitCell} data-disabled={!cellSplittable}>{this.language.splitCell}</div>
+        <div className="context-menu-item" onMouseDown={this.removeTable}>{this.language.removeTable}</div>
       </div>
     )
 

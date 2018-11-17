@@ -52,6 +52,7 @@ class Demo extends React.Component {
               text: 'Log HTML',
               onClick: this.logHTML
             }]}
+            language="pl"
             onChange={this.handleChange}
             value={editorState}
             contentStyle={{height: 700}}

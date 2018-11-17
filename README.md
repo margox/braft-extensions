@@ -1,11 +1,12 @@
 # Braft Editor扩展模块包
 
 ### 目前包含的模块列表
-1. 代码高亮模块 CodeHighlighter
-2. 高级取色器模块 ColorPicker
-3. 表情包扩展模块 Emoticon
-4. 输入字数限制模块 MaxLength
-5. 标题区块(h1-h6)id模块 HeaderId
+1. 表格模块 Table
+2. 代码高亮模块 CodeHighlighter
+3. 高级取色器模块 ColorPicker
+4. 表情包扩展模块 Emoticon
+5. 输入字数限制模块 MaxLength
+6. 标题区块(h1-h6)id模块 HeaderId
 
 ### 安装
 ```bash
@@ -16,6 +17,32 @@ yarn add braft-extensions
 
 ### 使用
 需要分别import本模块包下面的各个模块，参见下方各模块的基本使用介绍
+
+## 表格模块
+支持添加/删除行列、合并/拆分单元格等基本操作
+
+#### 基本使用
+```js
+import 'braft-editor/dist/index.css'
+import 'braft-extensions/dist/table.css'
+
+import BraftEditor from 'braft-editor'
+import Table from 'braft-extensions/dist/table'
+
+const options = {
+  includeEditors: ['editor-id-1'], // 指定该模块对哪些BraftEditor生效，不传此属性则对所有BraftEditor有效
+  excludeEditors: ['editor-id-2']  // 指定该模块对哪些BraftEditor无效
+}
+
+BraftEditor.use(Table(options))
+```
+
+#### 使用注意事项
+- 使用表格模块，请升级braft-editor、braft-convert和braft-utils至最新版本
+- 暂不支持在表格中插入图片等媒体资源，因为draftjs不支持嵌套block，而每一个单元格和图片等都是一个单独的block，所以无法实现
+- 每个表格前后都需要有一个空行才能正常展示，有疑问的请自行查阅源码
+- 请勿在表格内进行过于复杂的操作，例如任性合并/拆分单元格等，以免进入程序死角导致报错
+- 调整列宽的功能会在后续版本中支持
 
 ## 代码高亮模块
 使用[prismjs](https://github.com/PrismJS/prism)和[draft-js-prism](https://github.com/SamyPesse/draft-js-prism)开发的一个代码高亮模块，能在编辑器中实现代码高亮编辑功能，内置html、js和css语言支持，可扩展更多语言，[在线演示](https://braft.margox.cn/demos/code-highlighter)

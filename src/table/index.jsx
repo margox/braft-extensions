@@ -2,11 +2,13 @@ import './style.scss'
 import React from 'react'
 import { ContentUtils } from 'braft-utils'
 import { handleKeyCommand, handleReturn, handleDroppedFiles, handlePastedFiles, handlePastedText } from './handlers'
-import { tableRenderMap } from './render'
-import { insertTable } from './utils'
+import { getLanguage, tableRenderMap } from './render'
+import * as _TableUtils from './utils'
 import { tableImportFn, tableExportFn } from './converts'
 
 ContentUtils.registerStrictBlockType('table-cell')
+
+export const TableUtils = _TableUtils
 
 export default (options) => {
 
@@ -20,17 +22,18 @@ export default (options) => {
     {
       type: 'control',
       includeEditors, excludeEditors,
-      control: (props) => ({
-        key: 'table',
-        replace: 'table',
-        type: 'button',
-        title: '表格',
-        text: <i className="bfi-table"></i>,
-        onClick: () => {
-          // insertTable(props.editorState)
-          props.editor.setValue(insertTable(props.editorState))
+      control: (props) => {
+        return {
+          key: 'table',
+          replace: 'table',
+          type: 'button',
+          title: getLanguage(props.editor).insertTable,
+          text: <i className="bfi-table"></i>,
+          onClick: () => {
+            props.editor.setValue(TableUtils.insertTable(props.editorState))
+          }
         }
-      }),
+      },
     },
     {
       type: 'prop-interception',
