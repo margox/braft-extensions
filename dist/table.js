@@ -385,6 +385,7 @@ var rebuildTableNode = function rebuildTableNode(tableNode) {
         }
       }
 
+      cell.innerHTML = cell.innerHTML.replace(/\n\s*$/, '');
       cell.dataset.tableKey = tableKey;
       cell.dataset.colIndex = colIndex;
       cell.dataset.rowIndex = rowIndex;
@@ -2663,6 +2664,10 @@ var utils = __webpack_require__(7);
 // CONCATENATED MODULE: ./table/converts.js
 
 var converts_tableImportFn = function tableImportFn(nodeName, node) {
+  if (nodeName !== 'body' && node && node.querySelector && node.querySelector(':scope > table')) {
+    node.parentNode.insertBefore(node.querySelector(':scope > table'), node.nextSibling);
+  }
+
   if (nodeName === 'table') {
     Object(utils["rebuildTableNode"])(node);
   }
