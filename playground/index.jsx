@@ -23,8 +23,7 @@ class Demo extends React.Component {
           <tr><td>8</td><td>9</td></tr>
           <tr><td>10</td><td>11</td><td>12</td><td>13</td></tr>
           <tr><td>14</td><td>15</td><td>16</td><td>17</td></tr>
-        </table>
-        <p></p>
+        </table><p></p>
       `)
     }
 

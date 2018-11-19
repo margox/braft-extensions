@@ -2,6 +2,10 @@ import { rebuildTableNode } from './utils'
 
 export const tableImportFn = (nodeName, node) => {
 
+  if (nodeName !== 'body' && node && node.querySelector && node.querySelector(':scope > table')) {
+    node.parentNode.insertBefore(node.querySelector(':scope > table'), node.nextSibling)
+  }
+
   if (nodeName === 'table') {
     rebuildTableNode(node)
   }

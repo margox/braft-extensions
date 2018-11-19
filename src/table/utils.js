@@ -184,6 +184,7 @@ export const rebuildTableNode = (tableNode) => {
 
       }
 
+      cell.innerHTML = cell.innerHTML.replace(/\n\s*$/, '')
       cell.dataset.tableKey = tableKey
       cell.dataset.colIndex = colIndex
       cell.dataset.rowIndex = rowIndex
