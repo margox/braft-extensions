@@ -1144,16 +1144,23 @@ braces@^2.3.0, braces@^2.3.1:
     split-string "^3.0.2"
     to-regex "^3.0.1"
 
-braft-convert@^2.1.4, braft-convert@^2.1.9:
+braft-convert@^2.1.10:
+  version "2.1.10"
+  resolved "https://registry.yarnpkg.com/braft-convert/-/braft-convert-2.1.10.tgz#b90ee326c15af86384b122a56af4c871984576e5"
+  dependencies:
+    draft-convert "^2.0.0"
+    draft-js "^0.10.3"
+
+braft-convert@^2.1.4:
   version "2.1.9"
   resolved "https://registry.yarnpkg.com/braft-convert/-/braft-convert-2.1.9.tgz#fd756365528877e364196f3b7839680484d00172"
   dependencies:
     draft-convert "^2.0.0"
     draft-js "^0.10.3"
 
-braft-editor@^2.1.29:
-  version "2.1.29"
-  resolved "https://registry.yarnpkg.com/braft-editor/-/braft-editor-2.1.29.tgz#b52246c7c85a869c8ebada0a898d5bc9012ccf34"
+braft-editor@^2.1.30:
+  version "2.1.30"
+  resolved "https://registry.yarnpkg.com/braft-editor/-/braft-editor-2.1.30.tgz#abc70fdf4bdcc4dd5b2fe2e17999571d4a3a53c2"
   dependencies:
     "@babel/runtime" "^7.0.0"
     braft-convert "^2.1.4"
@@ -1172,6 +1179,10 @@ braft-finder@^0.0.14:
 braft-utils@^3.0.6:
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/braft-utils/-/braft-utils-3.0.6.tgz#5229014fb16879e9c6187e02dfc90fcbffa05937"
+
+braft-utils@^3.0.8:
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/braft-utils/-/braft-utils-3.0.8.tgz#3e19663cbafab9695f443f2392dbbee1a0a5c425"
 
 brorand@^1.0.1:
   version "1.1.0"

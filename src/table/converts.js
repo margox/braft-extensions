@@ -18,12 +18,18 @@ export const tableImportFn = (nodeName, node) => {
     const colSpan = node.colSpan
     const rowSpan = node.rowSpan
 
+    const cellData = { tableKey, colIndex, rowIndex, colSpan, rowSpan }
+    cellData.isHead = nodeName === 'th'
+
+    if (node.style && node.style.textAlign) {
+      cellData.textAlign = node.style.textAlign
+    } else if (node.align) {
+      cellData.textAlign = node.align
+    }
+
     return {
       type: 'table-cell',
-      data: {
-        tableKey, colIndex, rowIndex, colSpan, rowSpan,
-        isHead: nodeName === 'th'
-      }
+      data: cellData
     }
 
   }
@@ -47,13 +53,18 @@ export const tableExportFn = (contentState, block) => {
 
   let start = ''
   let end = ''
+  let blockStyle = ''
+
+  if (block.data.textAlign) {
+    blockStyle += ` style="text-align:${block.data.textAlign};"`
+  }
 
   if (previousBlockType !== 'table-cell') {
-    start = `<table><tr><td colSpan="${block.data.colSpan}" rowSpan="${block.data.rowSpan}">`
+    start = `<table><tr><td${blockStyle} colSpan="${block.data.colSpan}" rowSpan="${block.data.rowSpan}">`
   } else if (previousBlockData.rowIndex !== block.data.rowIndex) {
-    start = `<tr><td colSpan="${block.data.colSpan}" rowSpan="${block.data.rowSpan}">`
+    start = `<tr><td${blockStyle} colSpan="${block.data.colSpan}" rowSpan="${block.data.rowSpan}">`
   } else {
-    start = `<td colSpan="${block.data.colSpan}" rowSpan="${block.data.rowSpan}">`
+    start = `<td${blockStyle} colSpan="${block.data.colSpan}" rowSpan="${block.data.rowSpan}">`
   }
 
   if (nextBlockType !== 'table-cell') {
@@ -62,6 +73,14 @@ export const tableExportFn = (contentState, block) => {
     end = '</td></tr>'
   } else {
     end = '</td>'
+  }
+
+  if (!previousBlockType) {
+    start = '<p></p>' + start
+  }
+
+  if (!nextBlockType) {
+    end += '<p></p>'
   }
 
   return { start, end }

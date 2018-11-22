@@ -692,7 +692,7 @@ export class Table extends React.Component {
             style={{width: item.width || defaultColWidth}}
             onClick={this.selectColumn}
           >
-            {/*index !== 0 && ? (
+            {/*index !== 0 ? (
               <div
                 data-index={index}
                 data-key={item.key} 

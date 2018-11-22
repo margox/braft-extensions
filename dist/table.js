@@ -2678,16 +2678,24 @@ var converts_tableImportFn = function tableImportFn(nodeName, node) {
     var rowIndex = node.dataset.rowIndex * 1;
     var colSpan = node.colSpan;
     var rowSpan = node.rowSpan;
+    var cellData = {
+      tableKey: tableKey,
+      colIndex: colIndex,
+      rowIndex: rowIndex,
+      colSpan: colSpan,
+      rowSpan: rowSpan
+    };
+    cellData.isHead = nodeName === 'th';
+
+    if (node.style && node.style.textAlign) {
+      cellData.textAlign = node.style.textAlign;
+    } else if (node.align) {
+      cellData.textAlign = node.align;
+    }
+
     return {
       type: 'table-cell',
-      data: {
-        tableKey: tableKey,
-        colIndex: colIndex,
-        rowIndex: rowIndex,
-        colSpan: colSpan,
-        rowSpan: rowSpan,
-        isHead: nodeName === 'th'
-      }
+      data: cellData
     };
   }
 
@@ -2706,13 +2714,18 @@ var tableExportFn = function tableExportFn(contentState, block) {
   var nextBlockData = nextBlock ? nextBlock.getData().toJS() : {};
   var start = '';
   var end = '';
+  var blockStyle = '';
+
+  if (block.data.textAlign) {
+    blockStyle += " style=\"text-align:".concat(block.data.textAlign, ";\"");
+  }
 
   if (previousBlockType !== 'table-cell') {
-    start = "<table><tr><td colSpan=\"".concat(block.data.colSpan, "\" rowSpan=\"").concat(block.data.rowSpan, "\">");
+    start = "<table><tr><td".concat(blockStyle, " colSpan=\"").concat(block.data.colSpan, "\" rowSpan=\"").concat(block.data.rowSpan, "\">");
   } else if (previousBlockData.rowIndex !== block.data.rowIndex) {
-    start = "<tr><td colSpan=\"".concat(block.data.colSpan, "\" rowSpan=\"").concat(block.data.rowSpan, "\">");
+    start = "<tr><td".concat(blockStyle, " colSpan=\"").concat(block.data.colSpan, "\" rowSpan=\"").concat(block.data.rowSpan, "\">");
   } else {
-    start = "<td colSpan=\"".concat(block.data.colSpan, "\" rowSpan=\"").concat(block.data.rowSpan, "\">");
+    start = "<td".concat(blockStyle, " colSpan=\"").concat(block.data.colSpan, "\" rowSpan=\"").concat(block.data.rowSpan, "\">");
   }
 
   if (nextBlockType !== 'table-cell') {
@@ -2721,6 +2734,14 @@ var tableExportFn = function tableExportFn(contentState, block) {
     end = '</td></tr>';
   } else {
     end = '</td>';
+  }
+
+  if (!previousBlockType) {
+    start = '<p></p>' + start;
+  }
+
+  if (!nextBlockType) {
+    end += '<p></p>';
   }
 
   return {
