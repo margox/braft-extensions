@@ -506,12 +506,12 @@ var insertTable = function insertTable(editorState) {
   var tableKey = Object(draft_js__WEBPACK_IMPORTED_MODULE_2__["genKey"])();
   var cellBlocks = [createUnstyledBlock()];
 
-  for (var ii = 0; ii < columns; ii++) {
-    for (var jj = 0; jj < rows; jj++) {
+  for (var ii = 0; ii < rows; ii++) {
+    for (var jj = 0; jj < columns; jj++) {
       var cellBlock = createCellBlock({
         tableKey: tableKey,
-        colIndex: ii,
-        rowIndex: jj
+        colIndex: jj,
+        rowIndex: ii
       });
       cellBlocks.push([cellBlock.getKey(), cellBlock]);
     }

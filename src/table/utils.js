@@ -322,12 +322,12 @@ export const insertTable = (editorState, columns = 3, rows = 3) => {
   const tableKey = genKey()
   const cellBlocks = [createUnstyledBlock()]
 
-  for (var ii = 0;ii < columns; ii ++) {
-    for (var jj = 0;jj < rows;jj ++) {
+  for (var ii = 0;ii < rows; ii ++) {
+    for (var jj = 0;jj < columns;jj ++) {
       let cellBlock = createCellBlock({
         tableKey: tableKey,
-        colIndex: ii,
-        rowIndex: jj,
+        colIndex: jj,
+        rowIndex: ii,
       })
       cellBlocks.push([cellBlock.getKey(), cellBlock])
     }
