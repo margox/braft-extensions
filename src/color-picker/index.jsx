@@ -18,8 +18,8 @@ const getColorPicker = (superProps) => ({ onChange: originOnChange, color, prese
     <div className={`braft-color-picker ${superProps.theme}-theme`}>
       <SketchPicker color={color} presetColors={presetColors} onChangeComplete={onChange} {...props}/>
       <footer className="footer">
-        <button className="button control-item button-clear" onClick={clearColor} disabled={!color}>{superProps.clearButtonText}</button>
-        <button className="button control-item button-close" onClick={closePicker}>{superProps.closeButtonText}</button>
+        <button type="button" className="button control-item button-clear" onClick={clearColor} disabled={!color}>{superProps.clearButtonText}</button>
+        <button type="button" className="button control-item button-close" onClick={closePicker}>{superProps.closeButtonText}</button>
       </footer>
     </div>
   )

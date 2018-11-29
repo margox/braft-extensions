@@ -1,26 +1,338 @@
-.bf-table{
-  width: 100%;
-  table-layout: fixed;
-  border-collapse: collapse;
-  border-spacing: 0;
-  & + .bf-table{
-    margin-top: -1px;
-  }
-  th,td{  
-    border: 1px solid #d5d5d5;
-    padding: 10px 15px;
-    overflow: visible;
+.bf-table-container{
+  position: relative;
+  margin: 0 0 0 -10px;
+  padding: 10px 0 10px 10px;
+
+  .bf-table-col-tools,
+  .bf-table-row-tools{
+    position: absolute;
+    z-index: 2;
+    border-radius: 3px;
+    background-color: #f1f5f9;
+    cursor: default;
+    opacity: 0;
+    &[data-active="true"],
     &:hover{
-      position: relative;
-      &::before{
-        position: absolute;
-        top: -1px;
-        right: -1px;
-        bottom: -1px;
-        left: -1px;
-        border: 1px solid #a5a5a5;
-        content: '';
+      opacity: 1;
+    }
+    &:hover{
+      z-index: 4;
+    }
+  }
+
+  .bf-table-col-tools{
+    top: 0;
+    right: 0;
+    left: 10px;
+    height: 8px;
+    line-height: 0;
+    white-space: nowrap;
+    &.resizing {
+      opacity: 1;
+      .bf-col-tool-handler{
+        background-color: #f1f5f9;
+      }
+      .bf-col-resizer.active{
+        background-color: #07a9fe;
+      }
+      .bf-col-tool-left,
+      .bf-col-tool-right{
+        display: none;
       }
     }
   }
+
+  .bf-table-row-tools{
+    top: 10px;
+    bottom: 10px;
+    left: 0;
+    width: 8px;
+  }
+
+  .bf-col-tool-handler,
+  .bf-row-tool-handler{
+    position: relative;
+    box-sizing: border-box;
+    background-color: #f1f5f9;
+    cursor: pointer;
+    &:hover{
+      background-color: #e1e5e9;
+    }
+    &[data-active="true"]{
+      background-color: #07a9fe;
+      .bf-col-tool-left,
+      .bf-col-tool-right,
+      .bf-row-tool-up,
+      .bf-row-tool-down{
+        display: none;
+      }
+      .bf-col-tool-center,
+      .bf-row-tool-center{
+        display: block;
+      }
+    }
+  }
+
+  .bf-col-tool-handler{
+    display: inline-block;
+    height: 8px;
+    line-height: 0;
+    font-size: 0;
+    border-left: 1px solid #e1e5e9;
+    &:first-child{
+      border-left: none;
+      border-radius: 3px 0 0 3px;
+    }
+    &:last-child{
+      border-radius: 0 3px 3px 0;
+    }
+    &:first-child:last-child{
+      border-radius: 3px;
+    }
+  }
+
+  .bf-col-resizer{
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: -2px;
+    width: 4px;
+    height: 8px;
+    cursor: col-resize;
+    &:hover{
+      background-color: #07a9fe;
+    }
+  }
+
+  .bf-row-tool-handler{
+    border-top: 1px solid #e1e5e9;
+    &:first-child{
+      border-top: none;
+      border-radius: 3px 3px 0 0;
+    }
+    &:last-child{
+      border-radius: 0 0 3px 3px;
+    }
+    &:first-child:last-child{
+      border-radius: 3px;
+    }
+  }
+
+  .bf-col-tool-left,
+  .bf-col-tool-right{
+    float: left;
+    position: relative;
+    width: 50%;
+    height: 8px;
+    &:hover{
+      .bf-insert-col-before,
+      .bf-insert-col-after{
+        display: block;
+      }
+    }
+  }
+
+  .bf-row-tool-up,
+  .bf-row-tool-down{
+    position: relative;
+    height: 50%;
+    &:hover{
+      .bf-insert-row-before,
+      .bf-insert-row-after{
+        display: block;
+      }
+    }
+  }
+
+  .bf-col-tool-center,
+  .bf-row-tool-center{
+    display: none;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    &:hover{
+      .bf-remove-col,
+      .bf-remove-row{
+        display: block;
+      }
+    }
+  }
+
+  .bf-insert-col-before,
+  .bf-insert-col-after,
+  .bf-insert-row-before,
+  .bf-insert-row-after,
+  .bf-remove-col,
+  .bf-remove-row{
+    display: none;
+    box-sizing: content-box;
+    position: absolute;
+    color: #21242a;
+    &::before{
+      position: absolute;
+      border: 4px solid transparent;
+      content: '';
+    }
+    &:hover{
+      color: #07a9fe;
+    }
+    i{
+      display: block;
+      width: 20px;
+      height: 20px;
+      color: inherit;
+      background-color: currentColor;
+      border-radius: 3px;
+      box-shadow: 0 2px 5px rgba(#000, .1);
+      pointer-events: none;
+      &::before{
+        display: block;
+        width: 20px;
+        height: 20px;
+        color: #fff;
+        font-size: 14px;
+        line-height: 20px;
+        text-align: center;
+      }
+    }
+  }
+
+  .bf-insert-col-before,
+  .bf-insert-col-after,
+  .bf-remove-col{
+    bottom: -25px;
+    padding-top: 5px;
+    &::before{
+      left: 6px;
+      top: -1px;
+      border-bottom-color: currentColor;
+    }
+  }
+
+  .bf-insert-row-before,
+  .bf-insert-row-after,
+  .bf-remove-row{
+    right: -25px;
+    padding-left: 5px;
+    &::before{
+      top: 6px;
+      left: -1px;
+      border-right-color: currentColor;
+    }
+  }
+
+  .bf-insert-col-before{
+    left: -10px;
+  }
+  .bf-insert-col-after{
+    right: -10px;
+  }
+  .bf-remove-col{
+    left: 50%;
+    transform: translateX(-50%);
+    &:hover{
+      color: #e74c3c;
+    }
+  }
+  .bf-insert-row-before{
+    top: -10px;
+  }
+  .bf-insert-row-after{
+    bottom: -10px;
+  }
+  .bf-remove-row{
+    top: 50%;
+    transform: translateY(-50%);
+    &:hover{
+      color: #e74c3c;
+    }
+  }
+
+  .dragging-rect{
+    position: absolute;
+    z-index: 10;
+    box-sizing: border-box;
+    background-color: rgba(#07a9fe, .2);
+    pointer-events: none;
+  }
+
+  .bf-table-context-menu{
+    position: absolute;
+    z-index: 10;
+    top: 20px;
+    right: 20px;
+    width: 150px;
+    overflow: hidden;
+    background-color: #21242a;
+    border-radius: 3px;
+    box-shadow: 0 5px 25px rgba(#000, .2);
+    user-select: none;
+    cursor: default;
+    .context-menu-item{
+      padding: 0 15px;
+      border-top: 1px solid #31343a;
+      line-height: 38px;
+      color: #919599;
+      font-size: 14px;
+      cursor: pointer;
+      &:first-child{
+        border: none;
+      }
+      &[data-disabled="true"]{
+        cursor: not-allowed;
+        color: #414549;
+      }
+      &:hover{
+        background-color: rgba(#000, .3);
+      }
+    }
+  }
+
+  .bf-table{
+    width: 100%;
+    table-layout: fixed;
+    border-style: hidden;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 1px solid #07a9fe;
+    border-width: 0.5px;
+    &.dragging{
+      tbody .bf-table-cell{
+        cursor: default !important;
+      }
+    }
+    tbody{
+      tr:empty{
+        padding: 10px;
+      }
+      .bf-table-cell{  
+        background-color: #fff;
+        border: 1px solid #c5c5c5;
+        border-width: 0.5px;
+        overflow: visible;
+        cursor: text;
+        &[data-is-head="true"]{
+          background-color: #fafafa;
+          font-weight: bold;
+        }
+        &[data-active="true"]{
+          position: relative;
+          &::before{
+            position: absolute;
+            top: -1px;
+            right: -1px;
+            bottom: -1px;
+            left: -1px;
+            border: 1px solid #07a9fe;
+            border-width: 0.5px;
+            content: '';
+          }
+        }
+        &>div{
+          padding: 10px 15px;
+        }
+      }
+    }
+  }
+
 }

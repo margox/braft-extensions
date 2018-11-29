@@ -1152,9 +1152,16 @@ braces@^2.3.0, braces@^2.3.1:
     split-string "^3.0.2"
     to-regex "^3.0.1"
 
+braft-convert@^2.1.10:
+  version "2.1.10"
+  resolved "https://registry.yarnpkg.com/braft-convert/-/braft-convert-2.1.10.tgz#b90ee326c15af86384b122a56af4c871984576e5"
+  dependencies:
+    draft-convert "^2.0.0"
+    draft-js "^0.10.3"
+
 braft-convert@^2.1.4:
-  version "2.1.5"
-  resolved "https://registry.yarnpkg.com/braft-convert/-/braft-convert-2.1.5.tgz#7a9bb40556319d679033587406e906f6ae437a16"
+  version "2.1.9"
+  resolved "https://registry.yarnpkg.com/braft-convert/-/braft-convert-2.1.9.tgz#fd756365528877e364196f3b7839680484d00172"
   dependencies:
     draft-convert "^2.0.0"
     draft-js "^0.10.3"
@@ -1177,9 +1184,13 @@ braft-finder@^0.0.14:
   version "0.0.14"
   resolved "https://registry.yarnpkg.com/braft-finder/-/braft-finder-0.0.14.tgz#f5a65548a00dbe3193be58a90fffe5264f0a1184"
 
-braft-utils@^3.0.4:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/braft-utils/-/braft-utils-3.0.4.tgz#dd3d00b8fb4c5e6548a80cbd08389bcc40361756"
+braft-utils@^3.0.6:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/braft-utils/-/braft-utils-3.0.6.tgz#5229014fb16879e9c6187e02dfc90fcbffa05937"
+
+braft-utils@^3.0.8:
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/braft-utils/-/braft-utils-3.0.8.tgz#3e19663cbafab9695f443f2392dbbee1a0a5c425"
 
 brorand@^1.0.1:
   version "1.1.0"
@@ -1713,7 +1724,7 @@ copy-webpack-plugin@^4.5.3:
 
 core-js@^1.0.0:
   version "1.2.7"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-1.2.7.tgz#652294c14651db28fa93bd2d5ff2983a4f08c636"
+  resolved "http://registry.npmjs.org/core-js/-/core-js-1.2.7.tgz#652294c14651db28fa93bd2d5ff2983a4f08c636"
 
 core-js@^2.4.0:
   version "2.5.7"
@@ -6153,8 +6164,8 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
 ua-parser-js@^0.7.18:
-  version "0.7.18"
-  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.18.tgz#a7bfd92f56edfb117083b69e31d2aa8882d4b1ed"
+  version "0.7.19"
+  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.19.tgz#94151be4c0a7fb1d001af7022fdaca4642659e4b"
 
 uglify-es@^3.3.4:
   version "3.3.10"
