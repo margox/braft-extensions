@@ -9,7 +9,7 @@ const getColorPicker = (superProps) => ({
   presetColors,
   ...props
 }) => {
-  console.log(presetColors);
+  console.log(presetColors)
   const onChange = (colorObject) => {
     originOnChange(colorObject.color, false)
     superProps.onChange && superProps.onChange(colorObject.color)
@@ -19,12 +19,12 @@ const getColorPicker = (superProps) => ({
   const closePicker = () => originOnChange(null, true)
 
   color = color || presetColors[0]
-  console.log('color: ', color);
+  console.log('color: ', color)
 
   return (
     <div className={`braft-color-picker ${superProps.theme}-theme`}>
       <ColorPickerPanel
-        enableAlpha={true}
+        enableAlpha={false}
         color={color}
         onChange={onChange}
         mode="RGB"
@@ -56,19 +56,20 @@ export default (options) => {
     theme: 'dark',
     clearButtonText: '清除',
     closeButtonText: '关闭',
-    ...options
+    ...options,
   }
 
   const { includeEditors, excludeEditors } = options
 
   return {
     type: 'prop-interception',
-    includeEditors, excludeEditors,
+    includeEditors,
+    excludeEditors,
     interceptor: (editorProps) => {
       editorProps.colorPicker = getColorPicker(options)
       editorProps.colorPickerTheme = options.theme
       editorProps.colorPickerAutoHide = false
       return editorProps
-    }
+    },
   }
 }

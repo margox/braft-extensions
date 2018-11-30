@@ -65,6 +65,7 @@
   "peerDependencies": {
     "draft-js-prism": "^1.0.6",
     "html-table-to-json": "^0.4.0",
-    "prismjs": "^1.15.0"
+    "prismjs": "^1.15.0",
+    "material-ui-rc-color-picker": "^1.0.3"
   }
 }
