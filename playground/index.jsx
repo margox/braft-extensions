@@ -6,6 +6,13 @@ import ReactDOM from 'react-dom'
 import BraftEditor from 'braft-editor'
 import Table from '../src/table'
 
+import ColorPicker from '../src/color-picker'
+const options = {
+  theme: 'light', // 指定取色器样式主题，支持dark和light两种样式
+}
+BraftEditor.use(ColorPicker(options))
+
+
 BraftEditor.use(Table({
   defaultColumns: 5,
   defaultRows: 3
