@@ -186,22 +186,26 @@ __webpack_require__.r(__webpack_exports__);
 
 var getColorPicker = function getColorPicker(superProps) {
   return function (_ref) {
-    var originOnChange = _ref.onChange,
+    var onChange = _ref.onChange,
         color = _ref.color,
         presetColors = _ref.presetColors,
         props = _babel_runtime_helpers_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_2___default()(_ref, ["onChange", "color", "presetColors"]);
 
-    var onChange = function onChange(colorObject) {
-      originOnChange(colorObject.hex, false);
+    var handleChange = function handleChange(colorObject) {
+      if (colorObject.hex === color) {
+        return false;
+      }
+
+      onChange(colorObject.hex, false);
       superProps.onChange && superProps.onChange(colorObject.hex);
     };
 
     var clearColor = function clearColor() {
-      return originOnChange(color, false);
+      return onChange(color, false);
     };
 
     var closePicker = function closePicker() {
-      return originOnChange(null, true);
+      return onChange(null, true);
     };
 
     color = color || presetColors[0];
@@ -210,14 +214,16 @@ var getColorPicker = function getColorPicker(superProps) {
     }, react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(react_color__WEBPACK_IMPORTED_MODULE_5__["SketchPicker"], _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_1___default()({
       color: color,
       presetColors: presetColors,
-      onChangeComplete: onChange
+      onChangeComplete: handleChange
     }, props)), react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement("footer", {
       className: "footer"
     }, react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement("button", {
+      type: "button",
       className: "button control-item button-clear",
       onClick: clearColor,
       disabled: !color
     }, superProps.clearButtonText), react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement("button", {
+      type: "button",
       className: "button control-item button-close",
       onClick: closePicker
     }, superProps.closeButtonText)));
@@ -240,7 +246,6 @@ var getColorPicker = function getColorPicker(superProps) {
     interceptor: function interceptor(editorProps) {
       editorProps.colorPicker = getColorPicker(options);
       editorProps.colorPickerTheme = options.theme;
-      editorProps.colorPickerAutoHide = false;
       return editorProps;
     }
   };

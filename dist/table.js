@@ -2762,10 +2762,15 @@ var tableExportFn = function tableExportFn(contentState, block) {
 external_braft_utils_["ContentUtils"].registerStrictBlockType('table-cell');
 var TableUtils = utils;
 /* harmony default export */ var table = __webpack_exports__["default"] = (function (options) {
-  options = objectSpread_default()({}, options);
+  options = objectSpread_default()({
+    defaultColumns: 3,
+    defaultRows: 3
+  }, options);
   var _options = options,
       includeEditors = _options.includeEditors,
-      excludeEditors = _options.excludeEditors;
+      excludeEditors = _options.excludeEditors,
+      defaultColumns = _options.defaultColumns,
+      defaultRows = _options.defaultRows;
   return [{
     type: 'control',
     includeEditors: includeEditors,
@@ -2780,7 +2785,7 @@ var TableUtils = utils;
           className: "bfi-table"
         }),
         onClick: function onClick() {
-          props.editor.setValue(TableUtils.insertTable(props.editorState));
+          props.editor.setValue(TableUtils.insertTable(props.editorState, defaultColumns, defaultRows));
         }
       };
     }

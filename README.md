@@ -30,6 +30,8 @@ import BraftEditor from 'braft-editor'
 import Table from 'braft-extensions/dist/table'
 
 const options = {
+  defaultColumns: 3, // 默认列数
+  defaultRows: 3, // 默认行数
   includeEditors: ['editor-id-1'], // 指定该模块对哪些BraftEditor生效，不传此属性则对所有BraftEditor有效
   excludeEditors: ['editor-id-2']  // 指定该模块对哪些BraftEditor无效
 }

@@ -5,11 +5,14 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import BraftEditor from 'braft-editor'
 import Table from '../src/table'
+import ColorPicker from '../src/color-picker'
 
 BraftEditor.use(Table({
   defaultColumns: 5,
   defaultRows: 3
 }))
+
+BraftEditor.use(ColorPicker())
 
 class Demo extends React.Component {
 
