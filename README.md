@@ -18,6 +18,21 @@ yarn add braft-extensions
 ### 使用
 需要分别import本模块包下面的各个模块，参见下方各模块的基本使用介绍
 
+### 注意事项
+如果在使用扩展模块时，指定了includeEditors或excludeEditors属性，则通过BraftEditor.createEditorState创建初始化内的时候，需要传入一个editorId属性来指明创建的editorState是给哪个BraftEditor组件用的：
+```jsx
+// 以使用表格扩展为例
+BraftEditor.use(Table({
+  includeEditors: ['editor-1']
+}))
+
+// 使用BraftEditor.createEditorState创建编辑器数据
+const initialValue = BraftEditor.createEditorState('xxxxxx', { editorId: 'editor-1' })
+
+// 将数据传入编辑器
+<BraftEditor value={initialValue} id="editor-1"/>
+```
+
 ## 表格模块
 支持添加/删除行列、合并/拆分单元格等基本操作
 
