@@ -26,8 +26,8 @@ export const handleKeyCommand = (oringeHandler) => (command, editorState) => {
     if (selectedBlocks.length > 1) {
       return 'handled'
     }
-
-    if (currentBlock.getText().length === 0) {
+    const selectionState = editorState.getSelection()
+    if (currentBlock.getText().length === 0 || selectionState.getFocusOffset() === 0) {
       return 'handled'
     }
 
