@@ -1,6 +1,6 @@
 {
   "name": "braft-extensions",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Extensions for Braft Editor",
   "main": "dist/index.js",
   "scripts": {

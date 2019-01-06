@@ -2572,7 +2572,9 @@ var handlers_handleKeyCommand = function handleKeyCommand(oringeHandler) {
         return 'handled';
       }
 
-      if (currentBlock.getText().length === 0) {
+      var selectionState = editorState.getSelection();
+
+      if (currentBlock.getText().length === 0 || selectionState.getFocusOffset() === 0) {
         return 'handled';
       }
     } else if (command === 'tab') {
