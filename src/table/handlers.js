@@ -21,16 +21,24 @@ export const handleKeyCommand = (oringeHandler) => (command, editorState) => {
 
   const currentBlock = ContentUtils.getSelectionBlock(editorState)
 
-  if (command === 'backspace') {
+  if (['backspace', 'delete'].indexOf(command) > -1) {
 
     if (selectedBlocks.length > 1) {
       return 'handled'
     }
-    const selectionState = editorState.getSelection()
-    if (currentBlock.getText().length === 0 || selectionState.getFocusOffset() === 0) {
+    
+    const textLen = currentBlock.getText().length
+    if (textLen === 0) {
       return 'handled'
     }
-
+    
+    const focusOffset = editorState.getSelection().getFocusOffset()
+    if (command === 'backspace' && focusOffset === 0) {
+      return 'handled'
+    }
+    if (command === 'delete' && focusOffset === textLen) {
+      return 'handled'
+    }
   } else if (command === 'tab') {
     return 'handled'
   }
