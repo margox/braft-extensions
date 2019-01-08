@@ -111,8 +111,8 @@ const findBlocks = (contentBlocks, propName, propValue, operator = '==') => {
 
 }
 
-// 遍历以修正单元格的colSpan和rowSpan属性（表格blocks专用）
-export const rebuilTableBlocks = (tableBlocks) => {
+// 遍历以修正单元格的colIndex属性（表格blocks专用）
+export const rebuildTableBlocks = (tableBlocks) => {
 
   const skipedCells = {}
   const cellCountOfRow = []
@@ -132,7 +132,7 @@ export const rebuilTableBlocks = (tableBlocks) => {
     let colIndex = cellIndex
     let xx, yy
 
-    for (;skipedCells[rowIndex] && skipedCells[rowIndex][colIndex]; colIndex++);
+    for (;skipedCells[rowIndex] && skipedCells[rowIndex][colIndex]; colIndex++, cellCountOfRow[rowIndex]++);
 
     if (rowSpan > 1 || colSpan > 1) {
 
@@ -573,7 +573,7 @@ export const insertRow = (editorState, tableKey, cellCounts, rowIndex) => {
   const rowBlocks = createRowBlocks(tableKey, rowIndex, colCellLength || cellCounts)
   const focusCellKey = rowBlocks.first().getKey()
 
-  const nextTableBlocks = rebuilTableBlocks(blocksBefore.concat(rowBlocks, blocksAfter))
+  const nextTableBlocks = rebuildTableBlocks(blocksBefore.concat(rowBlocks, blocksAfter))
   const nextContentState = updateTableBlocks(contentState, editorState.getSelection(), focusCellKey, nextTableBlocks, tableKey)
 
   return EditorState.push(editorState, nextContentState, 'insert-table-row')
