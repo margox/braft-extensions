@@ -349,7 +349,11 @@ export const insertTable = (editorState, columns = 3, rows = 3) => {
   const tableBlocks = Immutable.OrderedMap(cellBlocks).toSeq()
 
   const firstCellKey = cellBlocks[1][0]
-  const nextContentBlocks = blocksBefore.concat(tableBlocks, blocksAfter).toOrderedMap()
+  const nextContentBlocks = blocksBefore.concat(
+    Immutable.OrderedMap([[startKey, currentBlock]]).toSeq(),
+    tableBlocks,
+    blocksAfter
+  ).toOrderedMap()
 
   const nextContentState = contentState.merge({
     blockMap: nextContentBlocks,
