@@ -91,12 +91,12 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 30);
+/******/ 	return __webpack_require__(__webpack_require__.s = 33);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 2:
+/***/ 3:
 /***/ (function(module, exports) {
 
 function _defineProperty(obj, key, value) {
@@ -118,7 +118,7 @@ module.exports = _defineProperty;
 
 /***/ }),
 
-/***/ 30:
+/***/ 33:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -218,7 +218,7 @@ var getSelectedTextLength = function getSelectedTextLength(editorState) {
 /***/ 5:
 /***/ (function(module, exports, __webpack_require__) {
 
-var defineProperty = __webpack_require__(2);
+var defineProperty = __webpack_require__(3);
 
 function _objectSpread(target) {
   for (var i = 1; i < arguments.length; i++) {

@@ -91,7 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 29);
+/******/ 	return __webpack_require__(__webpack_require__.s = 32);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -103,7 +103,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__1__;
 
 /***/ }),
 
-/***/ 2:
+/***/ 3:
 /***/ (function(module, exports) {
 
 function _defineProperty(obj, key, value) {
@@ -125,7 +125,7 @@ module.exports = _defineProperty;
 
 /***/ }),
 
-/***/ 29:
+/***/ 32:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -137,7 +137,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var braft_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 /* harmony import */ var braft_utils__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(braft_utils__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _styles_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(46);
+/* harmony import */ var _styles_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(47);
 /* harmony import */ var _styles_scss__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_styles_scss__WEBPACK_IMPORTED_MODULE_3__);
 
 
@@ -235,7 +235,7 @@ var insertEmoticon = function insertEmoticon(editor, editorState, src) {
 
 /***/ }),
 
-/***/ 46:
+/***/ 47:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
@@ -245,7 +245,7 @@ var insertEmoticon = function insertEmoticon(editor, editorState, src) {
 /***/ 5:
 /***/ (function(module, exports, __webpack_require__) {
 
-var defineProperty = __webpack_require__(2);
+var defineProperty = __webpack_require__(3);
 
 function _objectSpread(target) {
   for (var i = 1; i < arguments.length; i++) {
