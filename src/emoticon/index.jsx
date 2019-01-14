@@ -15,14 +15,19 @@ const insertEmoticon = (editor, editorState, src) => {
 
 }
 
+let controlRef = null
+const bindControlRef = (ref) => controlRef = ref
+
 export default (options) => {
 
   options = {
     emoticons: [],
+    closeOnSelect: false,
+    closeOnBlur: false,
     ...options
   }
 
-  const { emoticons, includeEditors, excludeEditors } = options
+  const { emoticons, closeOnSelect, closeOnBlur, includeEditors, excludeEditors } = options
 
   return {
     type: 'entity',
@@ -34,10 +39,15 @@ export default (options) => {
       type: 'dropdown',
       text: <i className="bfi-emoji"></i>,
       showArrow: false,
+      ref: bindControlRef,
+      autoHide: closeOnBlur,
       component: (
         <div className="braft-emoticon-picker">
           <div className="braft-emoticons-list">
-            {emoticons.map((item, index) => <img onClick={() => insertEmoticon(props.editor, props.editorState, item)} key={index} src={item} />)}
+            {emoticons.map((item, index) => <img onClick={() => {
+              insertEmoticon(props.editor, props.editorState, item)
+              closeOnSelect && controlRef && controlRef.hide()
+            }} key={index} src={item} />)}
           </div>
         </div>
       )

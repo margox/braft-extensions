@@ -206,6 +206,8 @@ const options = {
   includeEditors: ['editor-id-1'], // 指定该模块对哪些BraftEditor生效，不传此属性则对所有BraftEditor有效
   excludeEditors: ['editor-id-2'],  // 指定该模块对哪些BraftEditor无效
   emoticons: emoticons, // 指定可用表情图片列表，默认为空
+  closeOnBlur: false, // 指定是否在点击表情选择器之外的地方时关闭表情选择器，默认false
+  closeOnSelect: false // 指定是否在选择表情后关闭表情选择器，默认false
 }
 
 BraftEditor.use(Emoticon(options))

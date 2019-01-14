@@ -158,12 +158,22 @@ var insertEmoticon = function insertEmoticon(editor, editorState, src) {
   }));
 };
 
+var controlRef = null;
+
+var bindControlRef = function bindControlRef(ref) {
+  return controlRef = ref;
+};
+
 /* harmony default export */ __webpack_exports__["default"] = (function (options) {
   options = _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
-    emoticons: []
+    emoticons: [],
+    closeOnSelect: false,
+    closeOnBlur: false
   }, options);
   var _options = options,
       emoticons = _options.emoticons,
+      closeOnSelect = _options.closeOnSelect,
+      closeOnBlur = _options.closeOnBlur,
       includeEditors = _options.includeEditors,
       excludeEditors = _options.excludeEditors;
   return {
@@ -180,6 +190,8 @@ var insertEmoticon = function insertEmoticon(editor, editorState, src) {
           className: "bfi-emoji"
         }),
         showArrow: false,
+        ref: bindControlRef,
+        autoHide: closeOnBlur,
         component: react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
           className: "braft-emoticon-picker"
         }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
@@ -187,7 +199,8 @@ var insertEmoticon = function insertEmoticon(editor, editorState, src) {
         }, emoticons.map(function (item, index) {
           return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("img", {
             onClick: function onClick() {
-              return insertEmoticon(props.editor, props.editorState, item);
+              insertEmoticon(props.editor, props.editorState, item);
+              closeOnSelect && controlRef && controlRef.hide();
             },
             key: index,
             src: item
