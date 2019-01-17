@@ -1,5 +1,6 @@
 import { RichUtils } from 'draft-js'
 import { ContentUtils } from 'braft-utils'
+import * as TableUtils from './utils'
 
 // todo
 // 禁止选中多个单元格式时进行输入和粘贴操作
@@ -7,14 +8,28 @@ import { ContentUtils } from 'braft-utils'
 // 可以按方向键切换选中表格
 // 在最后一个单元格中按Shift + 回车跳出表格
 
-export const handleKeyCommand = (oringeHandler) => (command, editorState) => {
+export const handleKeyCommand = (oringeHandler) => (command, editorState, editor) => {
 
-  if (oringeHandler && oringeHandler(command, editorState) === 'handled') {
+  if (oringeHandler && oringeHandler(command, editorState, editor) === 'handled') {
     return 'handled'
   }
 
-  const selectedBlocks = ContentUtils.getSelectedBlocks(editorState)
+  if ('backspace' === command) {
+    const contentState = editorState.getCurrentContent()
+    const focusOffset = editorState.getSelection().getFocusOffset()
+    if (focusOffset === 0) {
+      const currentBlock = ContentUtils.getSelectionBlock(editorState)
+      const beforeBlock = contentState.getBlockBefore(currentBlock.getKey())
+      if ('table-cell' === beforeBlock.getType()) {
+        // 当前行 之前是表格的情况 特殊处理
+        const tableKey = beforeBlock.getData().get('tableKey')
+        editor.setValue(TableUtils.removeTable(editorState, tableKey))
+        return 'handled'
+      }
+    }
+  }
 
+  const selectedBlocks = ContentUtils.getSelectedBlocks(editorState)
   if (!selectedBlocks.find(block => block.getType() === 'table-cell')) {
     return 'not-handled'
   }
@@ -27,7 +42,7 @@ export const handleKeyCommand = (oringeHandler) => (command, editorState) => {
       return 'handled'
     }
     
-    const textLen = currentBlock.getText().length
+    const textLen = currentBlock.getLength()
     if (textLen === 0) {
       return 'handled'
     }
