@@ -7,7 +7,7 @@
 		var a = typeof exports === 'object' ? factory(require("draft-js"), require("immutable"), require("braft-utils")) : factory(root["draft-js"], root["immutable"], root["braft-utils"]);
 		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
 	}
-})(window, function(__WEBPACK_EXTERNAL_MODULE__2__, __WEBPACK_EXTERNAL_MODULE__4__, __WEBPACK_EXTERNAL_MODULE__6__) {
+})(window, function(__WEBPACK_EXTERNAL_MODULE__3__, __WEBPACK_EXTERNAL_MODULE__4__, __WEBPACK_EXTERNAL_MODULE__6__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -96,7 +96,24 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ({
 
-/***/ 18:
+/***/ 13:
+/***/ (function(module, exports, __webpack_require__) {
+
+var arrayWithHoles = __webpack_require__(19);
+
+var iterableToArrayLimit = __webpack_require__(20);
+
+var nonIterableRest = __webpack_require__(21);
+
+function _slicedToArray(arr, i) {
+  return arrayWithHoles(arr) || iterableToArrayLimit(arr, i) || nonIterableRest();
+}
+
+module.exports = _slicedToArray;
+
+/***/ }),
+
+/***/ 19:
 /***/ (function(module, exports) {
 
 function _arrayWithHoles(arr) {
@@ -107,7 +124,29 @@ module.exports = _arrayWithHoles;
 
 /***/ }),
 
-/***/ 19:
+/***/ 2:
+/***/ (function(module, exports) {
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+module.exports = _defineProperty;
+
+/***/ }),
+
+/***/ 20:
 /***/ (function(module, exports) {
 
 function _iterableToArrayLimit(arr, i) {
@@ -140,14 +179,7 @@ module.exports = _iterableToArrayLimit;
 
 /***/ }),
 
-/***/ 2:
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE__2__;
-
-/***/ }),
-
-/***/ 20:
+/***/ 21:
 /***/ (function(module, exports) {
 
 function _nonIterableRest() {
@@ -161,22 +193,7 @@ module.exports = _nonIterableRest;
 /***/ 3:
 /***/ (function(module, exports) {
 
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-module.exports = _defineProperty;
+module.exports = __WEBPACK_EXTERNAL_MODULE__3__;
 
 /***/ }),
 
@@ -198,7 +215,7 @@ var objectSpread = __webpack_require__(5);
 var objectSpread_default = /*#__PURE__*/__webpack_require__.n(objectSpread);
 
 // EXTERNAL MODULE: external "draft-js"
-var external_draft_js_ = __webpack_require__(2);
+var external_draft_js_ = __webpack_require__(3);
 
 // CONCATENATED MODULE: ./markdown/modifiers/changeCurrentBlockType.js
 
@@ -422,7 +439,7 @@ var handleNewCodeBlock_handleNewCodeBlock = function handleNewCodeBlock(editorSt
 
 /* harmony default export */ var modifiers_handleNewCodeBlock = (handleNewCodeBlock_handleNewCodeBlock);
 // EXTERNAL MODULE: ../node_modules/@babel/runtime/helpers/slicedToArray.js
-var slicedToArray = __webpack_require__(8);
+var slicedToArray = __webpack_require__(13);
 var slicedToArray_default = /*#__PURE__*/__webpack_require__.n(slicedToArray);
 
 // CONCATENATED MODULE: ./markdown/modifiers/insertLink.js
@@ -749,7 +766,7 @@ function checkReturnForState(editorState, ev, insertEmptyBlockOnReturnWithModifi
 /***/ 5:
 /***/ (function(module, exports, __webpack_require__) {
 
-var defineProperty = __webpack_require__(3);
+var defineProperty = __webpack_require__(2);
 
 function _objectSpread(target) {
   for (var i = 1; i < arguments.length; i++) {
@@ -778,23 +795,6 @@ module.exports = _objectSpread;
 /***/ (function(module, exports) {
 
 module.exports = __WEBPACK_EXTERNAL_MODULE__6__;
-
-/***/ }),
-
-/***/ 8:
-/***/ (function(module, exports, __webpack_require__) {
-
-var arrayWithHoles = __webpack_require__(18);
-
-var iterableToArrayLimit = __webpack_require__(19);
-
-var nonIterableRest = __webpack_require__(20);
-
-function _slicedToArray(arr, i) {
-  return arrayWithHoles(arr) || iterableToArrayLimit(arr, i) || nonIterableRest();
-}
-
-module.exports = _slicedToArray;
 
 /***/ })
 

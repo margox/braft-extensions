@@ -636,8 +636,6 @@ export class Table extends React.Component {
         onMouseEnter: this.handleCellMouseEnter
       })
 
-      
-
       for (var jj = rowIndex;jj < rowIndex + rowSpan; jj ++) {
         rowToolHandlers[jj] = {key: cell.key, height: 0}
         tableRows[jj] = tableRows[jj] || []

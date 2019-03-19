@@ -286,11 +286,15 @@ export const insertCell = (tableBlocks, cell) => {
   }
 
   const blocksBefore = tableBlocks.takeUntil(block => {
-    return block.getData().get('rowIndex') >= rowIndex && block.getData().get('colIndex') >= colIndex
+    const blockRowIndex = block.getData().get('rowIndex')
+    const blockColIndex = block.getData().get('colIndex')
+    return (blockColIndex >= colIndex && blockRowIndex === rowIndex) || blockRowIndex > rowIndex
   })
 
   const blocksAfter = tableBlocks.skipUntil(block => {
-    return block.getData().get('rowIndex') >= rowIndex && block.getData().get('colIndex') >= colIndex
+    const blockRowIndex = block.getData().get('rowIndex')
+    const blockColIndex = block.getData().get('colIndex')
+    return (blockColIndex >= colIndex && blockRowIndex === rowIndex) || blockRowIndex > rowIndex
   })
 
   const nextTableBlocks = blocksBefore.concat(Immutable.OrderedMap([[cellBlock.getKey(), cellBlock]]).toSeq(), blocksAfter)

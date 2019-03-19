@@ -1,5 +1,8 @@
 const zh = {
-  'insertTable': '插入表格',
+  'rows': '行数',
+  'columns': '列数',
+  'cancel': '取消',
+  'insertTable': '插入',
   'removeTable': '删除表格',
   'insertColumn': '插入列',
   'removeColumn': '删除列',
@@ -10,7 +13,10 @@ const zh = {
 }
 
 const zhHant = {
-  'insertTable': '插入表格',
+  'rows': '行数',
+  'columns': '列数',
+  'cancel': '取消',
+  'insertTable': '插入',
   'removeTable': '删除表格',
   'insertColumn': '插入列',
   'removeColumn': '删除列',
@@ -21,7 +27,10 @@ const zhHant = {
 }
 
 const en = {
-  'insertTable': 'Insert Table',
+  'rows': 'Rows',
+  'columns': 'Columns',
+  'cancel': 'Cancel',
+  'insertTable': 'Insert',
   'removeTable': 'Remove Table',
   'insertColumn': 'Insert Column',
   'removeColumn': 'Remove Column',
@@ -32,7 +41,10 @@ const en = {
 }
 
 const pl = {
-  'insertTable': 'Wstaw tabelę',
+  'rows': 'Wiersz',
+  'columns': 'Kolumnę',
+  'cancel': 'Anuluj',
+  'insertTable': 'Wstaw',
   'removeTable': 'Usuń tabelę',
   'insertColumn': 'Wstaw kolumnę',
   'removeColumn': 'Usuń kolumnę',

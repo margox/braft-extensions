@@ -9,8 +9,9 @@ import ColorPicker from '../src/color-picker'
 import Markdown from '../src/markdown'
 
 BraftEditor.use(Table({
-  defaultColumns: 5,
-  defaultRows: 3
+  defaultColumns: 4,
+  defaultRows: 5,
+  withDropdown: true
 }))
 
 BraftEditor.use(Markdown())
