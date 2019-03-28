@@ -38,7 +38,7 @@ export const tableImportFn = (nodeName, node) => {
 
 }
 
-export const tableExportFn = (contentState, block) => {
+export const tableExportFn = (exportAttrString) => (contentState, block) => {
 
   if (block.type.toLowerCase() !== 'table-cell') {
     return null
@@ -60,7 +60,7 @@ export const tableExportFn = (contentState, block) => {
   }
 
   if (previousBlockType !== 'table-cell') {
-    start = `<table><tr><td${blockStyle} colSpan="${block.data.colSpan}" rowSpan="${block.data.rowSpan}">`
+    start = `<table ${exportAttrString}><tr><td${blockStyle} colSpan="${block.data.colSpan}" rowSpan="${block.data.rowSpan}">`
   } else if (previousBlockData.rowIndex !== block.data.rowIndex) {
     start = `<tr><td${blockStyle} colSpan="${block.data.colSpan}" rowSpan="${block.data.rowSpan}">`
   } else {

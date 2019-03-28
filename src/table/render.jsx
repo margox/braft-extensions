@@ -29,7 +29,6 @@ export const getLanguage = (editor) => {
 
 }
 
-
 export class Table extends React.Component {
 
   constructor (props) {

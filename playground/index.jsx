@@ -11,7 +11,8 @@ import Markdown from '../src/markdown'
 BraftEditor.use(Table({
   defaultColumns: 4,
   defaultRows: 5,
-  withDropdown: true
+  withDropdown: true,
+  exportAttrString: 'border="1" style="border-collapse: collapse"'
 }))
 
 BraftEditor.use(Markdown())

@@ -21,10 +21,11 @@ export default (options) => {
     defaultColumns: 3,
     defaultRows: 3,
     withDropdown: false,
+    exportAttrString: '',
     ...options
   }
 
-  const { includeEditors, excludeEditors, defaultColumns, defaultRows, withDropdown } = options
+  const { includeEditors, excludeEditors, defaultColumns, defaultRows, withDropdown, exportAttrString } = options
 
   const controlItem = withDropdown ? {
     type: 'control',
@@ -89,7 +90,7 @@ export default (options) => {
       includeEditors, excludeEditors,
       renderMap: tableRenderMap,
       importer: tableImportFn,
-      exporter: tableExportFn
+      exporter: tableExportFn(exportAttrString)
     }
   ]
 

@@ -2868,52 +2868,54 @@ var converts_tableImportFn = function tableImportFn(nodeName, node) {
 
   return null;
 };
-var tableExportFn = function tableExportFn(contentState, block) {
-  if (block.type.toLowerCase() !== 'table-cell') {
-    return null;
-  }
+var tableExportFn = function tableExportFn(exportAttrString) {
+  return function (contentState, block) {
+    if (block.type.toLowerCase() !== 'table-cell') {
+      return null;
+    }
 
-  var previousBlock = contentState.getBlockBefore(block.key);
-  var nextBlock = contentState.getBlockAfter(block.key);
-  var previousBlockType = previousBlock ? previousBlock.getType() : null;
-  var previousBlockData = previousBlock ? previousBlock.getData().toJS() : {};
-  var nextBlockType = nextBlock ? nextBlock.getType() : null;
-  var nextBlockData = nextBlock ? nextBlock.getData().toJS() : {};
-  var start = '';
-  var end = '';
-  var blockStyle = '';
+    var previousBlock = contentState.getBlockBefore(block.key);
+    var nextBlock = contentState.getBlockAfter(block.key);
+    var previousBlockType = previousBlock ? previousBlock.getType() : null;
+    var previousBlockData = previousBlock ? previousBlock.getData().toJS() : {};
+    var nextBlockType = nextBlock ? nextBlock.getType() : null;
+    var nextBlockData = nextBlock ? nextBlock.getData().toJS() : {};
+    var start = '';
+    var end = '';
+    var blockStyle = '';
 
-  if (block.data.textAlign) {
-    blockStyle += " style=\"text-align:".concat(block.data.textAlign, ";\"");
-  }
+    if (block.data.textAlign) {
+      blockStyle += " style=\"text-align:".concat(block.data.textAlign, ";\"");
+    }
 
-  if (previousBlockType !== 'table-cell') {
-    start = "<table><tr><td".concat(blockStyle, " colSpan=\"").concat(block.data.colSpan, "\" rowSpan=\"").concat(block.data.rowSpan, "\">");
-  } else if (previousBlockData.rowIndex !== block.data.rowIndex) {
-    start = "<tr><td".concat(blockStyle, " colSpan=\"").concat(block.data.colSpan, "\" rowSpan=\"").concat(block.data.rowSpan, "\">");
-  } else {
-    start = "<td".concat(blockStyle, " colSpan=\"").concat(block.data.colSpan, "\" rowSpan=\"").concat(block.data.rowSpan, "\">");
-  }
+    if (previousBlockType !== 'table-cell') {
+      start = "<table ".concat(exportAttrString, "><tr><td").concat(blockStyle, " colSpan=\"").concat(block.data.colSpan, "\" rowSpan=\"").concat(block.data.rowSpan, "\">");
+    } else if (previousBlockData.rowIndex !== block.data.rowIndex) {
+      start = "<tr><td".concat(blockStyle, " colSpan=\"").concat(block.data.colSpan, "\" rowSpan=\"").concat(block.data.rowSpan, "\">");
+    } else {
+      start = "<td".concat(blockStyle, " colSpan=\"").concat(block.data.colSpan, "\" rowSpan=\"").concat(block.data.rowSpan, "\">");
+    }
 
-  if (nextBlockType !== 'table-cell') {
-    end = '</td></tr></table>';
-  } else if (nextBlockData.rowIndex !== block.data.rowIndex) {
-    end = '</td></tr>';
-  } else {
-    end = '</td>';
-  }
+    if (nextBlockType !== 'table-cell') {
+      end = '</td></tr></table>';
+    } else if (nextBlockData.rowIndex !== block.data.rowIndex) {
+      end = '</td></tr>';
+    } else {
+      end = '</td>';
+    }
 
-  if (!previousBlockType) {
-    start = '<p></p>' + start;
-  }
+    if (!previousBlockType) {
+      start = '<p></p>' + start;
+    }
 
-  if (!nextBlockType) {
-    end += '<p></p>';
-  }
+    if (!nextBlockType) {
+      end += '<p></p>';
+    }
 
-  return {
-    start: start,
-    end: end
+    return {
+      start: start,
+      end: end
+    };
   };
 };
 // CONCATENATED MODULE: ./table/index.jsx
@@ -2940,14 +2942,16 @@ var TableUtils = utils;
   options = objectSpread_default()({
     defaultColumns: 3,
     defaultRows: 3,
-    withDropdown: false
+    withDropdown: false,
+    exportAttrString: ''
   }, options);
   var _options = options,
       includeEditors = _options.includeEditors,
       excludeEditors = _options.excludeEditors,
       defaultColumns = _options.defaultColumns,
       defaultRows = _options.defaultRows,
-      withDropdown = _options.withDropdown;
+      withDropdown = _options.withDropdown,
+      exportAttrString = _options.exportAttrString;
   var controlItem = withDropdown ? {
     type: 'control',
     includeEditors: includeEditors,
@@ -3016,7 +3020,7 @@ var TableUtils = utils;
     excludeEditors: excludeEditors,
     renderMap: table_render["b" /* tableRenderMap */],
     importer: converts_tableImportFn,
-    exporter: tableExportFn
+    exporter: tableExportFn(exportAttrString)
   }];
 });
 
