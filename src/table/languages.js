@@ -53,5 +53,30 @@ const pl = {
   'mergeCells': 'Scal komórki',
   'splitCell': 'Podziel komórkę'
 }
-
-export default { zh, zhHant, en, pl }
+const kr = {
+  'rows': '행수',
+  'columns': '열수',
+  'cancel': '취소',
+  'insertTable': '삽입',
+  'removeTable': '양식삭제',
+  'insertColumn': '열삽입',
+  'removeColumn': '열삭제',
+  'insertRow': '행삽입',
+  'removeRow': '행삭제',
+  'mergeCells': '행삽입',
+  'splitCell': '셀분할'
+}
+const jpn = {
+  'rows': '行数',
+  'columns': '列数',
+  'cancel': 'キャンセル',
+  'insertTable': '挿入する',
+  'removeTable': 'フォームを削除',
+  'insertColumn': '列を挿入',
+  'removeColumn': '列を削除',
+  'insertRow': '行を挿入',
+  'removeRow': '行を削除',
+  'mergeCells': 'セルを結合',
+  'splitCell': '分割セル'
+}
+export default { zh, zhHant, en, pl ,jpn, kr}
