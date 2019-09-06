@@ -1836,6 +1836,7 @@ function (_React$Component) {
           tableRows = _this$state9.tableRows,
           dragSelecting = _this$state9.dragSelecting,
           draggingRectBounding = _this$state9.draggingRectBounding;
+      var readOnly = this.props.editor.props.readOnly;
       return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
         className: "bf-table-container"
       }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("table", {
@@ -1858,7 +1859,7 @@ function (_React$Component) {
       }))), dragSelecting ? react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
         className: "dragging-rect",
         style: draggingRectBounding
-      }) : null, this.createContextMenu(), this.createColTools(), this.createRowTools());
+      }) : null, this.createContextMenu(), !readOnly && this.createColTools(), !readOnly && this.createRowTools());
     }
   }]);
 
@@ -1887,7 +1888,6 @@ var zh = {
   'columns': '列数',
   'cancel': '取消',
   'insertTable': '插入',
-  'insertTitle': '表格',
   'removeTable': '删除表格',
   'insertColumn': '插入列',
   'removeColumn': '删除列',
@@ -1901,7 +1901,6 @@ var zhHant = {
   'columns': '列数',
   'cancel': '取消',
   'insertTable': '插入',
-  'insertTitle': '表格',
   'removeTable': '删除表格',
   'insertColumn': '插入列',
   'removeColumn': '删除列',
@@ -1915,7 +1914,6 @@ var en = {
   'columns': 'Columns',
   'cancel': 'Cancel',
   'insertTable': 'Insert',
-  'insertTitle': 'Table',
   'removeTable': 'Remove Table',
   'insertColumn': 'Insert Column',
   'removeColumn': 'Remove Column',
@@ -1929,7 +1927,6 @@ var pl = {
   'columns': 'Kolumnę',
   'cancel': 'Anuluj',
   'insertTable': 'Wstaw',
-  'insertTitle': 'tabelę',
   'removeTable': 'Usuń tabelę',
   'insertColumn': 'Wstaw kolumnę',
   'removeColumn': 'Usuń kolumnę',
@@ -1938,11 +1935,39 @@ var pl = {
   'mergeCells': 'Scal komórki',
   'splitCell': 'Podziel komórkę'
 };
+var kr = {
+  'rows': '행수',
+  'columns': '열수',
+  'cancel': '취소',
+  'insertTable': '삽입',
+  'removeTable': '양식삭제',
+  'insertColumn': '열삽입',
+  'removeColumn': '열삭제',
+  'insertRow': '행삽입',
+  'removeRow': '행삭제',
+  'mergeCells': '행삽입',
+  'splitCell': '셀분할'
+};
+var jpn = {
+  'rows': '行数',
+  'columns': '列数',
+  'cancel': 'キャンセル',
+  'insertTable': '挿入する',
+  'removeTable': 'フォームを削除',
+  'insertColumn': '列を挿入',
+  'removeColumn': '列を削除',
+  'insertRow': '行を挿入',
+  'removeRow': '行を削除',
+  'mergeCells': 'セルを結合',
+  'splitCell': '分割セル'
+};
 /* harmony default export */ __webpack_exports__["a"] = ({
   zh: zh,
   zhHant: zhHant,
   en: en,
-  pl: pl
+  pl: pl,
+  jpn: jpn,
+  kr: kr
 });
 
 /***/ }),
@@ -2966,7 +2991,7 @@ var TableUtils = utils;
         key: 'table',
         replace: 'table',
         type: 'dropdown',
-        title: language.insertTitle,
+        title: language.insertTable,
         text: external_react_default.a.createElement("i", {
           className: "bfi-table"
         }),
@@ -2995,7 +3020,7 @@ var TableUtils = utils;
         key: 'table',
         replace: 'table',
         type: 'button',
-        title: Object(table_render["a" /* getLanguage */])(props.editor).insertTitle,
+        title: Object(table_render["a" /* getLanguage */])(props.editor).insertTable,
         text: external_react_default.a.createElement("i", {
           className: "bfi-table"
         }),

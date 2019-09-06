@@ -814,7 +814,7 @@ export class Table extends React.Component {
   render () {
 
     const { tableRows, dragSelecting, draggingRectBounding } = this.state
-    const { readOnly } = this.props.editor.props;
+    const { readOnly } = this.props.editor.props
 
     return (
       <div className="bf-table-container">
