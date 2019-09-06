@@ -814,6 +814,7 @@ export class Table extends React.Component {
   render () {
 
     const { tableRows, dragSelecting, draggingRectBounding } = this.state
+    const { readOnly } = this.props.editor.props;
 
     return (
       <div className="bf-table-container">
@@ -835,8 +836,8 @@ export class Table extends React.Component {
         </table>
         {dragSelecting ? <div className="dragging-rect" style={draggingRectBounding}/> : null}
         {this.createContextMenu()}
-        {this.createColTools()}
-        {this.createRowTools()}
+        {!readOnly && this.createColTools()}
+        {!readOnly && this.createRowTools()}
       </div>
     )
 
