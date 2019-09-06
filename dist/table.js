@@ -1887,6 +1887,7 @@ var zh = {
   'columns': '列数',
   'cancel': '取消',
   'insertTable': '插入',
+  'insertTitle': '表格',
   'removeTable': '删除表格',
   'insertColumn': '插入列',
   'removeColumn': '删除列',
@@ -1900,6 +1901,7 @@ var zhHant = {
   'columns': '列数',
   'cancel': '取消',
   'insertTable': '插入',
+  'insertTitle': '表格',
   'removeTable': '删除表格',
   'insertColumn': '插入列',
   'removeColumn': '删除列',
@@ -1913,6 +1915,7 @@ var en = {
   'columns': 'Columns',
   'cancel': 'Cancel',
   'insertTable': 'Insert',
+  'insertTitle': 'Table',
   'removeTable': 'Remove Table',
   'insertColumn': 'Insert Column',
   'removeColumn': 'Remove Column',
@@ -1926,6 +1929,7 @@ var pl = {
   'columns': 'Kolumnę',
   'cancel': 'Anuluj',
   'insertTable': 'Wstaw',
+  'insertTitle': 'tabelę',
   'removeTable': 'Usuń tabelę',
   'insertColumn': 'Wstaw kolumnę',
   'removeColumn': 'Usuń kolumnę',
@@ -2962,7 +2966,7 @@ var TableUtils = utils;
         key: 'table',
         replace: 'table',
         type: 'dropdown',
-        title: language.insertTable,
+        title: language.insertTitle,
         text: external_react_default.a.createElement("i", {
           className: "bfi-table"
         }),
@@ -2991,7 +2995,7 @@ var TableUtils = utils;
         key: 'table',
         replace: 'table',
         type: 'button',
-        title: Object(table_render["a" /* getLanguage */])(props.editor).insertTable,
+        title: Object(table_render["a" /* getLanguage */])(props.editor).insertTitle,
         text: external_react_default.a.createElement("i", {
           className: "bfi-table"
         }),
