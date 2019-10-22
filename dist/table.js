@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("react"), require("draft-js"), require("immutable"), require("braft-utils"));
+		module.exports = factory(require("react"), require("draft-js"), require("immutable"), require("braft-utils"), require("braft-editor"));
 	else if(typeof define === 'function' && define.amd)
-		define(["react", "draft-js", "immutable", "braft-utils"], factory);
+		define(["react", "draft-js", "immutable", "braft-utils", "braft-editor"], factory);
 	else {
-		var a = typeof exports === 'object' ? factory(require("react"), require("draft-js"), require("immutable"), require("braft-utils")) : factory(root["react"], root["draft-js"], root["immutable"], root["braft-utils"]);
+		var a = typeof exports === 'object' ? factory(require("react"), require("draft-js"), require("immutable"), require("braft-utils"), require("braft-editor")) : factory(root["react"], root["draft-js"], root["immutable"], root["braft-utils"], root["braft-editor"]);
 		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
 	}
-})(window, function(__WEBPACK_EXTERNAL_MODULE__1__, __WEBPACK_EXTERNAL_MODULE__3__, __WEBPACK_EXTERNAL_MODULE__4__, __WEBPACK_EXTERNAL_MODULE__6__) {
+})(window, function(__WEBPACK_EXTERNAL_MODULE__1__, __WEBPACK_EXTERNAL_MODULE__3__, __WEBPACK_EXTERNAL_MODULE__4__, __WEBPACK_EXTERNAL_MODULE__6__, __WEBPACK_EXTERNAL_MODULE__28__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -91,7 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 42);
+/******/ 	return __webpack_require__(__webpack_require__.s = 43);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1024,6 +1024,9 @@ module.exports = _setPrototypeOf;
 /* harmony import */ var immutable__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(immutable__WEBPACK_IMPORTED_MODULE_9__);
 /* harmony import */ var _languages__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(18);
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(7);
+/* harmony import */ var braft_editor__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(28);
+/* harmony import */ var braft_editor__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(braft_editor__WEBPACK_IMPORTED_MODULE_12__);
+
 
 
 
@@ -1452,7 +1455,9 @@ function (_React$Component) {
           _this.props.editor.draftInstance.blur();
 
           setImmediate(function () {
-            _this.props.editor.setValue(_utils__WEBPACK_IMPORTED_MODULE_11__["removeColumn"](_this.props.editorState, _this.tableKey, selectedColumnIndex));
+            var result = _utils__WEBPACK_IMPORTED_MODULE_11__["removeColumn"](_this.props.editorState, _this.tableKey, selectedColumnIndex);
+
+            _this.props.editor.setValue(_this.validateContent(result));
           });
         });
       }
@@ -1474,6 +1479,11 @@ function (_React$Component) {
       });
     });
 
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "validateContent", function (editorState) {
+      var len = editorState.toRAW(true).blocks.length;
+      return len ? editorState : braft_editor__WEBPACK_IMPORTED_MODULE_12___default.a.createEditorState(null);
+    });
+
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "removeRow", function () {
       var selectedRowIndex = _this.state.selectedRowIndex;
 
@@ -1484,7 +1494,9 @@ function (_React$Component) {
           _this.props.editor.draftInstance.blur();
 
           setImmediate(function () {
-            _this.props.editor.setValue(_utils__WEBPACK_IMPORTED_MODULE_11__["removeRow"](_this.props.editorState, _this.tableKey, selectedRowIndex));
+            var result = _utils__WEBPACK_IMPORTED_MODULE_11__["removeRow"](_this.props.editorState, _this.tableKey, selectedRowIndex);
+
+            _this.props.editor.setValue(_this.validateContent(result));
           });
         });
       }
@@ -1859,7 +1871,7 @@ function (_React$Component) {
       }))), dragSelecting ? react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
         className: "dragging-rect",
         style: draggingRectBounding
-      }) : null, this.createContextMenu(), !readOnly && this.createColTools(), !readOnly && this.createRowTools());
+      }) : null, !readOnly && this.createContextMenu(), !readOnly && this.createColTools(), !readOnly && this.createRowTools());
     }
   }]);
 
@@ -1876,7 +1888,7 @@ var tableRenderMap = function tableRenderMap(props) {
     }
   });
 };
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(35).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(36).setImmediate))
 
 /***/ }),
 /* 18 */
@@ -2026,11 +2038,11 @@ module.exports = _nonIterableRest;
 /* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var arrayWithoutHoles = __webpack_require__(38);
+var arrayWithoutHoles = __webpack_require__(39);
 
-var iterableToArray = __webpack_require__(39);
+var iterableToArray = __webpack_require__(40);
 
-var nonIterableSpread = __webpack_require__(40);
+var nonIterableSpread = __webpack_require__(41);
 
 function _toConsumableArray(arr) {
   return arrayWithoutHoles(arr) || iterableToArray(arr) || nonIterableSpread();
@@ -2069,14 +2081,20 @@ module.exports = g;
 /* 25 */,
 /* 26 */,
 /* 27 */,
-/* 28 */,
+/* 28 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__28__;
+
+/***/ }),
 /* 29 */,
 /* 30 */,
 /* 31 */,
 /* 32 */,
 /* 33 */,
 /* 34 */,
-/* 35 */
+/* 35 */,
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
@@ -2132,7 +2150,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(36);
+__webpack_require__(37);
 // On some exotic environments, it's not clear which object `setimmediate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
@@ -2146,7 +2164,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(23)))
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -2336,10 +2354,10 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(23), __webpack_require__(37)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(23), __webpack_require__(38)))
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -2529,7 +2547,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports) {
 
 function _arrayWithoutHoles(arr) {
@@ -2545,7 +2563,7 @@ function _arrayWithoutHoles(arr) {
 module.exports = _arrayWithoutHoles;
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports) {
 
 function _iterableToArray(iter) {
@@ -2555,7 +2573,7 @@ function _iterableToArray(iter) {
 module.exports = _iterableToArray;
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports) {
 
 function _nonIterableSpread() {
@@ -2565,8 +2583,8 @@ function _nonIterableSpread() {
 module.exports = _nonIterableSpread;
 
 /***/ }),
-/* 41 */,
-/* 42 */
+/* 42 */,
+/* 43 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2577,7 +2595,7 @@ var objectSpread = __webpack_require__(5);
 var objectSpread_default = /*#__PURE__*/__webpack_require__.n(objectSpread);
 
 // EXTERNAL MODULE: ./table/style.scss
-var style = __webpack_require__(48);
+var style = __webpack_require__(49);
 
 // EXTERNAL MODULE: external "react"
 var external_react_ = __webpack_require__(1);
@@ -3054,12 +3072,12 @@ var TableUtils = utils;
 });
 
 /***/ }),
-/* 43 */,
 /* 44 */,
 /* 45 */,
 /* 46 */,
 /* 47 */,
-/* 48 */
+/* 48 */,
+/* 49 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
