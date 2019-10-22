@@ -845,7 +845,6 @@ export class Table extends React.Component {
           </tbody>
         </table>
         {dragSelecting ? <div className="dragging-rect" style={draggingRectBounding}/> : null}
-        {/* {this.createContextMenu()} */}
         {!readOnly && this.createContextMenu()}
         {!readOnly && this.createColTools()}
         {!readOnly && this.createRowTools()}
