@@ -19,6 +19,9 @@ BraftEditor.use(Markdown())
 
 BraftEditor.use(ColorPicker())
 
+const tableStr = '<p></p><table border="1" style="border-collapse: collapse"><tr><td colSpan="1" rowSpan="1">ST-dstcollector	</td><td colSpan="1" rowSpan="1">80、12200</td></tr><tr><td colSpan="1" rowSpan="1">DST-dstweb		</td><td colSpan="1" rowSpan="1">80、83</td></tr></table><p></p>';
+const tableStr2 = '<table border="1" style="border-collapse: collapse"><tr><td colSpan="1" rowSpan="1">ST-dstcollector	</td><td colSpan="1" rowSpan="1">80、12200</td></tr><tr><td colSpan="1" rowSpan="1">DST-dstweb		</td><td colSpan="1" rowSpan="1">80、83</td></tr></table>';
+
 class Demo extends React.Component {
 
   constructor(props) {
@@ -26,7 +29,7 @@ class Demo extends React.Component {
     super(props)
 
     this.state = {
-      editorState: BraftEditor.createEditorState(null)
+      editorState: BraftEditor.createEditorState(tableStr2)
     }
 
   }
@@ -53,6 +56,7 @@ class Demo extends React.Component {
               text: 'Log HTML',
               onClick: this.logHTML
             }]}
+            placeholder="xxx"
             onChange={this.handleChange}
             value={editorState}
             contentStyle={{height: 700}}
