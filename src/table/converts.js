@@ -1,24 +1,45 @@
 import { rebuildTableNode } from './utils'
 
-export const tableImportFn = (nodeName, node) => {
+const parseColgoupData = (colgroupNode) => {
+  if (!colgroupNode) {
+    return []
+  }
 
+  return Array.prototype.map.call(colgroupNode.querySelectorAll('col'), colNode => {
+    return {
+      width: colNode.width ? colNode.width * 1 : 0
+    }
+  })
+}
+
+const buildColgroup = (blockData) => {
+  if (blockData && blockData.colgroupData && blockData.colgroupData.length) {
+    return `<colgroup>${blockData.colgroupData.map(col => `<col width="${col.width}"></col>`).join('')}</<colgroup>`
+  }
+
+  return ''
+}
+
+let tableColgroupData = []
+
+export const tableImportFn = (nodeName, node) => {
   if (nodeName !== 'body' && node && node.querySelector && node.querySelector(':scope > table')) {
     node.parentNode.insertBefore(node.querySelector(':scope > table'), node.nextSibling)
   }
 
   if (nodeName === 'table') {
+    tableColgroupData = parseColgoupData(node.querySelector('colgroup'))
     rebuildTableNode(node)
   }
 
   if (nodeName === 'th' || nodeName === 'td') {
-
     const tableKey = node.dataset.tableKey
     const colIndex = node.dataset.colIndex * 1
     const rowIndex = node.dataset.rowIndex * 1
     const colSpan = node.colSpan
     const rowSpan = node.rowSpan
 
-    const cellData = { tableKey, colIndex, rowIndex, colSpan, rowSpan }
+    const cellData = { tableKey, colIndex, rowIndex, colSpan, rowSpan, colgroupData: tableColgroupData }
     cellData.isHead = nodeName === 'th'
 
     if (node.style && node.style.textAlign) {
@@ -60,7 +81,7 @@ export const tableExportFn = (exportAttrString) => (contentState, block) => {
   }
 
   if (previousBlockType !== 'table-cell') {
-    start = `<table ${exportAttrString}><tr><td${blockStyle} colSpan="${block.data.colSpan}" rowSpan="${block.data.rowSpan}">`
+    start = `<table ${exportAttrString}>${buildColgroup(block.data)}<tr><td${blockStyle} colSpan="${block.data.colSpan}" rowSpan="${block.data.rowSpan}">`
   } else if (previousBlockData.rowIndex !== block.data.rowIndex) {
     start = `<tr><td${blockStyle} colSpan="${block.data.colSpan}" rowSpan="${block.data.rowSpan}">`
   } else {

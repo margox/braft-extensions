@@ -21,6 +21,7 @@ export default (options) => {
     defaultColumns: 3,
     defaultRows: 3,
     withDropdown: false,
+    columnResizable: false,
     exportAttrString: '',
     ...options
   }
@@ -46,7 +47,7 @@ export default (options) => {
             language={language}
             defaultRows={defaultRows}
             defaultColumns={defaultColumns}
-            onConfirm={({columns, rows}) => {
+            onConfirm={({ columns, rows }) => {
               props.editor.setValue(TableUtils.insertTable(props.editorState, columns, rows))
               dropdownInstance && dropdownInstance.hide()
             }}
@@ -88,7 +89,7 @@ export default (options) => {
       type: 'block',
       name: 'table-cell',
       includeEditors, excludeEditors,
-      renderMap: tableRenderMap,
+      renderMap: tableRenderMap(options),
       importer: tableImportFn,
       exporter: tableExportFn(exportAttrString)
     }

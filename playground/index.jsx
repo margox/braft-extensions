@@ -12,6 +12,7 @@ BraftEditor.use(Table({
   defaultColumns: 4,
   defaultRows: 5,
   withDropdown: true,
+  columnResizable: true,
   exportAttrString: 'border="1" style="border-collapse: collapse"'
 }))
 
@@ -20,7 +21,7 @@ BraftEditor.use(Markdown())
 BraftEditor.use(ColorPicker())
 
 const tableStr = '<p></p><table border="1" style="border-collapse: collapse"><tr><td colSpan="1" rowSpan="1">ST-dstcollector	</td><td colSpan="1" rowSpan="1">80、12200</td></tr><tr><td colSpan="1" rowSpan="1">DST-dstweb		</td><td colSpan="1" rowSpan="1">80、83</td></tr></table><p></p>';
-const tableStr2 = '<table border="1" style="border-collapse: collapse"><tr><td colSpan="1" rowSpan="1">ST-dstcollector	</td><td colSpan="1" rowSpan="1">80、12200</td></tr><tr><td colSpan="1" rowSpan="1">DST-dstweb		</td><td colSpan="1" rowSpan="1">80、83</td></tr></table>';
+const tableStr2 = '<table border="1" style="border-collapse: collapse"><colgroup><col width="120"></col><col width="240"></col></colgroup><tr><td colSpan="1" rowSpan="1">ST-dstcollector	</td><td colSpan="1" rowSpan="1">80、12200</td></tr><tr><td colSpan="1" rowSpan="1">DST-dstweb		</td><td colSpan="1" rowSpan="1">80、83</td></tr></table>';
 
 class Demo extends React.Component {
 
@@ -59,7 +60,7 @@ class Demo extends React.Component {
             placeholder="xxx"
             onChange={this.handleChange}
             value={editorState}
-            contentStyle={{height: 700}}
+            contentStyle={{ height: 700 }}
           />
         </div>
       </div>

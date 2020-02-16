@@ -1,6 +1,6 @@
 var path = require('path')
+  , MiniCssExtractPlugin = require('mini-css-extract-plugin')
   , fs = require('fs')
-  , ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 var jsLoader = [
   {
@@ -17,12 +17,13 @@ module.exports = {
   module: {
     //加载器配置
     rules: [
-      { 
+      {
         test: /\.(scss|css)$/,
-        use: ExtractTextPlugin.extract([
+        use: [
+          process.env.NODE_ENV === 'production' ? MiniCssExtractPlugin.loader : 'style-loader',
           'css-loader',
           'sass-loader'
-        ])
+        ]
       }, {
         test: /\.(js|jsx)$/,
         exclude: [

@@ -5,7 +5,6 @@ import * as TableUtils from './utils'
 import BraftEditor from 'braft-editor'
 
 const getIndexFromEvent = (event, ignoredTarget = '') => {
-
   if (!isNaN(event)) {
     return event * 1
   } else if (ignoredTarget && event && event.target && event.target.dataset.role === ignoredTarget) {
@@ -15,11 +14,9 @@ const getIndexFromEvent = (event, ignoredTarget = '') => {
   }
 
   return false
-
 }
 
 export const getLanguage = (editor) => {
-
   const lang = editor.editorProps.language
 
   if (typeof lang === 'function') {
@@ -27,16 +24,13 @@ export const getLanguage = (editor) => {
   } else {
     return languages[lang] || languages['zh']
   }
-
 }
 
 export class Table extends React.Component {
 
-  constructor (props) {
-
+  constructor(props) {
     super(props)
     this.language = getLanguage(props.editor)
-
   }
 
   state = {
@@ -81,9 +75,7 @@ export class Table extends React.Component {
   }
 
   handleKeyDown = (event) => {
-
     if (event.keyCode === 8) {
-
       const { selectedColumnIndex, selectedRowIndex } = this.state
 
       if (selectedColumnIndex > -1) {
@@ -93,21 +85,17 @@ export class Table extends React.Component {
         this.removeRow()
         event.preventDefault()
       }
-
     }
-
   }
 
   handleMouseUp = (event) => {
-
     if (event.button !== 0) {
       return false
     }
 
     if (this.state.colResizing) {
-
       const { defaultColWidth, colToolHandlers, colResizeOffset } = this.state
-      const nextColToolHandlers = [ ...colToolHandlers ]
+      const nextColToolHandlers = [...colToolHandlers]
 
       nextColToolHandlers[this.__colResizeIndex - 1].width = (nextColToolHandlers[this.__colResizeIndex - 1].width || defaultColWidth) + colResizeOffset
       nextColToolHandlers[this.__colResizeIndex].width = (nextColToolHandlers[this.__colResizeIndex].width || defaultColWidth) - colResizeOffset
@@ -120,36 +108,32 @@ export class Table extends React.Component {
         colToolHandlers: nextColToolHandlers,
         colResizeOffset: 0,
         colResizing: false
+      }, () => {
+        this.renderCells()
+        this.updateCellsData({ colgroupData: nextColToolHandlers.map(item => ({ width: item.width })) })
       })
-
     } else {
       this.setState({
         contextMenuPosition: null
       })
     }
-
   }
 
   handleMouseMove = (event) => {
-
     if (this.state.colResizing) {
       this.setState({
         colResizeOffset: this.getResizeOffset(event.clientX - this.__colResizeStartAt)
       })
     }
-
   }
 
   handleColResizerMouseDown = (event) => {
-
     this.__colResizeIndex = event.currentTarget.dataset.index * 1
     this.__colResizeStartAt = event.clientX
     this.setState({ colResizing: true })
-
   }
 
   handleCellContexrMenu = (event) => {
-
     const { selectedCells } = this.state
     const { cellKey } = event.currentTarget.dataset
 
@@ -158,7 +142,6 @@ export class Table extends React.Component {
     }
 
     const { top: tableTop, left: tableLeft, width: tableWidth } = this.__tableRef.getBoundingClientRect()
-
     let top = event.clientY - tableTop + 15
     let left = event.clientX - tableLeft + 10
 
@@ -171,7 +154,6 @@ export class Table extends React.Component {
     })
 
     event.preventDefault()
-
   }
 
   handleContextMenuContextMenu = (event) => {
@@ -179,7 +161,11 @@ export class Table extends React.Component {
   }
 
   handleCellMouseDown = (event) => {
-
+    if (this.state.colResizing) {
+      event.preventDefault()
+      event.stopPropagation()
+      return false
+    }
     this.__dragSelecting = true
     this.__dragSelectingStartColumnIndex = event.currentTarget.dataset.colIndex
     this.__dragSelectingStartRowIndex = event.currentTarget.dataset.rowIndex
@@ -192,11 +178,9 @@ export class Table extends React.Component {
     this.setState({
       dragSelecting: true
     })
-
   }
 
   handleCellMouseUp = () => {
-
     this.__dragSelecting = false
     this.__dragSelected = false
     this.__dragSelectingStartColumnIndex = null
@@ -208,13 +192,10 @@ export class Table extends React.Component {
       dragSelecting: false,
       draggingRectBounding: null
     })
-
   }
 
   handleCellMouseEnter = (event) => {
-
     if (this.__dragSelecting) {
-
       this.__dragSelectingEndColumnIndex = event.currentTarget.dataset.colIndex
       this.__dragSelectingEndRowIndex = event.currentTarget.dataset.rowIndex
 
@@ -226,32 +207,25 @@ export class Table extends React.Component {
       }
 
       this.confirmDragSelecting()
-
     }
-
   }
 
   handleTableMouseMove = (event) => {
-
     if (this.__dragSelecting && this.__dragSelected) {
       this.updateDraggingRectBounding(event)
       event.preventDefault()
     }
-
   }
 
   handleTableMouseLeave = (event) => {
-
     if (this.__dragSelecting && event.currentTarget && event.currentTarget.dataset.role === 'table') {
       this.handleCellMouseUp()
     }
 
     event.preventDefault()
-
   }
 
   confirmDragSelecting = () => {
-
     if (!this.__dragSelectingStartColumnIndex || !this.__dragSelectingStartRowIndex || !this.__dragSelectingEndColumnIndex || !this.__dragSelectingEndRowIndex) {
       return false
     }
@@ -273,11 +247,9 @@ export class Table extends React.Component {
       cellSplittable: false,
       selectedCells: selectedCells
     }, this.renderCells)
-
   }
 
   updateDraggingRectBounding = (mouseEvent) => {
-
     if (this.__draggingRectBoundingUpdating || !this.__dragSelecting) {
       return false
     }
@@ -310,11 +282,9 @@ export class Table extends React.Component {
         this.__draggingRectBoundingUpdating = false
       }, 100)
     })
-
   }
 
   selectCell = (event) => {
-
     const { selectedCells } = this.state
     const { cellKey } = event.currentTarget.dataset
     const { colSpan, rowSpan } = event.currentTarget
@@ -329,11 +299,9 @@ export class Table extends React.Component {
       selectedRowIndex: -1,
       selectedColumnIndex: -1,
     }, this.renderCells)
-
   }
 
   selectColumn = (event) => {
-
     const selectedColumnIndex = getIndexFromEvent(event, 'insert-column')
 
     if (selectedColumnIndex === false) {
@@ -365,11 +333,9 @@ export class Table extends React.Component {
       cellsMergeable: spannedCellBlockKeys.length === 0,
       selectedCells: selectedCells
     }, this.renderCells)
-
   }
 
   selectRow = (event) => {
-
     const selectedRowIndex = getIndexFromEvent(event, 'insert-row')
 
     if (selectedRowIndex === false) {
@@ -399,49 +365,47 @@ export class Table extends React.Component {
       cellsMergeable: spannedCellBlockKeys.length === 0,
       selectedCells: selectedCells
     }, this.renderCells)
-
   }
 
   insertColumn = (event) => {
-
     const columnIndex = getIndexFromEvent(event)
 
     if (columnIndex === false) {
       return false
     }
 
+    const nextColToolHandlers = this.state.colToolHandlers.map(item => ({ ...item, width: 0 }))
     this.setState({
       selectedCells: [],
       selectedRowIndex: -1,
-      selectedColumnIndex: -1
+      selectedColumnIndex: -1,
+      colToolHandlers: nextColToolHandlers
     }, () => {
-      this.props.editor.setValue(TableUtils.insertColumn(this.props.editorState, this.tableKey, this.state.tableRows.length, columnIndex))
+      this.props.editor.setValue(TableUtils.insertColumn(this.props.editorState, this.tableKey, this.state.tableRows.length, columnIndex, nextColToolHandlers))
     })
-
   }
 
   removeColumn = () => {
-
     const { selectedColumnIndex } = this.state
+    const nextColToolHandlers = this.state.colToolHandlers.map(item => ({ ...item, width: 0 }))
 
     if (selectedColumnIndex >= 0) {
 
       this.setState({
-        selectedColumnIndex: -1
+        selectedColumnIndex: -1,
+        colToolHandlers: nextColToolHandlers
       }, () => {
         this.props.editor.draftInstance.blur()
         setImmediate(() => {
-          const result = TableUtils.removeColumn(this.props.editorState, this.tableKey, selectedColumnIndex)
+          const result = TableUtils.removeColumn(this.props.editorState, this.tableKey, selectedColumnIndex, nextColToolHandlers)
           this.props.editor.setValue(this.validateContent(result))
         })
       })
 
     }
-
   }
 
   insertRow = (event) => {
-
     const rowIndex = getIndexFromEvent(event)
 
     if (rowIndex === false) {
@@ -455,7 +419,6 @@ export class Table extends React.Component {
     }, () => {
       this.props.editor.setValue(TableUtils.insertRow(this.props.editorState, this.tableKey, this.colLength, rowIndex))
     })
-
   }
 
   // 校验一下删除行、列之后的内容还有没有，没有的话则创建一个空的editorState，防止后续取不到值报错
@@ -465,32 +428,25 @@ export class Table extends React.Component {
   }
 
   removeRow = () => {
-
     const { selectedRowIndex } = this.state
-    
+
     if (selectedRowIndex >= 0) {
-      
       this.setState({
         selectedRowIndex: -1
       }, () => {
         this.props.editor.draftInstance.blur()
-
         setImmediate(() => {
           const result = TableUtils.removeRow(this.props.editorState, this.tableKey, selectedRowIndex)
           this.props.editor.setValue(this.validateContent(result))
         })
       })
-
     }
-
   }
 
   mergeCells = () => {
-
     const { selectedCells, cellsMergeable } = this.state
 
     if (cellsMergeable && selectedCells.length > 1) {
-
       this.setState({
         selectedCells: [selectedCells[0]],
         cellSplittable: true,
@@ -500,17 +456,13 @@ export class Table extends React.Component {
       }, () => {
         this.props.editor.setValue(TableUtils.mergeCells(this.props.editorState, this.tableKey, selectedCells))
       })
-
     }
-
   }
 
   splitCell = () => {
-
     const { selectedCells, cellSplittable } = this.state
 
     if (cellSplittable && selectedCells.length === 1) {
-
       this.setState({
         cellSplittable: false,
         cellsMergeable: false,
@@ -519,39 +471,32 @@ export class Table extends React.Component {
       }, () => {
         this.props.editor.setValue(TableUtils.splitCell(this.props.editorState, this.tableKey, selectedCells[0]))
       })
-
     }
-
   }
 
   removeTable = () => {
     this.props.editor.setValue(TableUtils.removeTable(this.props.editorState, this.tableKey))
   }
 
-  componentDidMount () {
-
+  componentDidMount() {
     this.renderCells(this.props)
 
     document.body.addEventListener('keydown', this.handleKeyDown, false)
     document.body.addEventListener('mousemove', this.handleMouseMove, false)
     document.body.addEventListener('mouseup', this.handleMouseUp, false)
-
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     this.renderCells(nextProps)
   }
 
-  componentWillUnmount () {
-
+  componentWillUnmount() {
     document.body.removeEventListener('keydown', this.handleKeyDown, false)
     document.body.removeEventListener('mousemove', this.handleMouseMove, false)
     document.body.removeEventListener('mouseup', this.handleMouseUp, false)
-
   }
 
-  getResizeOffset (offset) {
-
+  getResizeOffset(offset) {
     let leftLimit = 0
     let rightLimit = 0
 
@@ -564,48 +509,43 @@ export class Table extends React.Component {
     offset = offset > rightLimit ? rightLimit : offset
 
     return offset
-
   }
 
-  adjustToolbarHandlers () {
-
+  adjustToolbarHandlers() {
     let needUpdate = false
-    const rowToolHandlers = [ ...this.state.rowToolHandlers ]
+    const rowToolHandlers = [...this.state.rowToolHandlers]
 
     Object.keys(this.__rowRefs).forEach((index) => {
-
       const rowHeight = this.__rowRefs[index] ? this.__rowRefs[index].getBoundingClientRect().height : 40
-
       if (rowToolHandlers[index] && rowToolHandlers[index].height !== rowHeight) {
         needUpdate = true
         rowToolHandlers[index].height = rowHeight
       }
-
     })
 
     if (needUpdate) {
       this.setState({ rowToolHandlers })
     }
-
   }
 
-  renderCells (props) {
+  updateCellsData(blockData) {
+    this.props.editor.setValue(TableUtils.updateAllTableBlocks(this.props.editorState, this.tableKey, blockData))
+  }
 
+  renderCells(props) {
     props = props || this.props
-
     this.colLength = 0
 
     const tableRows = []
     const colToolHandlers = []
     const rowToolHandlers = []
-
     const { editorState, children } = props
+    const tableWidth = this.__tableRef.getBoundingClientRect().width
 
     this.__startCellKey = children[0].key
     this.__endCellKey = children[children.length - 1].key
 
     children.forEach((cell, cellIndex) => {
-
       const cellBlock = editorState.getCurrentContent().getBlockForKey(cell.key)
       const cellBlockData = cellBlock.getData()
       const tableKey = cellBlockData.get('tableKey')
@@ -615,17 +555,21 @@ export class Table extends React.Component {
       const rowSpan = cellBlockData.get('rowSpan')
 
       this.tableKey = tableKey
-
       if (rowIndex === 0) {
-
-        const colSpan = (cellBlockData.get('colSpan') || 1) * 1  
-
-        for (var ii = this.colLength;ii < this.colLength + colSpan;ii ++) {
-          colToolHandlers[ii] = {key: cell.key, width: 0}
+        const colgroupData = cellBlockData.get('colgroupData') || []
+        const totalColgroupWidth = colgroupData.reduce((width, col) => width + col.width * 1, 0)
+        const colSpan = (cellBlockData.get('colSpan') || 1) * 1
+        for (var ii = this.colLength; ii < this.colLength + colSpan; ii++) {
+          colToolHandlers[ii] = {
+            key: cell.key,
+            width:
+              this.state.colToolHandlers[ii] ?
+                this.state.colToolHandlers[ii].width :
+                colgroupData[ii] ? colgroupData[ii].width / totalColgroupWidth * tableWidth * 1 : 0
+          }
         }
 
         this.colLength += colSpan
-
       }
 
       const newCell = React.cloneElement(cell, {
@@ -645,8 +589,8 @@ export class Table extends React.Component {
         onMouseEnter: this.handleCellMouseEnter
       })
 
-      for (var jj = rowIndex;jj < rowIndex + rowSpan; jj ++) {
-        rowToolHandlers[jj] = {key: cell.key, height: 0}
+      for (var jj = rowIndex; jj < rowIndex + rowSpan; jj++) {
+        rowToolHandlers[jj] = { key: cell.key, height: 0 }
         tableRows[jj] = tableRows[jj] || []
       }
 
@@ -655,18 +599,13 @@ export class Table extends React.Component {
       } else {
         tableRows[rowIndex].push(newCell)
       }
-
     })
 
-    const tableWidth = this.__tableRef.getBoundingClientRect().width
     const defaultColWidth = tableWidth / this.colLength
-
     this.setState({ tableRows, colToolHandlers, rowToolHandlers, defaultColWidth }, this.adjustToolbarHandlers)
-
   }
 
-  createColGroup () {
-
+  createColGroup() {
     return (
       <colgroup>
         {this.state.colToolHandlers.map((item, index) => (
@@ -674,12 +613,10 @@ export class Table extends React.Component {
         ))}
       </colgroup>
     )
-
   }
 
-  createColTools () {
-
-    const { colResizing, /*colResizeOffset,*/ colToolHandlers, selectedColumnIndex, defaultColWidth } = this.state
+  createColTools() {
+    const { colResizing, colResizeOffset, colToolHandlers, selectedColumnIndex, defaultColWidth } = this.state
 
     return (
       <div
@@ -696,18 +633,18 @@ export class Table extends React.Component {
             data-index={index}
             data-active={selectedColumnIndex == index}
             className="bf-col-tool-handler"
-            style={{width: item.width || defaultColWidth}}
+            style={{ width: item.width || defaultColWidth }}
             onClick={this.selectColumn}
           >
-            {/*index !== 0 ? (
+            {this.props.columnResizable && index !== 0 ? (
               <div
                 data-index={index}
-                data-key={item.key} 
+                data-key={item.key}
                 className={`bf-col-resizer${colResizing && this.__colResizeIndex === index ? ' active' : ''}`}
-                style={colResizing && this.__colResizeIndex === index ? {transform: `translateX(${colResizeOffset}px)`} : null}
+                style={colResizing && this.__colResizeIndex === index ? { transform: `translateX(${colResizeOffset}px)` } : null}
                 onMouseDown={this.handleColResizerMouseDown}
               ></div>
-            ) : null*/}
+            ) : null}
             <div className="bf-col-tool-left">
               <div
                 data-index={index}
@@ -742,11 +679,9 @@ export class Table extends React.Component {
         ))}
       </div>
     )
-
   }
 
-  createRowTools () {
-
+  createRowTools() {
     const { rowToolHandlers, selectedRowIndex } = this.state
 
     return (
@@ -763,7 +698,7 @@ export class Table extends React.Component {
             data-index={index}
             data-active={selectedRowIndex == index}
             className="bf-row-tool-handler"
-            style={{height: item.height}}
+            style={{ height: item.height }}
             onClick={this.selectRow}
           >
             <div className="bf-row-tool-up">
@@ -800,11 +735,9 @@ export class Table extends React.Component {
         ))}
       </div>
     )
-
   }
 
-  createContextMenu () {
-
+  createContextMenu() {
     const { cellsMergeable, cellSplittable, contextMenuPosition } = this.state
 
     if (!contextMenuPosition) {
@@ -818,11 +751,9 @@ export class Table extends React.Component {
         <div className="context-menu-item" onMouseDown={this.removeTable}>{this.language.removeTable}</div>
       </div>
     )
-
   }
 
-  render () {
-
+  render() {
     const { tableRows, dragSelecting, draggingRectBounding } = this.state
     const { readOnly } = this.props.editor.props
 
@@ -844,7 +775,7 @@ export class Table extends React.Component {
             ))}
           </tbody>
         </table>
-        {dragSelecting ? <div className="dragging-rect" style={draggingRectBounding}/> : null}
+        {dragSelecting ? <div className="dragging-rect" style={draggingRectBounding} /> : null}
         {!readOnly && this.createContextMenu()}
         {!readOnly && this.createColTools()}
         {!readOnly && this.createRowTools()}
@@ -852,16 +783,13 @@ export class Table extends React.Component {
     )
 
   }
-
 }
 
-export const tableRenderMap = (props) => {
-
+export const tableRenderMap = (options) => (props) => {
   return Immutable.Map({
     'table-cell': {
       element: 'td',
-      wrapper: <Table editor={props.editor} editorState={props.editorState}/>
+      wrapper: <Table columnResizable={options.columnResizable} editor={props.editor} editorState={props.editorState} />
     },
   })
-
 }

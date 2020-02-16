@@ -7,7 +7,7 @@
 		var a = typeof exports === 'object' ? factory(require("react"), require("draft-js"), require("immutable"), require("braft-utils"), require("braft-editor")) : factory(root["react"], root["draft-js"], root["immutable"], root["braft-utils"], root["braft-editor"]);
 		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
 	}
-})(window, function(__WEBPACK_EXTERNAL_MODULE__1__, __WEBPACK_EXTERNAL_MODULE__3__, __WEBPACK_EXTERNAL_MODULE__4__, __WEBPACK_EXTERNAL_MODULE__6__, __WEBPACK_EXTERNAL_MODULE__28__) {
+})(window, function(__WEBPACK_EXTERNAL_MODULE__1__, __WEBPACK_EXTERNAL_MODULE__3__, __WEBPACK_EXTERNAL_MODULE__4__, __WEBPACK_EXTERNAL_MODULE__6__, __WEBPACK_EXTERNAL_MODULE__29__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -91,7 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 43);
+/******/ 	return __webpack_require__(__webpack_require__.s = 47);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -155,7 +155,7 @@ var defineProperty = __webpack_require__(2);
 
 function _objectSpread(target) {
   for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
+    var source = arguments[i] != null ? Object(arguments[i]) : {};
     var ownKeys = Object.keys(source);
 
     if (typeof Object.getOwnPropertySymbols === 'function') {
@@ -188,6 +188,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__6__;
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "rebuildTableBlocks", function() { return rebuildTableBlocks; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "rebuildTableNode", function() { return rebuildTableNode; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateAllTableBlocks", function() { return updateAllTableBlocks; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCellCountForInsert", function() { return getCellCountForInsert; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCellsInsideRect", function() { return getCellsInsideRect; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "insertCell", function() { return insertCell; });
@@ -327,6 +328,7 @@ var findBlocks = function findBlocks(contentBlocks, propName, propValue) {
 
 
 var rebuildTableBlocks = function rebuildTableBlocks(tableBlocks) {
+  var addonBlockData = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   var skipedCells = {};
   var cellCountOfRow = [];
   return tableBlocks.map(function (block) {
@@ -354,7 +356,7 @@ var rebuildTableBlocks = function rebuildTableBlocks(tableBlocks) {
     }
 
     return block.merge({
-      'data': immutable__WEBPACK_IMPORTED_MODULE_3___default.a.Map(_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_1___default()({}, blockData.toJS(), {
+      'data': immutable__WEBPACK_IMPORTED_MODULE_3___default.a.Map(_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_1___default()({}, blockData.toJS(), addonBlockData, {
         colIndex: colIndex
       }))
     });
@@ -391,6 +393,15 @@ var rebuildTableNode = function rebuildTableNode(tableNode) {
       cell.dataset.rowIndex = rowIndex;
     });
   });
+};
+var updateAllTableBlocks = function updateAllTableBlocks(editorState, tableKey, blockData) {
+  var selectionState = editorState.getSelection();
+  var contentState = editorState.getCurrentContent();
+  var contentBlocks = contentState.getBlockMap();
+  var tableBlocks = findBlocks(contentBlocks, 'tableKey', tableKey);
+  var nextTableBlocks = rebuildTableBlocks(tableBlocks, blockData);
+  var nextContentState = updateTableBlocks(contentState, editorState.getSelection(), selectionState.focusKey, nextTableBlocks, tableKey);
+  return draft_js__WEBPACK_IMPORTED_MODULE_2__["EditorState"].push(editorState, nextContentState, 'insert-table-row');
 }; // 获取需要插入到某一行的单元格的数量
 
 var getCellCountForInsert = function getCellCountForInsert(tableBlocks, rowIndex) {
@@ -682,7 +693,7 @@ var removeColumn = function removeColumn(editorState, tableKey, colIndex) {
   return draft_js__WEBPACK_IMPORTED_MODULE_2__["EditorState"].push(editorState, nextContentState, 'remove-table-column');
 }; // 插入一行单元格到表格中
 
-var insertRow = function insertRow(editorState, tableKey, cellCounts, rowIndex) {
+var insertRow = function insertRow(editorState, tableKey, cellCounts, rowIndex, addonBlockData) {
   var contentState = editorState.getCurrentContent();
   var contentBlocks = contentState.getBlockMap().toSeq();
   var tableBlocks = findBlocks(contentBlocks, 'tableKey', tableKey);
@@ -714,12 +725,12 @@ var insertRow = function insertRow(editorState, tableKey, cellCounts, rowIndex) 
   var colCellLength = getCellCountForInsert(tableBlocks, rowIndex);
   var rowBlocks = createRowBlocks(tableKey, rowIndex, colCellLength || cellCounts);
   var focusCellKey = rowBlocks.first().getKey();
-  var nextTableBlocks = rebuildTableBlocks(blocksBefore.concat(rowBlocks, blocksAfter));
+  var nextTableBlocks = rebuildTableBlocks(blocksBefore.concat(rowBlocks, blocksAfter), addonBlockData);
   var nextContentState = updateTableBlocks(contentState, editorState.getSelection(), focusCellKey, nextTableBlocks, tableKey);
   return draft_js__WEBPACK_IMPORTED_MODULE_2__["EditorState"].push(editorState, nextContentState, 'insert-table-row');
 }; // 从表格中移除指定的某一行单元格
 
-var removeRow = function removeRow(editorState, tableKey, rowIndex) {
+var removeRow = function removeRow(editorState, tableKey, rowIndex, addonBlockData) {
   var contentState = editorState.getCurrentContent();
   var contentBlocks = contentState.getBlockMap().toSeq();
   var tableBlocks = findBlocks(contentBlocks, 'tableKey', tableKey);
@@ -769,7 +780,7 @@ var removeRow = function removeRow(editorState, tableKey, rowIndex) {
     return cellsToBeAdded;
   }, []);
   var focusCellKey = (blocksAfter.first() || blocksBefore.last() || contentBlocks.first()).getKey();
-  var nextTableBlocks = insertCells(blocksBefore.concat(blocksAfter), cellsToBeAdded);
+  var nextTableBlocks = rebuildTableBlocks(insertCells(blocksBefore.concat(blocksAfter), cellsToBeAdded), addonBlockData);
   var nextContentState = updateTableBlocks(contentState, editorState.getSelection(), focusCellKey, nextTableBlocks, tableKey, true);
   return draft_js__WEBPACK_IMPORTED_MODULE_2__["EditorState"].push(editorState, nextContentState, 'remove-table-row');
 }; // 合并单元格
@@ -961,16 +972,16 @@ module.exports = _slicedToArray;
 /* 15 */
 /***/ (function(module, exports) {
 
-function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof2 = function _typeof2(obj) { return typeof obj; }; } else { _typeof2 = function _typeof2(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof2(obj); }
-
 function _typeof(obj) {
-  if (typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol") {
+  "@babel/helpers - typeof";
+
+  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
     module.exports = _typeof = function _typeof(obj) {
-      return _typeof2(obj);
+      return typeof obj;
     };
   } else {
     module.exports = _typeof = function _typeof(obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof2(obj);
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
     };
   }
 
@@ -1002,30 +1013,33 @@ module.exports = _setPrototypeOf;
 /* WEBPACK VAR INJECTION */(function(setImmediate) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getLanguage; });
 /* unused harmony export Table */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return tableRenderMap; });
-/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(22);
-/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(11);
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(12);
-/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(0);
-/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(2);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(1);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var immutable__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(4);
-/* harmony import */ var immutable__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(immutable__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var _languages__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(18);
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(7);
-/* harmony import */ var braft_editor__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(28);
-/* harmony import */ var braft_editor__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(braft_editor__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
+/* harmony import */ var _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(22);
+/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8);
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(10);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(11);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(12);
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(0);
+/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(2);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(1);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var immutable__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(4);
+/* harmony import */ var immutable__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(immutable__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var _languages__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(18);
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(7);
+/* harmony import */ var braft_editor__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(29);
+/* harmony import */ var braft_editor__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(braft_editor__WEBPACK_IMPORTED_MODULE_13__);
+
 
 
 
@@ -1058,24 +1072,24 @@ var getLanguage = function getLanguage(editor) {
   var lang = editor.editorProps.language;
 
   if (typeof lang === 'function') {
-    return lang(_languages__WEBPACK_IMPORTED_MODULE_10__[/* default */ "a"], 'braft-table');
+    return lang(_languages__WEBPACK_IMPORTED_MODULE_11__[/* default */ "a"], 'braft-table');
   } else {
-    return _languages__WEBPACK_IMPORTED_MODULE_10__[/* default */ "a"][lang] || _languages__WEBPACK_IMPORTED_MODULE_10__[/* default */ "a"]['zh'];
+    return _languages__WEBPACK_IMPORTED_MODULE_11__[/* default */ "a"][lang] || _languages__WEBPACK_IMPORTED_MODULE_11__[/* default */ "a"]['zh'];
   }
 };
 var Table =
 /*#__PURE__*/
 function (_React$Component) {
-  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5___default()(Table, _React$Component);
+  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6___default()(Table, _React$Component);
 
   function Table(props) {
     var _this;
 
-    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default()(this, Table);
+    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2___default()(this, Table);
 
-    _this = _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Table).call(this, props));
+    _this = _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(Table).call(this, props));
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "state", {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "state", {
       tableRows: [],
       colToolHandlers: [],
       rowToolHandlers: [],
@@ -1093,41 +1107,41 @@ function (_React$Component) {
       contextMenuPosition: null
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "__tableRef", null);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__tableRef", null);
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "__colRefs", {});
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__colRefs", {});
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "__rowRefs", {});
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__rowRefs", {});
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "__colResizeIndex", 0);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__colResizeIndex", 0);
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "__colResizeStartAt", 0);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__colResizeStartAt", 0);
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "__startCellKey", null);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__startCellKey", null);
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "__endCellKey", null);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__endCellKey", null);
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "__dragSelecting", false);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__dragSelecting", false);
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "__dragSelected", false);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__dragSelected", false);
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "__dragSelectingStartColumnIndex", null);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__dragSelectingStartColumnIndex", null);
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "__dragSelectingStartRowIndex", null);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__dragSelectingStartRowIndex", null);
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "__dragSelectingEndColumnIndex", null);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__dragSelectingEndColumnIndex", null);
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "__dragSelectingEndRowIndex", null);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__dragSelectingEndRowIndex", null);
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "__draggingRectBoundingUpdating", false);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__draggingRectBoundingUpdating", false);
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "__selectedCellsCleared", false);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__selectedCellsCleared", false);
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "handleToolbarMouseDown", function (event) {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "handleToolbarMouseDown", function (event) {
       event.preventDefault();
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "handleKeyDown", function (event) {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "handleKeyDown", function (event) {
       if (event.keyCode === 8) {
         var _this$state = _this.state,
             selectedColumnIndex = _this$state.selectedColumnIndex,
@@ -1145,7 +1159,7 @@ function (_React$Component) {
       }
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "handleMouseUp", function (event) {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "handleMouseUp", function (event) {
       if (event.button !== 0) {
         return false;
       }
@@ -1156,7 +1170,7 @@ function (_React$Component) {
             colToolHandlers = _this$state2.colToolHandlers,
             colResizeOffset = _this$state2.colResizeOffset;
 
-        var nextColToolHandlers = _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(colToolHandlers);
+        var nextColToolHandlers = _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1___default()(colToolHandlers);
 
         nextColToolHandlers[_this.__colResizeIndex - 1].width = (nextColToolHandlers[_this.__colResizeIndex - 1].width || defaultColWidth) + colResizeOffset;
         nextColToolHandlers[_this.__colResizeIndex].width = (nextColToolHandlers[_this.__colResizeIndex].width || defaultColWidth) - colResizeOffset;
@@ -1168,6 +1182,16 @@ function (_React$Component) {
           colToolHandlers: nextColToolHandlers,
           colResizeOffset: 0,
           colResizing: false
+        }, function () {
+          _this.renderCells();
+
+          _this.updateCellsData({
+            colgroupData: nextColToolHandlers.map(function (item) {
+              return {
+                width: item.width
+              };
+            })
+          });
         });
       } else {
         _this.setState({
@@ -1176,7 +1200,7 @@ function (_React$Component) {
       }
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "handleMouseMove", function (event) {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "handleMouseMove", function (event) {
       if (_this.state.colResizing) {
         _this.setState({
           colResizeOffset: _this.getResizeOffset(event.clientX - _this.__colResizeStartAt)
@@ -1184,7 +1208,7 @@ function (_React$Component) {
       }
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "handleColResizerMouseDown", function (event) {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "handleColResizerMouseDown", function (event) {
       _this.__colResizeIndex = event.currentTarget.dataset.index * 1;
       _this.__colResizeStartAt = event.clientX;
 
@@ -1193,7 +1217,7 @@ function (_React$Component) {
       });
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "handleCellContexrMenu", function (event) {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "handleCellContexrMenu", function (event) {
       var selectedCells = _this.state.selectedCells;
       var cellKey = event.currentTarget.dataset.cellKey;
 
@@ -1223,11 +1247,17 @@ function (_React$Component) {
       event.preventDefault();
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "handleContextMenuContextMenu", function (event) {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "handleContextMenuContextMenu", function (event) {
       event.preventDefault();
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "handleCellMouseDown", function (event) {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "handleCellMouseDown", function (event) {
+      if (_this.state.colResizing) {
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
+      }
+
       _this.__dragSelecting = true;
       _this.__dragSelectingStartColumnIndex = event.currentTarget.dataset.colIndex;
       _this.__dragSelectingStartRowIndex = event.currentTarget.dataset.rowIndex;
@@ -1241,7 +1271,7 @@ function (_React$Component) {
       });
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "handleCellMouseUp", function () {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "handleCellMouseUp", function () {
       _this.__dragSelecting = false;
       _this.__dragSelected = false;
       _this.__dragSelectingStartColumnIndex = null;
@@ -1255,7 +1285,7 @@ function (_React$Component) {
       });
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "handleCellMouseEnter", function (event) {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "handleCellMouseEnter", function (event) {
       if (_this.__dragSelecting) {
         _this.__dragSelectingEndColumnIndex = event.currentTarget.dataset.colIndex;
         _this.__dragSelectingEndRowIndex = event.currentTarget.dataset.rowIndex;
@@ -1271,7 +1301,7 @@ function (_React$Component) {
       }
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "handleTableMouseMove", function (event) {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "handleTableMouseMove", function (event) {
       if (_this.__dragSelecting && _this.__dragSelected) {
         _this.updateDraggingRectBounding(event);
 
@@ -1279,7 +1309,7 @@ function (_React$Component) {
       }
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "handleTableMouseLeave", function (event) {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "handleTableMouseLeave", function (event) {
       if (_this.__dragSelecting && event.currentTarget && event.currentTarget.dataset.role === 'table') {
         _this.handleCellMouseUp();
       }
@@ -1287,12 +1317,12 @@ function (_React$Component) {
       event.preventDefault();
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "confirmDragSelecting", function () {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "confirmDragSelecting", function () {
       if (!_this.__dragSelectingStartColumnIndex || !_this.__dragSelectingStartRowIndex || !_this.__dragSelectingEndColumnIndex || !_this.__dragSelectingEndRowIndex) {
         return false;
       }
 
-      var _TableUtils$getCellsI = _utils__WEBPACK_IMPORTED_MODULE_11__["getCellsInsideRect"](_this.props.editorState, _this.tableKey, [_this.__dragSelectingStartColumnIndex, _this.__dragSelectingStartRowIndex], [_this.__dragSelectingEndColumnIndex, _this.__dragSelectingEndRowIndex]),
+      var _TableUtils$getCellsI = _utils__WEBPACK_IMPORTED_MODULE_12__["getCellsInsideRect"](_this.props.editorState, _this.tableKey, [_this.__dragSelectingStartColumnIndex, _this.__dragSelectingStartRowIndex], [_this.__dragSelectingEndColumnIndex, _this.__dragSelectingEndRowIndex]),
           selectedCells = _TableUtils$getCellsI.cellKeys,
           spannedCellBlockKeys = _TableUtils$getCellsI.spannedCellBlockKeys;
 
@@ -1309,7 +1339,7 @@ function (_React$Component) {
       }, _this.renderCells);
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "updateDraggingRectBounding", function (mouseEvent) {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "updateDraggingRectBounding", function (mouseEvent) {
       if (_this.__draggingRectBoundingUpdating || !_this.__dragSelecting) {
         return false;
       }
@@ -1349,7 +1379,7 @@ function (_React$Component) {
       });
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "selectCell", function (event) {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "selectCell", function (event) {
       var selectedCells = _this.state.selectedCells;
       var cellKey = event.currentTarget.dataset.cellKey;
       var _event$currentTarget = event.currentTarget,
@@ -1367,7 +1397,7 @@ function (_React$Component) {
       }, _this.renderCells);
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "selectColumn", function (event) {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "selectColumn", function (event) {
       var selectedColumnIndex = getIndexFromEvent(event, 'insert-column');
 
       if (selectedColumnIndex === false) {
@@ -1385,7 +1415,7 @@ function (_React$Component) {
         return false;
       }
 
-      var _TableUtils$getCellsI2 = _utils__WEBPACK_IMPORTED_MODULE_11__["getCellsInsideRect"](_this.props.editorState, _this.tableKey, [selectedColumnIndex, 0], [selectedColumnIndex, _this.state.rowToolHandlers.length - 1]),
+      var _TableUtils$getCellsI2 = _utils__WEBPACK_IMPORTED_MODULE_12__["getCellsInsideRect"](_this.props.editorState, _this.tableKey, [selectedColumnIndex, 0], [selectedColumnIndex, _this.state.rowToolHandlers.length - 1]),
           selectedCells = _TableUtils$getCellsI2.cellKeys,
           spannedCellBlockKeys = _TableUtils$getCellsI2.spannedCellBlockKeys;
 
@@ -1398,7 +1428,7 @@ function (_React$Component) {
       }, _this.renderCells);
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "selectRow", function (event) {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "selectRow", function (event) {
       var selectedRowIndex = getIndexFromEvent(event, 'insert-row');
 
       if (selectedRowIndex === false) {
@@ -1416,7 +1446,7 @@ function (_React$Component) {
         return false;
       }
 
-      var _TableUtils$getCellsI3 = _utils__WEBPACK_IMPORTED_MODULE_11__["getCellsInsideRect"](_this.props.editorState, _this.tableKey, [0, selectedRowIndex], [_this.state.colToolHandlers.length, selectedRowIndex]),
+      var _TableUtils$getCellsI3 = _utils__WEBPACK_IMPORTED_MODULE_12__["getCellsInsideRect"](_this.props.editorState, _this.tableKey, [0, selectedRowIndex], [_this.state.colToolHandlers.length, selectedRowIndex]),
           selectedCells = _TableUtils$getCellsI3.cellKeys,
           spannedCellBlockKeys = _TableUtils$getCellsI3.spannedCellBlockKeys;
 
@@ -1429,33 +1459,47 @@ function (_React$Component) {
       }, _this.renderCells);
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "insertColumn", function (event) {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "insertColumn", function (event) {
       var columnIndex = getIndexFromEvent(event);
 
       if (columnIndex === false) {
         return false;
       }
 
+      var nextColToolHandlers = _this.state.colToolHandlers.map(function (item) {
+        return _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({}, item, {
+          width: 0
+        });
+      });
+
       _this.setState({
         selectedCells: [],
         selectedRowIndex: -1,
-        selectedColumnIndex: -1
+        selectedColumnIndex: -1,
+        colToolHandlers: nextColToolHandlers
       }, function () {
-        _this.props.editor.setValue(_utils__WEBPACK_IMPORTED_MODULE_11__["insertColumn"](_this.props.editorState, _this.tableKey, _this.state.tableRows.length, columnIndex));
+        _this.props.editor.setValue(_utils__WEBPACK_IMPORTED_MODULE_12__["insertColumn"](_this.props.editorState, _this.tableKey, _this.state.tableRows.length, columnIndex, nextColToolHandlers));
       });
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "removeColumn", function () {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "removeColumn", function () {
       var selectedColumnIndex = _this.state.selectedColumnIndex;
+
+      var nextColToolHandlers = _this.state.colToolHandlers.map(function (item) {
+        return _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({}, item, {
+          width: 0
+        });
+      });
 
       if (selectedColumnIndex >= 0) {
         _this.setState({
-          selectedColumnIndex: -1
+          selectedColumnIndex: -1,
+          colToolHandlers: nextColToolHandlers
         }, function () {
           _this.props.editor.draftInstance.blur();
 
           setImmediate(function () {
-            var result = _utils__WEBPACK_IMPORTED_MODULE_11__["removeColumn"](_this.props.editorState, _this.tableKey, selectedColumnIndex);
+            var result = _utils__WEBPACK_IMPORTED_MODULE_12__["removeColumn"](_this.props.editorState, _this.tableKey, selectedColumnIndex, nextColToolHandlers);
 
             _this.props.editor.setValue(_this.validateContent(result));
           });
@@ -1463,7 +1507,7 @@ function (_React$Component) {
       }
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "insertRow", function (event) {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "insertRow", function (event) {
       var rowIndex = getIndexFromEvent(event);
 
       if (rowIndex === false) {
@@ -1475,16 +1519,16 @@ function (_React$Component) {
         selectedRowIndex: -1,
         selectedColumnIndex: -1
       }, function () {
-        _this.props.editor.setValue(_utils__WEBPACK_IMPORTED_MODULE_11__["insertRow"](_this.props.editorState, _this.tableKey, _this.colLength, rowIndex));
+        _this.props.editor.setValue(_utils__WEBPACK_IMPORTED_MODULE_12__["insertRow"](_this.props.editorState, _this.tableKey, _this.colLength, rowIndex));
       });
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "validateContent", function (editorState) {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "validateContent", function (editorState) {
       var len = editorState.toRAW(true).blocks.length;
-      return len ? editorState : braft_editor__WEBPACK_IMPORTED_MODULE_12___default.a.createEditorState(null);
+      return len ? editorState : braft_editor__WEBPACK_IMPORTED_MODULE_13___default.a.createEditorState(null);
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "removeRow", function () {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "removeRow", function () {
       var selectedRowIndex = _this.state.selectedRowIndex;
 
       if (selectedRowIndex >= 0) {
@@ -1494,7 +1538,7 @@ function (_React$Component) {
           _this.props.editor.draftInstance.blur();
 
           setImmediate(function () {
-            var result = _utils__WEBPACK_IMPORTED_MODULE_11__["removeRow"](_this.props.editorState, _this.tableKey, selectedRowIndex);
+            var result = _utils__WEBPACK_IMPORTED_MODULE_12__["removeRow"](_this.props.editorState, _this.tableKey, selectedRowIndex);
 
             _this.props.editor.setValue(_this.validateContent(result));
           });
@@ -1502,7 +1546,7 @@ function (_React$Component) {
       }
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "mergeCells", function () {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "mergeCells", function () {
       var _this$state3 = _this.state,
           selectedCells = _this$state3.selectedCells,
           cellsMergeable = _this$state3.cellsMergeable;
@@ -1515,12 +1559,12 @@ function (_React$Component) {
           selectedRowIndex: -1,
           selectedColumnIndex: -1
         }, function () {
-          _this.props.editor.setValue(_utils__WEBPACK_IMPORTED_MODULE_11__["mergeCells"](_this.props.editorState, _this.tableKey, selectedCells));
+          _this.props.editor.setValue(_utils__WEBPACK_IMPORTED_MODULE_12__["mergeCells"](_this.props.editorState, _this.tableKey, selectedCells));
         });
       }
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "splitCell", function () {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "splitCell", function () {
       var _this$state4 = _this.state,
           selectedCells = _this$state4.selectedCells,
           cellSplittable = _this$state4.cellSplittable;
@@ -1532,20 +1576,20 @@ function (_React$Component) {
           selectedRowIndex: -1,
           selectedColumnIndex: -1
         }, function () {
-          _this.props.editor.setValue(_utils__WEBPACK_IMPORTED_MODULE_11__["splitCell"](_this.props.editorState, _this.tableKey, selectedCells[0]));
+          _this.props.editor.setValue(_utils__WEBPACK_IMPORTED_MODULE_12__["splitCell"](_this.props.editorState, _this.tableKey, selectedCells[0]));
         });
       }
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this)), "removeTable", function () {
-      _this.props.editor.setValue(_utils__WEBPACK_IMPORTED_MODULE_11__["removeTable"](_this.props.editorState, _this.tableKey));
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "removeTable", function () {
+      _this.props.editor.setValue(_utils__WEBPACK_IMPORTED_MODULE_12__["removeTable"](_this.props.editorState, _this.tableKey));
     });
 
     _this.language = getLanguage(props.editor);
     return _this;
   }
 
-  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default()(Table, [{
+  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3___default()(Table, [{
     key: "componentDidMount",
     value: function componentDidMount() {
       this.renderCells(this.props);
@@ -1586,7 +1630,7 @@ function (_React$Component) {
 
       var needUpdate = false;
 
-      var rowToolHandlers = _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(this.state.rowToolHandlers);
+      var rowToolHandlers = _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1___default()(this.state.rowToolHandlers);
 
       Object.keys(this.__rowRefs).forEach(function (index) {
         var rowHeight = _this2.__rowRefs[index] ? _this2.__rowRefs[index].getBoundingClientRect().height : 40;
@@ -1604,6 +1648,11 @@ function (_React$Component) {
       }
     }
   }, {
+    key: "updateCellsData",
+    value: function updateCellsData(blockData) {
+      this.props.editor.setValue(_utils__WEBPACK_IMPORTED_MODULE_12__["updateAllTableBlocks"](this.props.editorState, this.tableKey, blockData));
+    }
+  }, {
     key: "renderCells",
     value: function renderCells(props) {
       var _this3 = this;
@@ -1616,6 +1665,9 @@ function (_React$Component) {
       var _props = props,
           editorState = _props.editorState,
           children = _props.children;
+
+      var tableWidth = this.__tableRef.getBoundingClientRect().width;
+
       this.__startCellKey = children[0].key;
       this.__endCellKey = children[children.length - 1].key;
       children.forEach(function (cell, cellIndex) {
@@ -1629,19 +1681,24 @@ function (_React$Component) {
         _this3.tableKey = tableKey;
 
         if (rowIndex === 0) {
+          var colgroupData = cellBlockData.get('colgroupData') || [];
+          var totalColgroupWidth = colgroupData.reduce(function (width, col) {
+            return width + col.width * 1;
+          }, 0);
+
           var _colSpan = (cellBlockData.get('colSpan') || 1) * 1;
 
           for (var ii = _this3.colLength; ii < _this3.colLength + _colSpan; ii++) {
             colToolHandlers[ii] = {
               key: cell.key,
-              width: 0
+              width: _this3.state.colToolHandlers[ii] ? _this3.state.colToolHandlers[ii].width : colgroupData[ii] ? colgroupData[ii].width / totalColgroupWidth * tableWidth * 1 : 0
             };
           }
 
           _this3.colLength += _colSpan;
         }
 
-        var newCell = react__WEBPACK_IMPORTED_MODULE_8___default.a.cloneElement(cell, {
+        var newCell = react__WEBPACK_IMPORTED_MODULE_9___default.a.cloneElement(cell, {
           'data-active': !!~_this3.state.selectedCells.indexOf(cell.key),
           'data-row-index': rowIndex,
           'data-col-index': colIndex || (tableRows[rowIndex] || []).length,
@@ -1672,9 +1729,6 @@ function (_React$Component) {
           tableRows[rowIndex].push(newCell);
         }
       });
-
-      var tableWidth = this.__tableRef.getBoundingClientRect().width;
-
       var defaultColWidth = tableWidth / this.colLength;
       this.setState({
         tableRows: tableRows,
@@ -1688,8 +1742,8 @@ function (_React$Component) {
     value: function createColGroup() {
       var _this4 = this;
 
-      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("colgroup", null, this.state.colToolHandlers.map(function (item, index) {
-        return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("col", {
+      return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("colgroup", null, this.state.colToolHandlers.map(function (item, index) {
+        return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("col", {
           ref: function ref(_ref) {
             return _this4.__colRefs[index] = _ref;
           },
@@ -1705,17 +1759,18 @@ function (_React$Component) {
 
       var _this$state6 = this.state,
           colResizing = _this$state6.colResizing,
+          colResizeOffset = _this$state6.colResizeOffset,
           colToolHandlers = _this$state6.colToolHandlers,
           selectedColumnIndex = _this$state6.selectedColumnIndex,
           defaultColWidth = _this$state6.defaultColWidth;
-      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+      return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
         "data-active": selectedColumnIndex >= 0,
         contentEditable: false,
         "data-key": "bf-col-toolbar",
         className: "bf-table-col-tools".concat(colResizing ? ' resizing' : ''),
         onMouseDown: this.handleToolbarMouseDown
       }, colToolHandlers.map(function (item, index) {
-        return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+        return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
           key: index,
           "data-key": item.key,
           "data-index": index,
@@ -1725,32 +1780,40 @@ function (_React$Component) {
             width: item.width || defaultColWidth
           },
           onClick: _this5.selectColumn
-        }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+        }, _this5.props.columnResizable && index !== 0 ? react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
+          "data-index": index,
+          "data-key": item.key,
+          className: "bf-col-resizer".concat(colResizing && _this5.__colResizeIndex === index ? ' active' : ''),
+          style: colResizing && _this5.__colResizeIndex === index ? {
+            transform: "translateX(".concat(colResizeOffset, "px)")
+          } : null,
+          onMouseDown: _this5.handleColResizerMouseDown
+        }) : null, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
           className: "bf-col-tool-left"
-        }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
           "data-index": index,
           "data-role": "insert-column",
           className: "bf-insert-col-before",
           onClick: _this5.insertColumn
-        }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("i", {
+        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("i", {
           className: "bfi-add"
-        }))), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+        }))), react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
           className: "bf-col-tool-center"
-        }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
           "data-index": index,
           "data-role": "remove-col",
           className: "bf-remove-col",
           onClick: _this5.removeColumn
-        }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("i", {
+        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("i", {
           className: "bfi-bin"
-        }))), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+        }))), react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
           className: "bf-col-tool-right"
-        }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
           "data-index": index + 1,
           "data-role": "insert-column",
           className: "bf-insert-col-after",
           onClick: _this5.insertColumn
-        }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("i", {
+        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("i", {
           className: "bfi-add"
         }))));
       }));
@@ -1763,13 +1826,13 @@ function (_React$Component) {
       var _this$state7 = this.state,
           rowToolHandlers = _this$state7.rowToolHandlers,
           selectedRowIndex = _this$state7.selectedRowIndex;
-      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+      return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
         "data-active": selectedRowIndex >= 0,
         contentEditable: false,
         className: "bf-table-row-tools",
         onMouseDown: this.handleToolbarMouseDown
       }, rowToolHandlers.map(function (item, index) {
-        return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+        return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
           key: index,
           "data-key": item.key,
           "data-index": index,
@@ -1779,32 +1842,32 @@ function (_React$Component) {
             height: item.height
           },
           onClick: _this6.selectRow
-        }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
           className: "bf-row-tool-up"
-        }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
           "data-index": index,
           "data-role": "insert-row",
           className: "bf-insert-row-before",
           onClick: _this6.insertRow
-        }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("i", {
+        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("i", {
           className: "bfi-add"
-        }))), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+        }))), react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
           className: "bf-row-tool-center"
-        }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
           "data-index": index,
           "data-role": "remove-row",
           className: "bf-remove-row",
           onClick: _this6.removeRow
-        }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("i", {
+        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("i", {
           className: "bfi-bin"
-        }))), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+        }))), react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
           className: "bf-row-tool-down"
-        }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
           "data-index": index + 1,
           "data-role": "insert-row",
           className: "bf-insert-row-after",
           onClick: _this6.insertRow
-        }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("i", {
+        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("i", {
           className: "bfi-add"
         }))));
       }));
@@ -1821,20 +1884,20 @@ function (_React$Component) {
         return null;
       }
 
-      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+      return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
         className: "bf-table-context-menu",
         onContextMenu: this.handleContextMenuContextMenu,
         contentEditable: false,
         style: contextMenuPosition
-      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
         className: "context-menu-item",
         onMouseDown: this.mergeCells,
         "data-disabled": !cellsMergeable
-      }, this.language.mergeCells), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+      }, this.language.mergeCells), react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
         className: "context-menu-item",
         onMouseDown: this.splitCell,
         "data-disabled": !cellSplittable
-      }, this.language.splitCell), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+      }, this.language.splitCell), react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
         className: "context-menu-item",
         onMouseDown: this.removeTable
       }, this.language.removeTable));
@@ -1849,9 +1912,9 @@ function (_React$Component) {
           dragSelecting = _this$state9.dragSelecting,
           draggingRectBounding = _this$state9.draggingRectBounding;
       var readOnly = this.props.editor.props.readOnly;
-      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+      return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
         className: "bf-table-container"
-      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("table", {
+      }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("table", {
         "data-role": "table",
         className: "bf-table".concat(dragSelecting ? ' dragging' : ''),
         ref: function ref(_ref3) {
@@ -1861,14 +1924,14 @@ function (_React$Component) {
         onMouseUp: this.hanldeTableMouseUp,
         onMouseMove: this.handleTableMouseMove,
         onMouseLeave: this.handleTableMouseLeave
-      }, this.createColGroup(), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("tbody", null, tableRows.map(function (cells, rowIndex) {
-        return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("tr", {
+      }, this.createColGroup(), react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("tbody", null, tableRows.map(function (cells, rowIndex) {
+        return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("tr", {
           ref: function ref(_ref2) {
             return _this7.__rowRefs[rowIndex] = _ref2;
           },
           key: rowIndex
         }, cells);
-      }))), dragSelecting ? react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+      }))), dragSelecting ? react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
         className: "dragging-rect",
         style: draggingRectBounding
       }) : null, !readOnly && this.createContextMenu(), !readOnly && this.createColTools(), !readOnly && this.createRowTools());
@@ -1876,19 +1939,22 @@ function (_React$Component) {
   }]);
 
   return Table;
-}(react__WEBPACK_IMPORTED_MODULE_8___default.a.Component);
-var tableRenderMap = function tableRenderMap(props) {
-  return immutable__WEBPACK_IMPORTED_MODULE_9___default.a.Map({
-    'table-cell': {
-      element: 'td',
-      wrapper: react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(Table, {
-        editor: props.editor,
-        editorState: props.editorState
-      })
-    }
-  });
+}(react__WEBPACK_IMPORTED_MODULE_9___default.a.Component);
+var tableRenderMap = function tableRenderMap(options) {
+  return function (props) {
+    return immutable__WEBPACK_IMPORTED_MODULE_10___default.a.Map({
+      'table-cell': {
+        element: 'td',
+        wrapper: react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement(Table, {
+          columnResizable: options.columnResizable,
+          editor: props.editor,
+          editorState: props.editorState
+        })
+      }
+    });
+  };
 };
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(36).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(40).setImmediate))
 
 /***/ }),
 /* 18 */
@@ -1997,6 +2063,10 @@ module.exports = _arrayWithHoles;
 /***/ (function(module, exports) {
 
 function _iterableToArrayLimit(arr, i) {
+  if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {
+    return;
+  }
+
   var _arr = [];
   var _n = true;
   var _d = false;
@@ -2038,11 +2108,11 @@ module.exports = _nonIterableRest;
 /* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var arrayWithoutHoles = __webpack_require__(39);
+var arrayWithoutHoles = __webpack_require__(43);
 
-var iterableToArray = __webpack_require__(40);
+var iterableToArray = __webpack_require__(44);
 
-var nonIterableSpread = __webpack_require__(41);
+var nonIterableSpread = __webpack_require__(45);
 
 function _toConsumableArray(arr) {
   return arrayWithoutHoles(arr) || iterableToArray(arr) || nonIterableSpread();
@@ -2052,6 +2122,12 @@ module.exports = _toConsumableArray;
 
 /***/ }),
 /* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 24 */
 /***/ (function(module, exports) {
 
 var g;
@@ -2063,7 +2139,7 @@ g = (function() {
 
 try {
 	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1, eval)("this");
+	g = g || new Function("return this")();
 } catch (e) {
 	// This works if the window reference is available
 	if (typeof window === "object") g = window;
@@ -2077,24 +2153,27 @@ module.exports = g;
 
 
 /***/ }),
-/* 24 */,
 /* 25 */,
 /* 26 */,
 /* 27 */,
-/* 28 */
+/* 28 */,
+/* 29 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__28__;
+module.exports = __WEBPACK_EXTERNAL_MODULE__29__;
 
 /***/ }),
-/* 29 */,
 /* 30 */,
 /* 31 */,
 /* 32 */,
 /* 33 */,
 /* 34 */,
 /* 35 */,
-/* 36 */
+/* 36 */,
+/* 37 */,
+/* 38 */,
+/* 39 */,
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
@@ -2150,7 +2229,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(37);
+__webpack_require__(41);
 // On some exotic environments, it's not clear which object `setimmediate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
@@ -2161,10 +2240,10 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(23)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(24)))
 
 /***/ }),
-/* 37 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -2354,10 +2433,10 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(23), __webpack_require__(38)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(24), __webpack_require__(42)))
 
 /***/ }),
-/* 38 */
+/* 42 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -2547,7 +2626,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 39 */
+/* 43 */
 /***/ (function(module, exports) {
 
 function _arrayWithoutHoles(arr) {
@@ -2563,7 +2642,7 @@ function _arrayWithoutHoles(arr) {
 module.exports = _arrayWithoutHoles;
 
 /***/ }),
-/* 40 */
+/* 44 */
 /***/ (function(module, exports) {
 
 function _iterableToArray(iter) {
@@ -2573,7 +2652,7 @@ function _iterableToArray(iter) {
 module.exports = _iterableToArray;
 
 /***/ }),
-/* 41 */
+/* 45 */
 /***/ (function(module, exports) {
 
 function _nonIterableSpread() {
@@ -2583,8 +2662,8 @@ function _nonIterableSpread() {
 module.exports = _nonIterableSpread;
 
 /***/ }),
-/* 42 */,
-/* 43 */
+/* 46 */,
+/* 47 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2595,7 +2674,7 @@ var objectSpread = __webpack_require__(5);
 var objectSpread_default = /*#__PURE__*/__webpack_require__.n(objectSpread);
 
 // EXTERNAL MODULE: ./table/style.scss
-var style = __webpack_require__(49);
+var style = __webpack_require__(23);
 
 // EXTERNAL MODULE: external "react"
 var external_react_ = __webpack_require__(1);
@@ -2877,12 +2956,37 @@ function (_React$Component) {
 
 // CONCATENATED MODULE: ./table/converts.js
 
+
+var parseColgoupData = function parseColgoupData(colgroupNode) {
+  if (!colgroupNode) {
+    return [];
+  }
+
+  return Array.prototype.map.call(colgroupNode.querySelectorAll('col'), function (colNode) {
+    return {
+      width: colNode.width ? colNode.width * 1 : 0
+    };
+  });
+};
+
+var buildColgroup = function buildColgroup(blockData) {
+  if (blockData && blockData.colgroupData && blockData.colgroupData.length) {
+    return "<colgroup>".concat(blockData.colgroupData.map(function (col) {
+      return "<col width=\"".concat(col.width, "\"></col>");
+    }).join(''), "</<colgroup>");
+  }
+
+  return '';
+};
+
+var tableColgroupData = [];
 var converts_tableImportFn = function tableImportFn(nodeName, node) {
   if (nodeName !== 'body' && node && node.querySelector && node.querySelector(':scope > table')) {
     node.parentNode.insertBefore(node.querySelector(':scope > table'), node.nextSibling);
   }
 
   if (nodeName === 'table') {
+    tableColgroupData = parseColgoupData(node.querySelector('colgroup'));
     Object(utils["rebuildTableNode"])(node);
   }
 
@@ -2897,7 +3001,8 @@ var converts_tableImportFn = function tableImportFn(nodeName, node) {
       colIndex: colIndex,
       rowIndex: rowIndex,
       colSpan: colSpan,
-      rowSpan: rowSpan
+      rowSpan: rowSpan,
+      colgroupData: tableColgroupData
     };
     cellData.isHead = nodeName === 'th';
 
@@ -2936,7 +3041,7 @@ var tableExportFn = function tableExportFn(exportAttrString) {
     }
 
     if (previousBlockType !== 'table-cell') {
-      start = "<table ".concat(exportAttrString, "><tr><td").concat(blockStyle, " colSpan=\"").concat(block.data.colSpan, "\" rowSpan=\"").concat(block.data.rowSpan, "\">");
+      start = "<table ".concat(exportAttrString, ">").concat(buildColgroup(block.data), "<tr><td").concat(blockStyle, " colSpan=\"").concat(block.data.colSpan, "\" rowSpan=\"").concat(block.data.rowSpan, "\">");
     } else if (previousBlockData.rowIndex !== block.data.rowIndex) {
       start = "<tr><td".concat(blockStyle, " colSpan=\"").concat(block.data.colSpan, "\" rowSpan=\"").concat(block.data.rowSpan, "\">");
     } else {
@@ -2990,6 +3095,7 @@ var TableUtils = utils;
     defaultColumns: 3,
     defaultRows: 3,
     withDropdown: false,
+    columnResizable: false,
     exportAttrString: ''
   }, options);
   var _options = options,
@@ -3065,22 +3171,11 @@ var TableUtils = utils;
     name: 'table-cell',
     includeEditors: includeEditors,
     excludeEditors: excludeEditors,
-    renderMap: table_render["b" /* tableRenderMap */],
+    renderMap: Object(table_render["b" /* tableRenderMap */])(options),
     importer: converts_tableImportFn,
     exporter: tableExportFn(exportAttrString)
   }];
 });
-
-/***/ }),
-/* 44 */,
-/* 45 */,
-/* 46 */,
-/* 47 */,
-/* 48 */,
-/* 49 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

@@ -112,7 +112,7 @@ const findBlocks = (contentBlocks, propName, propValue, operator = '==') => {
 }
 
 // 遍历以修正单元格的colIndex属性（表格blocks专用）
-export const rebuildTableBlocks = (tableBlocks) => {
+export const rebuildTableBlocks = (tableBlocks, addonBlockData = {}) => {
 
   const skipedCells = {}
   const cellCountOfRow = []
@@ -125,19 +125,19 @@ export const rebuildTableBlocks = (tableBlocks) => {
     const rowSpan = blockData.get('rowSpan') || 1
 
     cellCountOfRow[rowIndex] = cellCountOfRow[rowIndex] || 0
-    cellCountOfRow[rowIndex] ++
+    cellCountOfRow[rowIndex]++
 
     const cellIndex = cellCountOfRow[rowIndex] - 1
 
     let colIndex = cellIndex
     let xx, yy
 
-    for (;skipedCells[rowIndex] && skipedCells[rowIndex][colIndex]; colIndex++, cellCountOfRow[rowIndex]++);
+    for (; skipedCells[rowIndex] && skipedCells[rowIndex][colIndex]; colIndex++ , cellCountOfRow[rowIndex]++);
 
     if (rowSpan > 1 || colSpan > 1) {
 
-      for (xx = rowIndex;xx < rowIndex + rowSpan;xx ++) {
-        for (yy = colIndex;yy < colIndex + colSpan;yy ++) {
+      for (xx = rowIndex; xx < rowIndex + rowSpan; xx++) {
+        for (yy = colIndex; yy < colIndex + colSpan; yy++) {
           skipedCells[xx] = skipedCells[xx] || {}
           skipedCells[xx][yy] = true
         }
@@ -148,6 +148,7 @@ export const rebuildTableBlocks = (tableBlocks) => {
     return block.merge({
       'data': Immutable.Map({
         ...blockData.toJS(),
+        ...addonBlockData,
         colIndex: colIndex
       })
     })
@@ -169,14 +170,14 @@ export const rebuildTableNode = (tableNode) => {
       let colIndex = cellIndex
       let xx, yy
 
-      for (;skipedCells[rowIndex] && skipedCells[rowIndex][colIndex]; colIndex++) {/*_*/}
+      for (; skipedCells[rowIndex] && skipedCells[rowIndex][colIndex]; colIndex++) {/*_*/ }
 
       const { rowSpan, colSpan } = cell
 
       if (rowSpan > 1 || colSpan > 1) {
 
-        for (xx = rowIndex;xx < rowIndex + rowSpan;xx ++) {
-          for (yy = colIndex;yy < colIndex + colSpan;yy ++) {
+        for (xx = rowIndex; xx < rowIndex + rowSpan; xx++) {
+          for (yy = colIndex; yy < colIndex + colSpan; yy++) {
             skipedCells[xx] = skipedCells[xx] || {}
             skipedCells[xx][yy] = true
           }
@@ -193,6 +194,18 @@ export const rebuildTableNode = (tableNode) => {
 
   })
 
+}
+
+export const updateAllTableBlocks = (editorState, tableKey, blockData) => {
+  const selectionState = editorState.getSelection()
+  const contentState = editorState.getCurrentContent()
+  const contentBlocks = contentState.getBlockMap()
+  const tableBlocks = findBlocks(contentBlocks, 'tableKey', tableKey)
+
+  const nextTableBlocks = rebuildTableBlocks(tableBlocks, blockData)
+  const nextContentState = updateTableBlocks(contentState, editorState.getSelection(), selectionState.focusKey, nextTableBlocks, tableKey)
+
+  return EditorState.push(editorState, nextContentState, 'insert-table-row')
 }
 
 // 获取需要插入到某一行的单元格的数量
@@ -217,15 +230,15 @@ export const getCellsInsideRect = (editorState, tableKey, startLocation, endLoca
 
   const matchedCellLocations = []
 
-  for (let ii = leftColIndex;ii <= rightColIndex;ii++) {
-    for (let jj = upRowIndex;jj <= downRowIndex;jj ++) {
+  for (let ii = leftColIndex; ii <= rightColIndex; ii++) {
+    for (let jj = upRowIndex; jj <= downRowIndex; jj++) {
       matchedCellLocations.push([ii, jj])
     }
   }
 
   if (matchedCellLocations.length === 0) {
     return Immutable.OrderedMap([])
-  } 
+  }
 
   const contentState = editorState.getCurrentContent()
   const contentBlocks = contentState.getBlockMap()
@@ -263,7 +276,7 @@ export const getCellsInsideRect = (editorState, tableKey, startLocation, endLoca
 
   return {
     cellBlocks: matchedCellBlocks.merge(spannedCellBlocks),
-    cellKeys: [ ...matchedCellBlockKeys, ...spannedCellBlockKeys ], // todo: 去重复
+    cellKeys: [...matchedCellBlockKeys, ...spannedCellBlockKeys], // todo: 去重复
     spannedCellBlocks: spannedCellBlocks,
     spannedCellBlockKeys: spannedCellBlockKeys
   }
@@ -326,8 +339,8 @@ export const insertTable = (editorState, columns = 3, rows = 3) => {
   const tableKey = genKey()
   const cellBlocks = [createUnstyledBlock()]
 
-  for (var ii = 0;ii < rows; ii ++) {
-    for (var jj = 0;jj < columns;jj ++) {
+  for (var ii = 0; ii < rows; ii++) {
+    for (var jj = 0; jj < columns; jj++) {
       let cellBlock = createCellBlock({
         tableKey: tableKey,
         colIndex: jj,
@@ -423,7 +436,7 @@ export const insertColumn = (editorState, tableKey, cellCounts, colIndex) => {
 
   if (colIndex === 0) {
 
-    for (let ii = 0;ii < cellCounts; ii ++) {
+    for (let ii = 0; ii < cellCounts; ii++) {
       cellsToBeAdded.push({
         text: '',
         colIndex: 0,
@@ -447,7 +460,7 @@ export const insertColumn = (editorState, tableKey, cellCounts, colIndex) => {
 
     if ((blockColSpan === 1 && blockColIndex === colIndex - 1) || (blockColSpan > 1 && blockColIndex + blockColSpan === colIndex)) {
 
-      for (let jj = blockRowIndex;jj < blockRowIndex + blockRowSpan;jj++) {
+      for (let jj = blockRowIndex; jj < blockRowIndex + blockRowSpan; jj++) {
         cellsToBeAdded.push({
           text: '',
           colIndex: colIndex,
@@ -523,7 +536,7 @@ export const removeColumn = (editorState, tableKey, colIndex) => {
         ...blockData,
         colIndex: newColIndex,
         colSpan: newColSpan
-      } 
+      }
     }) : block
 
   })
@@ -536,7 +549,7 @@ export const removeColumn = (editorState, tableKey, colIndex) => {
 }
 
 // 插入一行单元格到表格中
-export const insertRow = (editorState, tableKey, cellCounts, rowIndex) => {
+export const insertRow = (editorState, tableKey, cellCounts, rowIndex, addonBlockData) => {
 
   const contentState = editorState.getCurrentContent()
   const contentBlocks = contentState.getBlockMap().toSeq()
@@ -581,7 +594,7 @@ export const insertRow = (editorState, tableKey, cellCounts, rowIndex) => {
   const rowBlocks = createRowBlocks(tableKey, rowIndex, colCellLength || cellCounts)
   const focusCellKey = rowBlocks.first().getKey()
 
-  const nextTableBlocks = rebuildTableBlocks(blocksBefore.concat(rowBlocks, blocksAfter))
+  const nextTableBlocks = rebuildTableBlocks(blocksBefore.concat(rowBlocks, blocksAfter), addonBlockData)
   const nextContentState = updateTableBlocks(contentState, editorState.getSelection(), focusCellKey, nextTableBlocks, tableKey)
 
   return EditorState.push(editorState, nextContentState, 'insert-table-row')
@@ -589,7 +602,7 @@ export const insertRow = (editorState, tableKey, cellCounts, rowIndex) => {
 }
 
 // 从表格中移除指定的某一行单元格
-export const removeRow = (editorState, tableKey, rowIndex) => {
+export const removeRow = (editorState, tableKey, rowIndex, addonBlockData) => {
 
   const contentState = editorState.getCurrentContent()
   const contentBlocks = contentState.getBlockMap().toSeq()
@@ -650,7 +663,7 @@ export const removeRow = (editorState, tableKey, rowIndex) => {
   }, [])
 
   const focusCellKey = (blocksAfter.first() || blocksBefore.last() || contentBlocks.first()).getKey()
-  const nextTableBlocks = insertCells(blocksBefore.concat(blocksAfter), cellsToBeAdded)
+  const nextTableBlocks = rebuildTableBlocks(insertCells(blocksBefore.concat(blocksAfter), cellsToBeAdded), addonBlockData)
   const nextContentState = updateTableBlocks(contentState, editorState.getSelection(), focusCellKey, nextTableBlocks, tableKey, true)
 
   return EditorState.push(editorState, nextContentState, 'remove-table-row')
@@ -724,8 +737,8 @@ export const splitCell = (editorState, tableKey, cellKey) => {
         return block
       }
 
-      for (var ii = colIndex;ii < colIndex + colSpan;ii++) {
-        for (var jj = rowIndex;jj < rowIndex + rowSpan;jj++) {
+      for (var ii = colIndex; ii < colIndex + colSpan; ii++) {
+        for (var jj = rowIndex; jj < rowIndex + rowSpan; jj++) {
           if (ii !== colIndex || jj !== rowIndex) {
             cellsToBeAdded.push({
               text: '',
