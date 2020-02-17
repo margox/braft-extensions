@@ -49,6 +49,7 @@ const options = {
   defaultColumns: 3, // 默认列数
   defaultRows: 3, // 默认行数
   withDropdown: false, // 插入表格前是否弹出下拉菜单
+  columnResizable: false, // 是否允许拖动调整列宽，默认false
   exportAttrString: '', // 指定输出HTML时附加到table标签上的属性字符串
   includeEditors: ['editor-id-1'], // 指定该模块对哪些BraftEditor生效，不传此属性则对所有BraftEditor有效
   excludeEditors: ['editor-id-2']  // 指定该模块对哪些BraftEditor无效
@@ -63,6 +64,7 @@ BraftEditor.use(Table(options))
 - 每个表格前后都需要有一个空行才能正常展示，有疑问的请自行查阅源码
 - 请勿在表格内进行过于复杂的操作，例如任性合并/拆分单元格等，以免进入程序死角导致报错
 - 调整列宽的功能会在后续版本中支持
+- 输出表格默认不带边框，如果需要边框，设置参数`exportAttrString`为`'border="1" style="border-collapse: collapse"'`即可
 
 ## Markdown语法支持模块
 移植自[draft-js-markdown-shortcuts-plugin](https://github.com/ngs/draft-js-markdown-shortcuts-plugin)，可以在编辑器中使用markdown语法快捷输入内容
