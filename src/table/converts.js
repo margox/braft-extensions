@@ -14,7 +14,7 @@ const parseColgoupData = (colgroupNode) => {
 
 const buildColgroup = (blockData) => {
   if (blockData && blockData.colgroupData && blockData.colgroupData.length) {
-    return `<colgroup>${blockData.colgroupData.map(col => `<col width="${col.width}"></col>`).join('')}</<colgroup>`
+    return `<colgroup>${blockData.colgroupData.map(col => `<col width="${col.width}"></col>`).join('')}</colgroup>`
   }
 
   return ''
