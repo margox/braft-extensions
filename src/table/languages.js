@@ -79,4 +79,17 @@ const jpn = {
   'mergeCells': 'セルを結合',
   'splitCell': '分割セル'
 }
-export default { zh, zhHant, en, pl ,jpn, kr}
+const nl = {
+  'rows' : 'Rijen' ,
+  'columns' : 'Kolommen' ,
+  'cancel' : 'Annuleer' ,
+  'insertTable' : 'Invoegen' ,
+  'removeTable' : 'Verwijder Tabel' ,
+  'insertColumn' : 'Voeg kolom in' ,
+  'removeColumn' : 'Verwijder kolom' ,
+  'insertRow' : 'Voeg rij in' ,
+  'removeRow' : 'Verwijder rij' ,
+  'mergeCells' : 'Samenvoegen cellen' ,
+  'splitCell' : 'Split cell'
+}
+export default { zh, zhHant, en, pl ,jpn, kr, nl }
