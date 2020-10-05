@@ -79,4 +79,17 @@ const jpn = {
   'mergeCells': 'セルを結合',
   'splitCell': '分割セル'
 }
-export default { zh, zhHant, en, pl ,jpn, kr}
+const pt_br = {
+  'rows': 'Linhas',
+  'columns': 'Colunas',
+  'cancel': 'Cancelar',
+  'insertTable': 'Inserir',
+  'removeTable': 'Remover Tabela',
+  'insertColumn': 'Inserir Coluna',
+  'removeColumn': 'Remover Coluna',
+  'insertRow': 'Inserir Linha',
+  'removeRow': 'Remover Linha',
+  'mergeCells': 'Mesclar',
+  'splitCell': 'Dividir'
+}
+export default { zh, zhHant, en, pl ,jpn, kr, pt_br}
