@@ -7,7 +7,9 @@ import BraftEditor from 'braft-editor'
 import Table from '../src/table'
 import ColorPicker from '../src/color-picker'
 import Markdown from '../src/markdown'
+import HeaderId from '../src/header-id'
 import Mention, { defaultSuggestionsFilter } from '../src/mention'
+
 
 BraftEditor.use(Table({
   defaultColumns: 4,
@@ -21,6 +23,7 @@ BraftEditor.use(Markdown())
 
 BraftEditor.use(ColorPicker())
 
+BraftEditor.use(HeaderId());
 const [mentionExtension, MentionSuggestions] = Mention()
 BraftEditor.use(mentionExtension)
 
@@ -58,20 +61,20 @@ const mentions = [
   }
 ].map((item) => ({ ...item, id: item.name }))
 
+
 const tableStr = '<p></p><table border="1" style="border-collapse: collapse"><tr><td colSpan="1" rowSpan="1">ST-dstcollector	</td><td colSpan="1" rowSpan="1">80、12200</td></tr><tr><td colSpan="1" rowSpan="1">DST-dstweb		</td><td colSpan="1" rowSpan="1">80、83</td></tr></table><p></p>';
 const tableStr2 = '<table border="1" style="border-collapse: collapse"><colgroup><col width="120"></col><col width="240"></col></colgroup><tr><td colSpan="1" rowSpan="1">ST-dstcollector	</td><td colSpan="1" rowSpan="1">80、12200</td></tr><tr><td colSpan="1" rowSpan="1">DST-dstweb		</td><td colSpan="1" rowSpan="1">80、83</td></tr></table>';
+const tableStr3 = '<h1 id="efidd" style="text-align:left;text-indent:2em;"><strong><span style="font-size:0.64rem">优质物流服务协议</span></strong></h1>';
 
 class Demo extends React.Component {
 
   constructor(props) {
-
     super(props)
 
     this.state = {
-      editorState: BraftEditor.createEditorState(tableStr2),
+      editorState: BraftEditor.createEditorState(tableStr3),
       suggestions: mentions
     }
-
   }
 
   logHTML = () => {
