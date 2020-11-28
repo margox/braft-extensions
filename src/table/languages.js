@@ -53,6 +53,7 @@ const pl = {
   'mergeCells': 'Scal komórki',
   'splitCell': 'Podziel komórkę'
 }
+
 const kr = {
   'rows': '행수',
   'columns': '열수',
@@ -66,6 +67,7 @@ const kr = {
   'mergeCells': '행삽입',
   'splitCell': '셀분할'
 }
+
 const jpn = {
   'rows': '行数',
   'columns': '列数',
@@ -79,6 +81,21 @@ const jpn = {
   'mergeCells': 'セルを結合',
   'splitCell': '分割セル'
 }
+
+const pt_br = {
+  'rows': 'Linhas',
+  'columns': 'Colunas',
+  'cancel': 'Cancelar',
+  'insertTable': 'Inserir',
+  'removeTable': 'Remover Tabela',
+  'insertColumn': 'Inserir Coluna',
+  'removeColumn': 'Remover Coluna',
+  'insertRow': 'Inserir Linha',
+  'removeRow': 'Remover Linha',
+  'mergeCells': 'Mesclar',
+  'splitCell': 'Dividir'
+}
+
 const nl = {
   'rows' : 'Rijen' ,
   'columns' : 'Kolommen' ,
@@ -92,4 +109,5 @@ const nl = {
   'mergeCells' : 'Samenvoegen cellen' ,
   'splitCell' : 'Split cell'
 }
-export default { zh, zhHant, en, pl ,jpn, kr, nl }
+
+export default { zh, zhHant, en, pl ,jpn, kr, pt_br, nl }
