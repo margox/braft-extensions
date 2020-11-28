@@ -75,11 +75,23 @@ export default (options = {}) => {
     importer: (nodeName, node) => {
 
       if (/h[1-6]/.test(nodeName)) {
+        const blockData = {
+          id: node.getAttribute('id')
+        }
+
+        let nodeStyle = node.style || {}
+
+        if (nodeStyle.textAlign) {
+          blockData.textAlign = nodeStyle.textAlign
+        }
+
+        if (nodeStyle.textIndent) {
+          blockData.textIndent = /^\d+em$/.test(nodeStyle.textIndent) ? Math.ceil(parseInt(nodeStyle.textIndent, 10) / 2) : 1
+        }
+
         return {
           type: headerTagTypeMap[nodeName],
-          data: {
-            id: node.getAttribute('id')
-          }
+          data: blockData
         }
       }
 
