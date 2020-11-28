@@ -269,3 +269,54 @@ const options = {
 
 BraftEditor.use(HeaderId(options))
 ```
+
+## Mention 模块
+基于 [draft-js-mention](https://github.com/draft-js-plugins/draft-js-plugins/tree/master/packages/mention) 实现的 Mention 功能  
+`options` 除了可以使用 includeEditors 和 excludeEditors 指定和排除 editor 外，其余的参数请参考 draft-js-mention 的参数配置
+可参考 https://www.draft-js-plugins.com/plugin/mention
+
+#### 基本使用
+```ts
+import Mention from 'braft-extensions/dist/mention'
+
+interface MentionData {
+    link?: string;
+    avatar?: string;
+    name: string;
+    id?: null | string | number;
+}
+
+interface MentionSuggestionsPubProps {
+    suggestions: MentionData[];
+    open: boolean;
+    onOpenChange(open: boolean): void;
+    onSearchChange(event: { value: string }): void;
+    onAddMention(Mention: MentionData): void;
+}
+
+const options = {
+  includeEditors: ['editor-id-1'], // 指定该模块对哪些BraftEditor生效，不传此属性则对所有BraftEditor有效
+  excludeEditors: ['editor-id-2'],  // 指定该模块对哪些BraftEditor无效
+  mentionTrigger: '@'               // 可选参数。设置触发 mention 的符号，默认为 '@'
+}
+
+// Mention 方法返回一个二元祖
+// 第一个是 braft-extension 所用插件数据
+// 第二个是 控制 mention suggestions 的组件
+//          类型为 React.ComponentType<MentionSuggestionsPubProps>
+const [mentionExtension, MentionSuggestions] = Mention(options)
+BraftEditor.use(mentionExtension)
+
+
+const DemoEditor = (props) => {
+  // ... 省略
+
+  return (
+    <div>
+      <BraftEditor ... />
+      <MentionSuggestions ... />
+    </div>
+  )
+}
+
+```
