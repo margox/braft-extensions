@@ -6,8 +6,9 @@
 3. 代码高亮模块 CodeHighlighter
 4. 高级取色器模块 ColorPicker
 5. 表情包扩展模块 Emoticon
-6. 输入字数限制模块 MaxLength
-7. 标题区块(h1-h6)id模块 HeaderId
+6. Mention模块 Mention （感谢[ninesunsabiu](https://github.com/ninesunsabiu)的贡献）
+7. 输入字数限制模块 MaxLength
+8. 标题区块(h1-h6)id模块 HeaderId
 
 ### 安装
 ```bash
@@ -222,13 +223,88 @@ BraftEditor.use(Emoticon(options))
 #### 使用注意事项
 - 使用该模块，必须引入braft-extensions/dist/emoticon.css文件
 
+## Mention模块
+为编辑器增加mention(提及)功能
+
+#### 基本使用
+```js
+import 'braft-editor/dist/index.css'
+import BraftEditor from 'braft-editor'
+
+// 引入Mention扩展模块
+import Mention, { defaultSuggestionsFilter } from 'braft-extensions/dist/mention'
+// 取出Mention扩展和Mention列表组件
+const [mentionExtension, MentionSuggestions] = Mention()
+
+// 使用扩展
+BraftEditor.use(mentionExtension)
+
+class MentionDemo extends React.Component {
+  state = {
+    editorState: BraftEditor.createEditorState(),
+    // 在state中维护一个mention列表(这个数据可以从外部获取)
+    mentions: [
+      {
+        id: 'Matthew Russell',
+        name: 'Matthew Russell',
+        link: 'https://twitter.com/mrussell247',
+        avatar: 'https://pbs.twimg.com/profile_images/517863945/mattsailing_400x400.jpg'
+      },
+      {
+        id: 'Julian Krispel-Samsel',
+        name: 'Julian Krispel-Samsel',
+        link: 'https://twitter.com/juliandoesstuff',
+        avatar: 'https://avatars2.githubusercontent.com/u/1188186?v=3&s=400'
+      },
+      {
+        id: 'Jyoti Puri',
+        name: 'Jyoti Puri',
+        link: 'https://twitter.com/jyopur',
+        avatar: 'https://avatars0.githubusercontent.com/u/2182307?v=3&s=400'
+      },
+      {
+        id: 'Max Stoiber',
+        name: 'Max Stoiber',
+        link: 'https://twitter.com/mxstbr',
+        avatar: 'https://pbs.twimg.com/profile_images/763033229993574400/6frGyDyA_400x400.jpg'
+      }
+    ],
+    // 再维护一个mention列表搜索关键字
+    mentionKeyword: null
+  }
+
+  // 定义mention列表的搜索处理函数
+  handleMentionFilter = ({ value: mentionKeyword }) => {
+    this.setState({ mentionKeyword })
+  }
+
+  handleChange = (editorState) => {
+    this.setState({ editorState })
+  }
+ 
+  render () {
+    const { mentionKeyword, editorState, mentions } = this.state
+
+    return (
+      <div>
+        <BraftEditor value={editorState} onChange={this.handleChange} />
+        {/**MentionSuggestions组件需要单独渲染，并传入正确的属性**/}
+        <MentionSuggestions
+          onSearchChange={this.handleMentionFilter}
+          suggestions={defaultSuggestionsFilter(mentionKeyword, mentions)}
+        />
+      </div>
+    )
+  }
+}
+```
+
 ## 输入字数限制模块
 为编辑器增加maxLength和onReachMaxLength属性，用于限制输入字数
 
 #### 基本使用
 ```js
 import 'braft-editor/dist/index.css'
-
 import BraftEditor from 'braft-editor'
 import MaxLength from 'braft-extensions/dist/max-length'
 
