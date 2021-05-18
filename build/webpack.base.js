@@ -11,8 +11,6 @@ var jsLoader = [
   }
 ]
 
-process.env.NODE_ENV === 'production' && jsLoader.push('eslint-loader')
-
 module.exports = {
   module: {
     //加载器配置

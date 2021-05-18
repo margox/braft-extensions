@@ -1,7 +1,8 @@
-var merge = require('webpack-merge')
+var merge = require('webpack-merge').default
   , path = require('path')
   , HtmlWebpackPlugin = require('html-webpack-plugin')
   , baseConfigs = require('./webpack.base')
+  , ESLintPlugin = require('eslint-webpack-plugin')
 
 module.exports = merge(baseConfigs, {
   mode: 'development',
@@ -17,7 +18,8 @@ module.exports = merge(baseConfigs, {
   plugins: [
     new HtmlWebpackPlugin({
       template: './playground/index.html'
-    })
+    }),
+    new ESLintPlugin()
   ],
   devServer: {
     stats: { chunks: false },
