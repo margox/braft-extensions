@@ -58,7 +58,7 @@
   "dependencies": {
     "@babel/runtime": "^7.14.0",
     "braft-convert": "git+https://github.com/JaysQubeXon/braft-convert.git#upgrades@3.0.0",
-    "braft-utils": "git+https://github.com/JaysQubeXon/braft-utils.gitupgrades@4.0.0"
+    "braft-utils": "git+https://github.com/JaysQubeXon/braft-utils.git#upgrades@4.0.0"
   },
   "author": "Margox",
   "license": "ISC",
