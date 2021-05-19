@@ -1,6 +1,6 @@
 {
   "name": "braft-extensions",
-  "version": "0.1.1",
+  "version": "0.2.1",
   "description": "Extensions for Braft Editor",
   "main": "dist/index.js",
   "scripts": {
@@ -58,7 +58,7 @@
   "dependencies": {
     "@babel/runtime": "^7.14.0",
     "braft-convert": "git+https://github.com/JaysQubeXon/braft-convert.git#upgrades@3.0.0",
-    "braft-utils": "git+https://github.com/bwencke/braft-utils.git#fix_decrease_indent"
+    "braft-utils": "git+https://github.com/JaysQubeXon/braft-utils.gitupgrades@4.0.0"
   },
   "author": "Margox",
   "license": "ISC",
