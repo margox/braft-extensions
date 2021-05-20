@@ -110,4 +110,18 @@ const nl = {
   'splitCell' : 'Split cell'
 }
 
-export default { zh, zhHant, en, pl ,jpn, kr, pt_br, nl }
+const tr = {
+  'rows': 'Satırlar',
+  'columns': 'Sütunlar',
+  'cancel': 'İptal Et',
+  'insertTable': 'Tablo Ekle',
+  'removeTable': 'Tabloyu Sil',
+  'insertColumn': 'Sütun Ekle',
+  'removeColumn': 'Sütun Sil',
+  'insertRow': 'Satır Ekle',
+  'removeRow': 'Satır Sil',
+  'mergeCells': 'Hücreleri Birleştir',
+  'splitCell': 'Hücreyi Ayır'
+};
+
+export default { zh, zhHant, en, pl ,jpn, kr, pt_br, nl, tr }
