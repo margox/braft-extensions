@@ -1,4 +1,4 @@
-var merge = require('webpack-merge')
+var merge = require('webpack-merge').default
   , MiniCssExtractPlugin = require('mini-css-extract-plugin')
   , CopyWebpackPlugin = require('copy-webpack-plugin')
   , OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
@@ -15,6 +15,7 @@ entryNames.forEach(item => entries[item] = `./${item}/index.jsx`)
 module.exports = merge(baseConfigs, {
   mode: 'production',
   context: path.join(__dirname, '../src'),
+  devtool: false,
   entry: entries,
   output: {
     path: path.join(__dirname, '../dist'),
@@ -56,12 +57,13 @@ module.exports = merge(baseConfigs, {
         safe: true
       }
     }),
-    new CopyWebpackPlugin([
-      {
-        from: '../src/emoticon/images/*.*',
-        to: '../dist/assets/',
-        flatten: true
-      },
-    ])
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: '../src/emoticon/images/*.*',
+          to: '../dist/assets/'
+        },
+      ]
+    })
   ]
 })

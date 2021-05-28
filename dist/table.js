@@ -1,123 +1,155 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("react"), require("draft-js"), require("immutable"), require("braft-utils"), require("braft-editor"));
+		module.exports = factory(require("braft-editor"), require("braft-utils"), require("draft-js"), require("immutable"), require("react"));
 	else if(typeof define === 'function' && define.amd)
-		define(["react", "draft-js", "immutable", "braft-utils", "braft-editor"], factory);
+		define(["braft-editor", "braft-utils", "draft-js", "immutable", "react"], factory);
 	else {
-		var a = typeof exports === 'object' ? factory(require("react"), require("draft-js"), require("immutable"), require("braft-utils"), require("braft-editor")) : factory(root["react"], root["draft-js"], root["immutable"], root["braft-utils"], root["braft-editor"]);
+		var a = typeof exports === 'object' ? factory(require("braft-editor"), require("braft-utils"), require("draft-js"), require("immutable"), require("react")) : factory(root["braft-editor"], root["braft-utils"], root["draft-js"], root["immutable"], root["react"]);
 		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
 	}
-})(window, function(__WEBPACK_EXTERNAL_MODULE__1__, __WEBPACK_EXTERNAL_MODULE__3__, __WEBPACK_EXTERNAL_MODULE__4__, __WEBPACK_EXTERNAL_MODULE__6__, __WEBPACK_EXTERNAL_MODULE__39__) {
-return /******/ (function(modules) { // webpackBootstrap
+})(self, function(__WEBPACK_EXTERNAL_MODULE__163__, __WEBPACK_EXTERNAL_MODULE__961__, __WEBPACK_EXTERNAL_MODULE__379__, __WEBPACK_EXTERNAL_MODULE__856__, __WEBPACK_EXTERNAL_MODULE__297__) {
+return /******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ 163:
+/***/ ((module) => {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__163__;
+
+/***/ }),
+
+/***/ 961:
+/***/ ((module) => {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__961__;
+
+/***/ }),
+
+/***/ 379:
+/***/ ((module) => {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__379__;
+
+/***/ }),
+
+/***/ 856:
+/***/ ((module) => {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__856__;
+
+/***/ }),
+
+/***/ 297:
+/***/ ((module) => {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__297__;
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
 /******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-/******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
 /******/ 			exports: {}
 /******/ 		};
-/******/
+/******/ 	
 /******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// define __esModule on exports
-/******/ 	__webpack_require__.r = function(exports) {
-/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 		}
-/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 	};
-/******/
-/******/ 	// create a fake namespace object
-/******/ 	// mode & 1: value is a module id, require it
-/******/ 	// mode & 2: merge all properties of value into the ns
-/******/ 	// mode & 4: return value when already ns object
-/******/ 	// mode & 8|1: behave like require
-/******/ 	__webpack_require__.t = function(value, mode) {
-/******/ 		if(mode & 1) value = __webpack_require__(value);
-/******/ 		if(mode & 8) return value;
-/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
-/******/ 		var ns = Object.create(null);
-/******/ 		__webpack_require__.r(ns);
-/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
-/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
-/******/ 		return ns;
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "/";
-/******/
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 83);
-/******/ })
+/******/ 	
 /************************************************************************/
-/******/ ([
-/* 0 */
-/***/ (function(module, exports) {
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
 
-function _assertThisInitialized(self) {
-  if (self === void 0) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "TableUtils": () => (/* binding */ TableUtils),
+  "default": () => (/* binding */ table),
+  "dropdownInstance": () => (/* binding */ dropdownInstance)
+});
 
-  return self;
-}
+// NAMESPACE OBJECT: ./table/utils.js
+var utils_namespaceObject = {};
+__webpack_require__.r(utils_namespaceObject);
+__webpack_require__.d(utils_namespaceObject, {
+  "getCellCountForInsert": () => (getCellCountForInsert),
+  "getCellsInsideRect": () => (getCellsInsideRect),
+  "insertCell": () => (insertCell),
+  "insertCells": () => (insertCells),
+  "insertColumn": () => (insertColumn),
+  "insertRow": () => (insertRow),
+  "insertTable": () => (insertTable),
+  "mergeCells": () => (mergeCells),
+  "rebuildTableBlocks": () => (rebuildTableBlocks),
+  "rebuildTableNode": () => (rebuildTableNode),
+  "removeColumn": () => (removeColumn),
+  "removeRow": () => (removeRow),
+  "removeTable": () => (removeTable),
+  "splitCell": () => (splitCell),
+  "updateAllTableBlocks": () => (updateAllTableBlocks)
+});
 
-module.exports = _assertThisInitialized;
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE__1__;
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
+;// CONCATENATED MODULE: ../node_modules/@babel/runtime/helpers/esm/defineProperty.js
 function _defineProperty(obj, key, value) {
   if (key in obj) {
     Object.defineProperty(obj, key, {
@@ -132,86 +164,89 @@ function _defineProperty(obj, key, value) {
 
   return obj;
 }
+// EXTERNAL MODULE: external "react"
+var external_react_ = __webpack_require__(297);
+var external_react_default = /*#__PURE__*/__webpack_require__.n(external_react_);
+// EXTERNAL MODULE: external "braft-utils"
+var external_braft_utils_ = __webpack_require__(961);
+// EXTERNAL MODULE: external "draft-js"
+var external_draft_js_ = __webpack_require__(379);
+;// CONCATENATED MODULE: ../node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+;// CONCATENATED MODULE: ../node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js
+function _iterableToArrayLimit(arr, i) {
+  var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]);
 
-module.exports = _defineProperty;
+  if (_i == null) return;
+  var _arr = [];
+  var _n = true;
+  var _d = false;
 
-/***/ }),
-/* 3 */
-/***/ (function(module, exports) {
+  var _s, _e;
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__3__;
+  try {
+    for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
 
-/***/ }),
-/* 4 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE__4__;
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var defineProperty = __webpack_require__(2);
-
-function _objectSpread(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? Object(arguments[i]) : {};
-    var ownKeys = Object.keys(source);
-
-    if (typeof Object.getOwnPropertySymbols === 'function') {
-      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-      }));
+      if (i && _arr.length === i) break;
     }
-
-    ownKeys.forEach(function (key) {
-      defineProperty(target, key, source[key]);
-    });
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
   }
 
-  return target;
+  return _arr;
 }
+;// CONCATENATED MODULE: ../node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
 
-module.exports = _objectSpread;
+  for (var i = 0, arr2 = new Array(len); i < len; i++) {
+    arr2[i] = arr[i];
+  }
 
-/***/ }),
-/* 6 */
-/***/ (function(module, exports) {
+  return arr2;
+}
+;// CONCATENATED MODULE: ../node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__6__;
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+}
+;// CONCATENATED MODULE: ../node_modules/@babel/runtime/helpers/esm/nonIterableRest.js
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+;// CONCATENATED MODULE: ../node_modules/@babel/runtime/helpers/esm/slicedToArray.js
 
-/***/ }),
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "rebuildTableBlocks", function() { return rebuildTableBlocks; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "rebuildTableNode", function() { return rebuildTableNode; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateAllTableBlocks", function() { return updateAllTableBlocks; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCellCountForInsert", function() { return getCellCountForInsert; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCellsInsideRect", function() { return getCellsInsideRect; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "insertCell", function() { return insertCell; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "insertCells", function() { return insertCells; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "insertTable", function() { return insertTable; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removeTable", function() { return removeTable; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "insertColumn", function() { return insertColumn; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removeColumn", function() { return removeColumn; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "insertRow", function() { return insertRow; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removeRow", function() { return removeRow; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mergeCells", function() { return mergeCells; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "splitCell", function() { return splitCell; });
-/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
-/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
-/* harmony import */ var _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var draft_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
-/* harmony import */ var draft_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(draft_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var immutable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
-/* harmony import */ var immutable__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(immutable__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var braft_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(6);
-/* harmony import */ var braft_utils__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(braft_utils__WEBPACK_IMPORTED_MODULE_4__);
 
+
+function _slicedToArray(arr, i) {
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+}
+// EXTERNAL MODULE: external "immutable"
+var external_immutable_ = __webpack_require__(856);
+var external_immutable_default = /*#__PURE__*/__webpack_require__.n(external_immutable_);
+;// CONCATENATED MODULE: ./table/utils.js
+
+
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 
 
@@ -238,7 +273,7 @@ var valueComparison = function valueComparison(value1, value2, operator) {
 
 
 var createCellBlock = function createCellBlock(cell) {
-  cell = _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_1___default()({
+  cell = _objectSpread({
     colSpan: 1,
     rowSpan: 1,
     text: ''
@@ -252,11 +287,11 @@ var createCellBlock = function createCellBlock(cell) {
       rowSpan = _cell.rowSpan,
       text = _cell.text,
       isHead = _cell.isHead;
-  return new draft_js__WEBPACK_IMPORTED_MODULE_2__["ContentBlock"]({
-    key: key || Object(draft_js__WEBPACK_IMPORTED_MODULE_2__["genKey"])(),
+  return new external_draft_js_.ContentBlock({
+    key: key || (0,external_draft_js_.genKey)(),
     type: 'table-cell',
     text: text,
-    data: immutable__WEBPACK_IMPORTED_MODULE_3___default.a.Map({
+    data: external_immutable_default().Map({
       tableKey: tableKey,
       colIndex: colIndex,
       rowIndex: rowIndex,
@@ -264,25 +299,25 @@ var createCellBlock = function createCellBlock(cell) {
       rowSpan: rowSpan,
       isHead: isHead
     }),
-    characterList: immutable__WEBPACK_IMPORTED_MODULE_3___default.a.List(immutable__WEBPACK_IMPORTED_MODULE_3___default.a.Repeat(draft_js__WEBPACK_IMPORTED_MODULE_2__["CharacterMetadata"].create(), text.length))
+    characterList: external_immutable_default().List(external_immutable_default().Repeat(external_draft_js_.CharacterMetadata.create(), text.length))
   });
 };
 
 var createUnstyledBlock = function createUnstyledBlock() {
-  var key = Object(draft_js__WEBPACK_IMPORTED_MODULE_2__["genKey"])();
-  return [key, new draft_js__WEBPACK_IMPORTED_MODULE_2__["ContentBlock"]({
+  var key = (0,external_draft_js_.genKey)();
+  return [key, new external_draft_js_.ContentBlock({
     key: key,
     type: 'unstyled',
     text: '',
-    data: immutable__WEBPACK_IMPORTED_MODULE_3___default.a.Map({}),
-    characterList: immutable__WEBPACK_IMPORTED_MODULE_3___default.a.List([])
+    data: external_immutable_default().Map({}),
+    characterList: external_immutable_default().List([])
   })];
 }; // 创建并返回一行单元格block
 
 
 var createRowBlocks = function createRowBlocks(tableKey, rowIndex, rowLength) {
   var firstCellText = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '';
-  var cells = immutable__WEBPACK_IMPORTED_MODULE_3___default.a.Range(0, rowLength).map(function (index) {
+  var cells = external_immutable_default().Range(0, rowLength).map(function (index) {
     var cellBlock = createCellBlock({
       tableKey: tableKey,
       colIndex: index,
@@ -291,7 +326,7 @@ var createRowBlocks = function createRowBlocks(tableKey, rowIndex, rowLength) {
     });
     return [cellBlock.getKey(), cellBlock];
   }).toArray();
-  return immutable__WEBPACK_IMPORTED_MODULE_3___default.a.OrderedMap(cells).toSeq();
+  return external_immutable_default().OrderedMap(cells).toSeq();
 }; // 将表格block更新到contentState
 
 
@@ -356,7 +391,7 @@ var rebuildTableBlocks = function rebuildTableBlocks(tableBlocks) {
     }
 
     return block.merge({
-      'data': immutable__WEBPACK_IMPORTED_MODULE_3___default.a.Map(_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_1___default()({}, blockData.toJS(), addonBlockData, {
+      'data': external_immutable_default().Map(_objectSpread(_objectSpread(_objectSpread({}, blockData.toJS()), addonBlockData), {}, {
         colIndex: colIndex
       }))
     });
@@ -364,7 +399,7 @@ var rebuildTableBlocks = function rebuildTableBlocks(tableBlocks) {
 }; // 遍历以修正单元格的colSpan和rowSpan属性（表格DOM专用）
 
 var rebuildTableNode = function rebuildTableNode(tableNode) {
-  var tableKey = Object(draft_js__WEBPACK_IMPORTED_MODULE_2__["genKey"])();
+  var tableKey = (0,external_draft_js_.genKey)();
   var skipedCells = {};
   [].forEach.call(tableNode.rows, function (row, rowIndex) {
     [].forEach.call(row.cells, function (cell, cellIndex) {
@@ -401,7 +436,7 @@ var updateAllTableBlocks = function updateAllTableBlocks(editorState, tableKey, 
   var tableBlocks = findBlocks(contentBlocks, 'tableKey', tableKey);
   var nextTableBlocks = rebuildTableBlocks(tableBlocks, blockData);
   var nextContentState = updateTableBlocks(contentState, editorState.getSelection(), selectionState.focusKey, nextTableBlocks, tableKey);
-  return draft_js__WEBPACK_IMPORTED_MODULE_2__["EditorState"].push(editorState, nextContentState, 'insert-table-row');
+  return external_draft_js_.EditorState.push(editorState, nextContentState, 'insert-table-row');
 }; // 获取需要插入到某一行的单元格的数量
 
 var getCellCountForInsert = function getCellCountForInsert(tableBlocks, rowIndex) {
@@ -411,11 +446,11 @@ var getCellCountForInsert = function getCellCountForInsert(tableBlocks, rowIndex
 }; // 获取指定范围内的单元格block
 
 var getCellsInsideRect = function getCellsInsideRect(editorState, tableKey, startLocation, endLocation) {
-  var _startLocation = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(startLocation, 2),
+  var _startLocation = _slicedToArray(startLocation, 2),
       startColIndex = _startLocation[0],
       startRowIndex = _startLocation[1];
 
-  var _endLocation = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(endLocation, 2),
+  var _endLocation = _slicedToArray(endLocation, 2),
       endColIndex = _endLocation[0],
       endRowIndex = _endLocation[1];
 
@@ -432,7 +467,7 @@ var getCellsInsideRect = function getCellsInsideRect(editorState, tableKey, star
   }
 
   if (matchedCellLocations.length === 0) {
-    return immutable__WEBPACK_IMPORTED_MODULE_3___default.a.OrderedMap([]);
+    return external_immutable_default().OrderedMap([]);
   }
 
   var contentState = editorState.getCurrentContent();
@@ -440,8 +475,8 @@ var getCellsInsideRect = function getCellsInsideRect(editorState, tableKey, star
   var tableBlocks = findBlocks(contentBlocks, 'tableKey', tableKey);
   var matchedCellBlockKeys = [];
   var spannedCellBlockKeys = [];
-  var matchedCellBlocks = immutable__WEBPACK_IMPORTED_MODULE_3___default.a.List([]);
-  var spannedCellBlocks = immutable__WEBPACK_IMPORTED_MODULE_3___default.a.List([]);
+  var matchedCellBlocks = external_immutable_default().List([]);
+  var spannedCellBlocks = external_immutable_default().List([]);
   tableBlocks.forEach(function (block) {
     var blockData = block.getData();
     var blockKey = block.getKey();
@@ -450,7 +485,7 @@ var getCellsInsideRect = function getCellsInsideRect(editorState, tableKey, star
     var colSpan = blockData.get('colSpan');
     var rowSpan = blockData.get('rowSpan');
     matchedCellLocations.forEach(function (_ref) {
-      var _ref2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(_ref, 2),
+      var _ref2 = _slicedToArray(_ref, 2),
           x = _ref2[0],
           y = _ref2[1];
 
@@ -466,7 +501,7 @@ var getCellsInsideRect = function getCellsInsideRect(editorState, tableKey, star
   });
   return {
     cellBlocks: matchedCellBlocks.merge(spannedCellBlocks),
-    cellKeys: matchedCellBlockKeys.concat(spannedCellBlockKeys),
+    cellKeys: [].concat(matchedCellBlockKeys, spannedCellBlockKeys),
     // todo: 去重复
     spannedCellBlocks: spannedCellBlocks,
     spannedCellBlockKeys: spannedCellBlockKeys
@@ -476,7 +511,7 @@ var getCellsInsideRect = function getCellsInsideRect(editorState, tableKey, star
 var insertCell = function insertCell(tableBlocks, cell) {
   var colIndex, rowIndex, cellBlock;
 
-  if (cell instanceof draft_js__WEBPACK_IMPORTED_MODULE_2__["ContentBlock"]) {
+  if (cell instanceof external_draft_js_.ContentBlock) {
     colIndex = cell.getData().get('colIndex');
     rowIndex = cell.getData().get('rowIndex');
     cellBlock = cell;
@@ -496,7 +531,7 @@ var insertCell = function insertCell(tableBlocks, cell) {
     var blockColIndex = block.getData().get('colIndex');
     return blockColIndex >= colIndex && blockRowIndex === rowIndex || blockRowIndex > rowIndex;
   });
-  var nextTableBlocks = blocksBefore.concat(immutable__WEBPACK_IMPORTED_MODULE_3___default.a.OrderedMap([[cellBlock.getKey(), cellBlock]]).toSeq(), blocksAfter);
+  var nextTableBlocks = blocksBefore.concat(external_immutable_default().OrderedMap([[cellBlock.getKey(), cellBlock]]).toSeq(), blocksAfter);
   return nextTableBlocks;
 }; // 插入多个单元格block到表格的block列表中
 
@@ -511,14 +546,14 @@ var insertTable = function insertTable(editorState) {
   var columns = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 3;
   var rows = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 3;
 
-  if (braft_utils__WEBPACK_IMPORTED_MODULE_4__["ContentUtils"].selectionContainsStrictBlock(editorState)) {
+  if (external_braft_utils_.ContentUtils.selectionContainsStrictBlock(editorState)) {
     return editorState;
   }
 
   var selectionState = editorState.getSelection();
   var contentState = editorState.getCurrentContent();
   var contentBlocks = contentState.getBlockMap();
-  var tableKey = Object(draft_js__WEBPACK_IMPORTED_MODULE_2__["genKey"])();
+  var tableKey = (0,external_draft_js_.genKey)();
   var cellBlocks = [createUnstyledBlock()];
 
   for (var ii = 0; ii < rows; ii++) {
@@ -541,9 +576,9 @@ var insertTable = function insertTable(editorState) {
   var blocksAfter = contentBlocks.toSeq().skipUntil(function (block) {
     return block === currentBlock;
   }).rest();
-  var tableBlocks = immutable__WEBPACK_IMPORTED_MODULE_3___default.a.OrderedMap(cellBlocks).toSeq();
+  var tableBlocks = external_immutable_default().OrderedMap(cellBlocks).toSeq();
   var firstCellKey = cellBlocks[1][0];
-  var nextContentBlocks = blocksBefore.concat(immutable__WEBPACK_IMPORTED_MODULE_3___default.a.OrderedMap([[startKey, currentBlock]]).toSeq(), tableBlocks, blocksAfter).toOrderedMap();
+  var nextContentBlocks = blocksBefore.concat(external_immutable_default().OrderedMap([[startKey, currentBlock]]).toSeq(), tableBlocks, blocksAfter).toOrderedMap();
   var nextContentState = contentState.merge({
     blockMap: nextContentBlocks,
     selectionBefore: selectionState,
@@ -555,7 +590,7 @@ var insertTable = function insertTable(editorState) {
       isBackward: false
     })
   });
-  return draft_js__WEBPACK_IMPORTED_MODULE_2__["EditorState"].push(editorState, nextContentState, 'insert-table');
+  return external_draft_js_.EditorState.push(editorState, nextContentState, 'insert-table');
 }; // 删除整个表格
 
 var removeTable = function removeTable(editorState, tableKey) {
@@ -586,7 +621,7 @@ var removeTable = function removeTable(editorState, tableKey) {
       isBackward: false
     })
   });
-  return draft_js__WEBPACK_IMPORTED_MODULE_2__["EditorState"].push(editorState, nextContentState, 'remove-table');
+  return external_draft_js_.EditorState.push(editorState, nextContentState, 'remove-table');
 }; // 插入一列单元格到表格中
 
 var insertColumn = function insertColumn(editorState, tableKey, cellCounts, colIndex) {
@@ -632,7 +667,7 @@ var insertColumn = function insertColumn(editorState, tableKey, cellCounts, colI
     }
 
     return needUpdate ? block.merge({
-      data: immutable__WEBPACK_IMPORTED_MODULE_3___default.a.Map(_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_1___default()({}, blockData, {
+      data: external_immutable_default().Map(_objectSpread(_objectSpread({}, blockData), {}, {
         colIndex: nextColIndex,
         colSpan: nextColSpan
       }))
@@ -643,9 +678,9 @@ var insertColumn = function insertColumn(editorState, tableKey, cellCounts, colI
     return editorState;
   }
 
-  var focusCellKey = cellsToBeAdded[0].key = Object(draft_js__WEBPACK_IMPORTED_MODULE_2__["genKey"])();
+  var focusCellKey = cellsToBeAdded[0].key = (0,external_draft_js_.genKey)();
   var nextContentState = updateTableBlocks(contentState, editorState.getSelection(), focusCellKey, insertCells(nextTableBlocks, cellsToBeAdded), tableKey);
-  return draft_js__WEBPACK_IMPORTED_MODULE_2__["EditorState"].push(editorState, nextContentState, 'insert-table-column');
+  return external_draft_js_.EditorState.push(editorState, nextContentState, 'insert-table-column');
 }; // 从表格中移除指定的某一列单元格
 
 var removeColumn = function removeColumn(editorState, tableKey, colIndex) {
@@ -682,7 +717,7 @@ var removeColumn = function removeColumn(editorState, tableKey, colIndex) {
     var newColSpan = blockColIndex < colIndex && blockColIndex + blockColSpan > colIndex ? blockColSpan - 1 : blockColSpan;
     var needUpdate = newColIndex !== blockColIndex || newColSpan !== blockColSpan;
     return needUpdate ? block.merge({
-      'data': _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_1___default()({}, blockData, {
+      'data': _objectSpread(_objectSpread({}, blockData), {}, {
         colIndex: newColIndex,
         colSpan: newColSpan
       })
@@ -690,7 +725,7 @@ var removeColumn = function removeColumn(editorState, tableKey, colIndex) {
   });
   var focusCellKey = (nextTableBlocks.first() || contentState.getBlockBefore(tableBlocks.first().getKey()) || contentState.getBlockAfter(tableBlocks.first().getKey())).getKey();
   var nextContentState = updateTableBlocks(contentState, editorState.getSelection(), focusCellKey, insertCells(nextTableBlocks, cellsToBeAdded), tableKey);
-  return draft_js__WEBPACK_IMPORTED_MODULE_2__["EditorState"].push(editorState, nextContentState, 'remove-table-column');
+  return external_draft_js_.EditorState.push(editorState, nextContentState, 'remove-table-column');
 }; // 插入一行单元格到表格中
 
 var insertRow = function insertRow(editorState, tableKey, cellCounts, rowIndex, addonBlockData) {
@@ -708,7 +743,7 @@ var insertRow = function insertRow(editorState, tableKey, cellCounts, rowIndex, 
       var needUpdate = blockRowSpan && blockRowIndex + blockRowSpan > rowIndex;
       var newRowSpan = needUpdate ? blockRowSpan * 1 + 1 : blockRowSpan;
       return block.merge({
-        'data': immutable__WEBPACK_IMPORTED_MODULE_3___default.a.Map(_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_1___default()({}, blockData, {
+        'data': external_immutable_default().Map(_objectSpread(_objectSpread({}, blockData), {}, {
           rowSpan: newRowSpan
         }))
       });
@@ -717,7 +752,7 @@ var insertRow = function insertRow(editorState, tableKey, cellCounts, rowIndex, 
   var blocksAfter = findBlocks(tableBlocks, 'rowIndex', rowIndex, '>=').map(function (block) {
     var blockData = block.getData().toJS();
     return block.merge({
-      'data': immutable__WEBPACK_IMPORTED_MODULE_3___default.a.Map(_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_1___default()({}, blockData, {
+      'data': external_immutable_default().Map(_objectSpread(_objectSpread({}, blockData), {}, {
         rowIndex: blockData.rowIndex * 1 + 1
       }))
     });
@@ -727,7 +762,7 @@ var insertRow = function insertRow(editorState, tableKey, cellCounts, rowIndex, 
   var focusCellKey = rowBlocks.first().getKey();
   var nextTableBlocks = rebuildTableBlocks(blocksBefore.concat(rowBlocks, blocksAfter), addonBlockData);
   var nextContentState = updateTableBlocks(contentState, editorState.getSelection(), focusCellKey, nextTableBlocks, tableKey);
-  return draft_js__WEBPACK_IMPORTED_MODULE_2__["EditorState"].push(editorState, nextContentState, 'insert-table-row');
+  return external_draft_js_.EditorState.push(editorState, nextContentState, 'insert-table-row');
 }; // 从表格中移除指定的某一行单元格
 
 var removeRow = function removeRow(editorState, tableKey, rowIndex, addonBlockData) {
@@ -745,7 +780,7 @@ var removeRow = function removeRow(editorState, tableKey, rowIndex, addonBlockDa
       var needUpdate = blockRowSpan && blockRowIndex + blockRowSpan > rowIndex;
       var newRowSpan = needUpdate ? blockRowSpan * 1 - 1 : blockRowSpan;
       return block.merge({
-        'data': immutable__WEBPACK_IMPORTED_MODULE_3___default.a.Map(_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_1___default()({}, blockData, {
+        'data': external_immutable_default().Map(_objectSpread(_objectSpread({}, blockData), {}, {
           rowSpan: newRowSpan
         }))
       });
@@ -754,7 +789,7 @@ var removeRow = function removeRow(editorState, tableKey, rowIndex, addonBlockDa
   var blocksAfter = findBlocks(tableBlocks, 'rowIndex', rowIndex, '>').map(function (block) {
     var blockData = block.getData().toJS();
     return block.merge({
-      'data': immutable__WEBPACK_IMPORTED_MODULE_3___default.a.Map(_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_1___default()({}, blockData, {
+      'data': external_immutable_default().Map(_objectSpread(_objectSpread({}, blockData), {}, {
         rowIndex: blockData.rowIndex * 1 - 1
       }))
     });
@@ -782,7 +817,7 @@ var removeRow = function removeRow(editorState, tableKey, rowIndex, addonBlockDa
   var focusCellKey = (blocksAfter.first() || blocksBefore.last() || contentBlocks.first()).getKey();
   var nextTableBlocks = rebuildTableBlocks(insertCells(blocksBefore.concat(blocksAfter), cellsToBeAdded), addonBlockData);
   var nextContentState = updateTableBlocks(contentState, editorState.getSelection(), focusCellKey, nextTableBlocks, tableKey, true);
-  return draft_js__WEBPACK_IMPORTED_MODULE_2__["EditorState"].push(editorState, nextContentState, 'remove-table-row');
+  return external_draft_js_.EditorState.push(editorState, nextContentState, 'remove-table-row');
 }; // 合并单元格
 
 var mergeCells = function mergeCells(editorState, tableKey, cellKeys) {
@@ -793,7 +828,7 @@ var mergeCells = function mergeCells(editorState, tableKey, cellKeys) {
   var tableBlocks = findBlocks(contentBlocks, 'tableKey', tableKey).filter(function (block) {
     if (~cellKeys.indexOf(block.getKey())) {
       mergedText += block.getText();
-      cellBlocksData.push(_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_1___default()({
+      cellBlocksData.push(_objectSpread({
         key: block.getKey()
       }, block.getData().toJS()));
       return false;
@@ -808,14 +843,14 @@ var mergeCells = function mergeCells(editorState, tableKey, cellKeys) {
   var lastCellData = sortedCellBlocksData[0];
   var mergedCell = contentState.getBlockForKey(firstCellData.key).merge({
     'text': mergedText,
-    'data': immutable__WEBPACK_IMPORTED_MODULE_3___default.a.Map(_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_1___default()({}, firstCellData, {
+    'data': external_immutable_default().Map(_objectSpread(_objectSpread({}, firstCellData), {}, {
       colSpan: lastCellData.colIndex - firstCellData.colIndex + 1,
       rowSpan: lastCellData.rowIndex - firstCellData.rowIndex + 1
     })),
-    characterList: immutable__WEBPACK_IMPORTED_MODULE_3___default.a.List(immutable__WEBPACK_IMPORTED_MODULE_3___default.a.Repeat(draft_js__WEBPACK_IMPORTED_MODULE_2__["CharacterMetadata"].create(), mergedText.length))
+    characterList: external_immutable_default().List(external_immutable_default().Repeat(external_draft_js_.CharacterMetadata.create(), mergedText.length))
   });
   var nextContentState = updateTableBlocks(contentState, editorState.getSelection(), firstCellData.key, insertCell(tableBlocks, mergedCell), tableKey);
-  return draft_js__WEBPACK_IMPORTED_MODULE_2__["EditorState"].push(editorState, nextContentState, 'merge-table-cell');
+  return external_draft_js_.EditorState.push(editorState, nextContentState, 'merge-table-cell');
 }; // 拆分单元格
 
 var splitCell = function splitCell(editorState, tableKey, cellKey) {
@@ -850,7 +885,7 @@ var splitCell = function splitCell(editorState, tableKey, cellKey) {
       }
 
       return block.merge({
-        'data': immutable__WEBPACK_IMPORTED_MODULE_3___default.a.Map(_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_1___default()({}, blockData, {
+        'data': external_immutable_default().Map(_objectSpread(_objectSpread({}, blockData), {}, {
           colSpan: 1,
           rowSpan: 1
         }))
@@ -860,25 +895,180 @@ var splitCell = function splitCell(editorState, tableKey, cellKey) {
     }
   });
   var nextContentState = updateTableBlocks(contentState, editorState.getSelection(), cellKey, insertCells(tableBlocks, cellsToBeAdded), tableKey);
-  return draft_js__WEBPACK_IMPORTED_MODULE_2__["EditorState"].push(editorState, nextContentState, 'merge-table-cell');
+  return external_draft_js_.EditorState.push(editorState, nextContentState, 'merge-table-cell');
 };
+;// CONCATENATED MODULE: ./table/handlers.js
 
-/***/ }),
-/* 8 */
-/***/ (function(module, exports) {
 
+ // todo
+// 禁止选中多个单元格式时进行输入和粘贴操作
+// 可以按tab/shift + tab键切换选中单元格
+// 可以按方向键切换选中表格
+// 在最后一个单元格中按Shift + 回车跳出表格
+
+var handleKeyCommand = function handleKeyCommand(oringeHandler) {
+  return function (command, editorState, editor) {
+    if (oringeHandler && oringeHandler(command, editorState, editor) === 'handled') {
+      return 'handled';
+    }
+
+    if ('backspace' === command) {
+      var contentState = editorState.getCurrentContent();
+      var focusOffset = editorState.getSelection().getFocusOffset();
+
+      if (focusOffset === 0) {
+        var _currentBlock = external_braft_utils_.ContentUtils.getSelectionBlock(editorState);
+
+        var beforeBlock = contentState.getBlockBefore(_currentBlock.getKey());
+        if (!beforeBlock) return 'not-handled';
+
+        if ('table-cell' === beforeBlock.getType()) {
+          // 当前行 之前是表格的情况 特殊处理
+          var tableKey = beforeBlock.getData().get('tableKey');
+          editor.setValue(removeTable(editorState, tableKey));
+          return 'handled';
+        }
+      }
+    }
+
+    var selectedBlocks = external_braft_utils_.ContentUtils.getSelectedBlocks(editorState);
+
+    if (!selectedBlocks.find(function (block) {
+      return block.getType() === 'table-cell';
+    })) {
+      return 'not-handled';
+    }
+
+    var currentBlock = external_braft_utils_.ContentUtils.getSelectionBlock(editorState);
+
+    if (['backspace', 'delete'].indexOf(command) > -1) {
+      if (selectedBlocks.length > 1) {
+        return 'handled';
+      }
+
+      var textLen = currentBlock.getLength();
+
+      if (textLen === 0) {
+        return 'handled';
+      }
+
+      var _focusOffset = editorState.getSelection().getFocusOffset();
+
+      if (command === 'backspace' && _focusOffset === 0) {
+        return 'handled';
+      }
+
+      if (command === 'delete' && _focusOffset === textLen) {
+        return 'handled';
+      }
+    } else if (command === 'tab') {
+      return 'handled';
+    }
+  };
+};
+var handleReturn = function handleReturn(oringeHandler) {
+  return function (event, editorState, editor) {
+    if (oringeHandler && oringeHandler(event, editorState, editor) === 'handled') {
+      return 'handled';
+    }
+
+    if (!external_braft_utils_.ContentUtils.selectionContainsBlockType(editorState, 'table-cell')) {
+      return 'not-handled';
+    }
+
+    var blockType = external_braft_utils_.ContentUtils.getSelectionBlockType(editorState);
+
+    if (blockType !== 'table-cell') {
+      return 'not-handled';
+    }
+
+    editor.setValue(external_draft_js_.RichUtils.insertSoftNewline(editorState));
+    return 'handled';
+  };
+};
+var handleDroppedFiles = function handleDroppedFiles(oringeHandler) {
+  return function (selectionState, files, editor) {
+    if (oringeHandler && oringeHandler(selectionState, files, editor) === 'handled') {
+      return 'handled';
+    }
+
+    if (!external_braft_utils_.ContentUtils.selectionContainsBlockType(editor.state.editorState, 'table-cell')) {
+      return 'not-handled';
+    }
+
+    var currentBlock = external_braft_utils_.ContentUtils.getSelectionBlock(editor.state.editorState);
+
+    if (currentBlock.getType() === 'table-cell') {
+      return 'handled';
+    }
+  };
+};
+var handlePastedFiles = function handlePastedFiles(oringeHandler) {
+  return function (files, editor) {
+    if (oringeHandler && oringeHandler(files, editor) === 'handled') {
+      return 'handled';
+    }
+
+    if (!external_braft_utils_.ContentUtils.selectionContainsBlockType(editor.state.editorState, 'table-cell')) {
+      return 'not-handled';
+    }
+
+    var currentBlock = external_braft_utils_.ContentUtils.getSelectionBlock(editor.state.editorState);
+
+    if (currentBlock.getType() === 'table-cell') {
+      return 'handled';
+    }
+  };
+};
+var handlePastedText = function handlePastedText(oringeHandler) {
+  return function (text, html, editorState, editor) {
+    if (oringeHandler && oringeHandler(text, html, editorState, editor) === 'handled') {
+      return 'handled';
+    }
+
+    var selectedBlocks = external_braft_utils_.ContentUtils.getSelectedBlocks(editor.state.editorState);
+
+    if (!selectedBlocks.find(function (block) {
+      return block.getType() === 'table-cell';
+    })) {
+      return 'not-handled';
+    }
+
+    if (selectedBlocks.length === 1) {
+      editor.setValue(external_braft_utils_.ContentUtils.insertText(editor.state.editorState, text));
+    }
+
+    return 'handled';
+  };
+};
+;// CONCATENATED MODULE: ../node_modules/@babel/runtime/helpers/esm/arrayWithoutHoles.js
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) return _arrayLikeToArray(arr);
+}
+;// CONCATENATED MODULE: ../node_modules/@babel/runtime/helpers/esm/iterableToArray.js
+function _iterableToArray(iter) {
+  if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
+}
+;// CONCATENATED MODULE: ../node_modules/@babel/runtime/helpers/esm/nonIterableSpread.js
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+;// CONCATENATED MODULE: ../node_modules/@babel/runtime/helpers/esm/toConsumableArray.js
+
+
+
+
+function _toConsumableArray(arr) {
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
+}
+;// CONCATENATED MODULE: ../node_modules/@babel/runtime/helpers/esm/classCallCheck.js
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
   }
 }
-
-module.exports = _classCallCheck;
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports) {
-
+;// CONCATENATED MODULE: ../node_modules/@babel/runtime/helpers/esm/createClass.js
 function _defineProperties(target, props) {
   for (var i = 0; i < props.length; i++) {
     var descriptor = props[i];
@@ -894,45 +1084,24 @@ function _createClass(Constructor, protoProps, staticProps) {
   if (staticProps) _defineProperties(Constructor, staticProps);
   return Constructor;
 }
-
-module.exports = _createClass;
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var _typeof = __webpack_require__(17);
-
-var assertThisInitialized = __webpack_require__(0);
-
-function _possibleConstructorReturn(self, call) {
-  if (call && (_typeof(call) === "object" || typeof call === "function")) {
-    return call;
+;// CONCATENATED MODULE: ../node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
   }
 
-  return assertThisInitialized(self);
+  return self;
 }
-
-module.exports = _possibleConstructorReturn;
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports) {
-
-function _getPrototypeOf(o) {
-  module.exports = _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-    return o.__proto__ || Object.getPrototypeOf(o);
+;// CONCATENATED MODULE: ../node_modules/@babel/runtime/helpers/esm/setPrototypeOf.js
+function _setPrototypeOf(o, p) {
+  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
   };
-  return _getPrototypeOf(o);
+
+  return _setPrototypeOf(o, p);
 }
-
-module.exports = _getPrototypeOf;
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var setPrototypeOf = __webpack_require__(18);
+;// CONCATENATED MODULE: ../node_modules/@babel/runtime/helpers/esm/inherits.js
 
 function _inherits(subClass, superClass) {
   if (typeof superClass !== "function" && superClass !== null) {
@@ -946,1064 +1115,42 @@ function _inherits(subClass, superClass) {
       configurable: true
     }
   });
-  if (superClass) setPrototypeOf(subClass, superClass);
+  if (superClass) _setPrototypeOf(subClass, superClass);
 }
-
-module.exports = _inherits;
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var arrayWithHoles = __webpack_require__(23);
-
-var iterableToArrayLimit = __webpack_require__(24);
-
-var nonIterableRest = __webpack_require__(25);
-
-function _slicedToArray(arr, i) {
-  return arrayWithHoles(arr) || iterableToArrayLimit(arr, i) || nonIterableRest();
-}
-
-module.exports = _slicedToArray;
-
-/***/ }),
-/* 14 */,
-/* 15 */,
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var arrayWithoutHoles = __webpack_require__(26);
-
-var iterableToArray = __webpack_require__(27);
-
-var nonIterableSpread = __webpack_require__(28);
-
-function _toConsumableArray(arr) {
-  return arrayWithoutHoles(arr) || iterableToArray(arr) || nonIterableSpread();
-}
-
-module.exports = _toConsumableArray;
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports) {
-
+;// CONCATENATED MODULE: ../node_modules/@babel/runtime/helpers/esm/typeof.js
 function _typeof(obj) {
   "@babel/helpers - typeof";
 
   if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-    module.exports = _typeof = function _typeof(obj) {
+    _typeof = function _typeof(obj) {
       return typeof obj;
     };
   } else {
-    module.exports = _typeof = function _typeof(obj) {
+    _typeof = function _typeof(obj) {
       return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
     };
   }
 
   return _typeof(obj);
 }
+;// CONCATENATED MODULE: ../node_modules/@babel/runtime/helpers/esm/possibleConstructorReturn.js
 
-module.exports = _typeof;
 
-/***/ }),
-/* 18 */
-/***/ (function(module, exports) {
+function _possibleConstructorReturn(self, call) {
+  if (call && (_typeof(call) === "object" || typeof call === "function")) {
+    return call;
+  }
 
-function _setPrototypeOf(o, p) {
-  module.exports = _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-    o.__proto__ = p;
-    return o;
-  };
-
-  return _setPrototypeOf(o, p);
+  return _assertThisInitialized(self);
 }
-
-module.exports = _setPrototypeOf;
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || new Function("return this")();
-} catch (e) {
-	// This works if the window reference is available
-	if (typeof window === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 20 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(setImmediate) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getLanguage; });
-/* unused harmony export Table */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return tableRenderMap; });
-/* harmony import */ var _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
-/* harmony import */ var _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(16);
-/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(10);
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(11);
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(12);
-/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(0);
-/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(2);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(1);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var immutable__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(4);
-/* harmony import */ var immutable__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(immutable__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var _languages__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(21);
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(7);
-/* harmony import */ var braft_editor__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(39);
-/* harmony import */ var braft_editor__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(braft_editor__WEBPACK_IMPORTED_MODULE_13__);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var getIndexFromEvent = function getIndexFromEvent(event) {
-  var ignoredTarget = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-
-  if (!isNaN(event)) {
-    return event * 1;
-  } else if (ignoredTarget && event && event.target && event.target.dataset.role === ignoredTarget) {
-    return false;
-  } else if (event && event.currentTarget && event.currentTarget.dataset.index) {
-    return event.currentTarget.dataset.index * 1;
-  }
-
-  return false;
-};
-
-var getLanguage = function getLanguage(editor) {
-  var lang = editor.editorProps.language;
-
-  if (typeof lang === 'function') {
-    return lang(_languages__WEBPACK_IMPORTED_MODULE_11__[/* default */ "a"], 'braft-table');
-  } else {
-    return _languages__WEBPACK_IMPORTED_MODULE_11__[/* default */ "a"][lang] || _languages__WEBPACK_IMPORTED_MODULE_11__[/* default */ "a"]['zh'];
-  }
-};
-var Table =
-/*#__PURE__*/
-function (_React$Component) {
-  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6___default()(Table, _React$Component);
-
-  function Table(props) {
-    var _this;
-
-    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2___default()(this, Table);
-
-    _this = _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(Table).call(this, props));
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "state", {
-      tableRows: [],
-      colToolHandlers: [],
-      rowToolHandlers: [],
-      defaultColWidth: 0,
-      colResizing: false,
-      colResizeOffset: 0,
-      selectedCells: [],
-      selectedRowIndex: -1,
-      selectedColumnIndex: -1,
-      setFirstRowAsHead: false,
-      dragSelecting: false,
-      draggingRectBounding: null,
-      cellsMergeable: false,
-      cellSplittable: false,
-      contextMenuPosition: null
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__tableRef", null);
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__colRefs", {});
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__rowRefs", {});
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__colResizeIndex", 0);
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__colResizeStartAt", 0);
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__startCellKey", null);
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__endCellKey", null);
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__dragSelecting", false);
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__dragSelected", false);
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__dragSelectingStartColumnIndex", null);
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__dragSelectingStartRowIndex", null);
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__dragSelectingEndColumnIndex", null);
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__dragSelectingEndRowIndex", null);
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__draggingRectBoundingUpdating", false);
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "__selectedCellsCleared", false);
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "handleToolbarMouseDown", function (event) {
-      event.preventDefault();
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "handleKeyDown", function (event) {
-      if (event.keyCode === 8) {
-        var _this$state = _this.state,
-            selectedColumnIndex = _this$state.selectedColumnIndex,
-            selectedRowIndex = _this$state.selectedRowIndex;
-
-        if (selectedColumnIndex > -1) {
-          _this.removeColumn();
-
-          event.preventDefault();
-        } else if (selectedRowIndex > -1) {
-          _this.removeRow();
-
-          event.preventDefault();
-        }
-      }
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "handleMouseUp", function (event) {
-      if (event.button !== 0) {
-        return false;
-      }
-
-      if (_this.state.colResizing) {
-        var _this$state2 = _this.state,
-            defaultColWidth = _this$state2.defaultColWidth,
-            colToolHandlers = _this$state2.colToolHandlers,
-            colResizeOffset = _this$state2.colResizeOffset;
-
-        var nextColToolHandlers = _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1___default()(colToolHandlers);
-
-        nextColToolHandlers[_this.__colResizeIndex - 1].width = (nextColToolHandlers[_this.__colResizeIndex - 1].width || defaultColWidth) + colResizeOffset;
-        nextColToolHandlers[_this.__colResizeIndex].width = (nextColToolHandlers[_this.__colResizeIndex].width || defaultColWidth) - colResizeOffset;
-        _this.__colResizeIndex = 0;
-        _this.__colResizeStartAt = 0;
-
-        _this.setState({
-          contextMenuPosition: null,
-          colToolHandlers: nextColToolHandlers,
-          colResizeOffset: 0,
-          colResizing: false
-        }, function () {
-          _this.renderCells();
-
-          _this.updateCellsData({
-            colgroupData: nextColToolHandlers.map(function (item) {
-              return {
-                width: item.width
-              };
-            })
-          });
-        });
-      } else {
-        _this.setState({
-          contextMenuPosition: null
-        });
-      }
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "handleMouseMove", function (event) {
-      if (_this.state.colResizing) {
-        _this.setState({
-          colResizeOffset: _this.getResizeOffset(event.clientX - _this.__colResizeStartAt)
-        });
-      }
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "handleColResizerMouseDown", function (event) {
-      _this.__colResizeIndex = event.currentTarget.dataset.index * 1;
-      _this.__colResizeStartAt = event.clientX;
-
-      _this.setState({
-        colResizing: true
-      });
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "handleCellContexrMenu", function (event) {
-      var selectedCells = _this.state.selectedCells;
-      var cellKey = event.currentTarget.dataset.cellKey;
-
-      if (!~selectedCells.indexOf(cellKey)) {
-        _this.selectCell(event);
-      }
-
-      var _this$__tableRef$getB = _this.__tableRef.getBoundingClientRect(),
-          tableTop = _this$__tableRef$getB.top,
-          tableLeft = _this$__tableRef$getB.left,
-          tableWidth = _this$__tableRef$getB.width;
-
-      var top = event.clientY - tableTop + 15;
-      var left = event.clientX - tableLeft + 10;
-
-      if (left + 150 > tableWidth) {
-        left = tableWidth - 150;
-      }
-
-      _this.setState({
-        contextMenuPosition: {
-          top: top,
-          left: left
-        }
-      });
-
-      event.preventDefault();
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "handleContextMenuContextMenu", function (event) {
-      event.preventDefault();
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "handleCellMouseDown", function (event) {
-      if (_this.state.colResizing) {
-        event.preventDefault();
-        event.stopPropagation();
-        return false;
-      }
-
-      _this.__dragSelecting = true;
-      _this.__dragSelectingStartColumnIndex = event.currentTarget.dataset.colIndex;
-      _this.__dragSelectingStartRowIndex = event.currentTarget.dataset.rowIndex;
-      _this.__draggingStartPoint = {
-        x: event.clientX,
-        y: event.clientY
-      };
-
-      _this.setState({
-        dragSelecting: true
-      });
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "handleCellMouseUp", function () {
-      _this.__dragSelecting = false;
-      _this.__dragSelected = false;
-      _this.__dragSelectingStartColumnIndex = null;
-      _this.__dragSelectingStartRowIndex = null;
-      _this.__dragSelectingEndColumnIndex = null;
-      _this.__dragSelectingEndRowIndex = null;
-
-      _this.setState({
-        dragSelecting: false,
-        draggingRectBounding: null
-      });
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "handleCellMouseEnter", function (event) {
-      if (_this.__dragSelecting) {
-        _this.__dragSelectingEndColumnIndex = event.currentTarget.dataset.colIndex;
-        _this.__dragSelectingEndRowIndex = event.currentTarget.dataset.rowIndex;
-
-        if (_this.__dragSelectingEndColumnIndex !== _this.__dragSelectingStartColumnIndex || _this.__dragSelectingEndRowIndex !== _this.__dragSelectingStartRowIndex) {
-          _this.__dragSelected = true;
-          event.preventDefault();
-        } else {
-          _this.__dragSelected = false;
-        }
-
-        _this.confirmDragSelecting();
-      }
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "handleTableMouseMove", function (event) {
-      if (_this.__dragSelecting && _this.__dragSelected) {
-        _this.updateDraggingRectBounding(event);
-
-        event.preventDefault();
-      }
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "handleTableMouseLeave", function (event) {
-      if (_this.__dragSelecting && event.currentTarget && event.currentTarget.dataset.role === 'table') {
-        _this.handleCellMouseUp();
-      }
-
-      event.preventDefault();
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "confirmDragSelecting", function () {
-      if (!_this.__dragSelectingStartColumnIndex || !_this.__dragSelectingStartRowIndex || !_this.__dragSelectingEndColumnIndex || !_this.__dragSelectingEndRowIndex) {
-        return false;
-      }
-
-      var _TableUtils$getCellsI = _utils__WEBPACK_IMPORTED_MODULE_12__["getCellsInsideRect"](_this.props.editorState, _this.tableKey, [_this.__dragSelectingStartColumnIndex, _this.__dragSelectingStartRowIndex], [_this.__dragSelectingEndColumnIndex, _this.__dragSelectingEndRowIndex]),
-          selectedCells = _TableUtils$getCellsI.cellKeys,
-          spannedCellBlockKeys = _TableUtils$getCellsI.spannedCellBlockKeys;
-
-      if (selectedCells.length < 2) {
-        return false;
-      }
-
-      _this.setState({
-        selectedColumnIndex: -1,
-        selectedRowIndex: -1,
-        cellsMergeable: spannedCellBlockKeys.length === 0,
-        cellSplittable: false,
-        selectedCells: selectedCells
-      }, _this.renderCells);
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "updateDraggingRectBounding", function (mouseEvent) {
-      if (_this.__draggingRectBoundingUpdating || !_this.__dragSelecting) {
-        return false;
-      }
-
-      _this.__draggingRectBoundingUpdating = true;
-
-      var tableBounding = _this.__tableRef.getBoundingClientRect();
-
-      var _this$__draggingStart = _this.__draggingStartPoint,
-          startX = _this$__draggingStart.x,
-          startY = _this$__draggingStart.y;
-      var currentX = mouseEvent.clientX,
-          currentY = mouseEvent.clientY;
-      var draggingRectBounding = {};
-
-      if (currentX <= startX) {
-        draggingRectBounding.right = tableBounding.left + tableBounding.width - startX;
-      } else {
-        draggingRectBounding.left = startX - tableBounding.left + 9;
-      }
-
-      if (currentY <= startY) {
-        draggingRectBounding.bottom = tableBounding.top + tableBounding.height - startY;
-      } else {
-        draggingRectBounding.top = startY - tableBounding.top + 9;
-      }
-
-      draggingRectBounding.width = Math.abs(currentX - startX);
-      draggingRectBounding.height = Math.abs(currentY - startY);
-
-      _this.setState({
-        draggingRectBounding: draggingRectBounding
-      }, function () {
-        setTimeout(function () {
-          _this.__draggingRectBoundingUpdating = false;
-        }, 100);
-      });
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "selectCell", function (event) {
-      var selectedCells = _this.state.selectedCells;
-      var cellKey = event.currentTarget.dataset.cellKey;
-      var _event$currentTarget = event.currentTarget,
-          colSpan = _event$currentTarget.colSpan,
-          rowSpan = _event$currentTarget.rowSpan;
-      var nextSelectedCells = ~selectedCells.indexOf(cellKey) ? [] : [cellKey];
-      var cellSplittable = nextSelectedCells.length && (colSpan > 1 || rowSpan > 1);
-
-      _this.setState({
-        selectedCells: nextSelectedCells,
-        cellSplittable: cellSplittable,
-        cellsMergeable: false,
-        selectedRowIndex: -1,
-        selectedColumnIndex: -1
-      }, _this.renderCells);
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "selectColumn", function (event) {
-      var selectedColumnIndex = getIndexFromEvent(event, 'insert-column');
-
-      if (selectedColumnIndex === false) {
-        return false;
-      }
-
-      if (_this.state.selectedColumnIndex === selectedColumnIndex) {
-        _this.setState({
-          selectedCells: [],
-          cellsMergeable: false,
-          cellSplittable: false,
-          selectedColumnIndex: -1
-        }, _this.renderCells);
-
-        return false;
-      }
-
-      var _TableUtils$getCellsI2 = _utils__WEBPACK_IMPORTED_MODULE_12__["getCellsInsideRect"](_this.props.editorState, _this.tableKey, [selectedColumnIndex, 0], [selectedColumnIndex, _this.state.rowToolHandlers.length - 1]),
-          selectedCells = _TableUtils$getCellsI2.cellKeys,
-          spannedCellBlockKeys = _TableUtils$getCellsI2.spannedCellBlockKeys;
-
-      _this.setState({
-        selectedColumnIndex: selectedColumnIndex,
-        selectedRowIndex: -1,
-        cellSplittable: false,
-        cellsMergeable: spannedCellBlockKeys.length === 0,
-        selectedCells: selectedCells
-      }, _this.renderCells);
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "selectRow", function (event) {
-      var selectedRowIndex = getIndexFromEvent(event, 'insert-row');
-
-      if (selectedRowIndex === false) {
-        return false;
-      }
-
-      if (_this.state.selectedRowIndex === selectedRowIndex) {
-        _this.setState({
-          selectedCells: [],
-          cellsMergeable: false,
-          cellSplittable: false,
-          selectedRowIndex: -1
-        }, _this.renderCells);
-
-        return false;
-      }
-
-      var _TableUtils$getCellsI3 = _utils__WEBPACK_IMPORTED_MODULE_12__["getCellsInsideRect"](_this.props.editorState, _this.tableKey, [0, selectedRowIndex], [_this.state.colToolHandlers.length, selectedRowIndex]),
-          selectedCells = _TableUtils$getCellsI3.cellKeys,
-          spannedCellBlockKeys = _TableUtils$getCellsI3.spannedCellBlockKeys;
-
-      _this.setState({
-        selectedColumnIndex: -1,
-        selectedRowIndex: selectedRowIndex,
-        cellSplittable: false,
-        cellsMergeable: spannedCellBlockKeys.length === 0,
-        selectedCells: selectedCells
-      }, _this.renderCells);
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "insertColumn", function (event) {
-      var columnIndex = getIndexFromEvent(event);
-
-      if (columnIndex === false) {
-        return false;
-      }
-
-      var nextColToolHandlers = _this.state.colToolHandlers.map(function (item) {
-        return _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({}, item, {
-          width: 0
-        });
-      });
-
-      _this.setState({
-        selectedCells: [],
-        selectedRowIndex: -1,
-        selectedColumnIndex: -1,
-        colToolHandlers: nextColToolHandlers
-      }, function () {
-        _this.props.editor.setValue(_utils__WEBPACK_IMPORTED_MODULE_12__["insertColumn"](_this.props.editorState, _this.tableKey, _this.state.tableRows.length, columnIndex, nextColToolHandlers));
-      });
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "removeColumn", function () {
-      var selectedColumnIndex = _this.state.selectedColumnIndex;
-
-      var nextColToolHandlers = _this.state.colToolHandlers.map(function (item) {
-        return _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({}, item, {
-          width: 0
-        });
-      });
-
-      if (selectedColumnIndex >= 0) {
-        _this.setState({
-          selectedColumnIndex: -1,
-          colToolHandlers: nextColToolHandlers
-        }, function () {
-          _this.props.editor.draftInstance.blur();
-
-          setImmediate(function () {
-            var result = _utils__WEBPACK_IMPORTED_MODULE_12__["removeColumn"](_this.props.editorState, _this.tableKey, selectedColumnIndex, nextColToolHandlers);
-
-            _this.props.editor.setValue(_this.validateContent(result));
-          });
-        });
-      }
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "insertRow", function (event) {
-      var rowIndex = getIndexFromEvent(event);
-
-      if (rowIndex === false) {
-        return false;
-      }
-
-      _this.setState({
-        selectedCells: [],
-        selectedRowIndex: -1,
-        selectedColumnIndex: -1
-      }, function () {
-        _this.props.editor.setValue(_utils__WEBPACK_IMPORTED_MODULE_12__["insertRow"](_this.props.editorState, _this.tableKey, _this.colLength, rowIndex));
-      });
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "validateContent", function (editorState) {
-      var len = editorState.toRAW(true).blocks.length;
-      return len ? editorState : braft_editor__WEBPACK_IMPORTED_MODULE_13___default.a.createEditorState(null);
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "removeRow", function () {
-      var selectedRowIndex = _this.state.selectedRowIndex;
-
-      if (selectedRowIndex >= 0) {
-        _this.setState({
-          selectedRowIndex: -1
-        }, function () {
-          _this.props.editor.draftInstance.blur();
-
-          setImmediate(function () {
-            var result = _utils__WEBPACK_IMPORTED_MODULE_12__["removeRow"](_this.props.editorState, _this.tableKey, selectedRowIndex);
-
-            _this.props.editor.setValue(_this.validateContent(result));
-          });
-        });
-      }
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "mergeCells", function () {
-      var _this$state3 = _this.state,
-          selectedCells = _this$state3.selectedCells,
-          cellsMergeable = _this$state3.cellsMergeable;
-
-      if (cellsMergeable && selectedCells.length > 1) {
-        _this.setState({
-          selectedCells: [selectedCells[0]],
-          cellSplittable: true,
-          cellsMergeable: false,
-          selectedRowIndex: -1,
-          selectedColumnIndex: -1
-        }, function () {
-          _this.props.editor.setValue(_utils__WEBPACK_IMPORTED_MODULE_12__["mergeCells"](_this.props.editorState, _this.tableKey, selectedCells));
-        });
-      }
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "splitCell", function () {
-      var _this$state4 = _this.state,
-          selectedCells = _this$state4.selectedCells,
-          cellSplittable = _this$state4.cellSplittable;
-
-      if (cellSplittable && selectedCells.length === 1) {
-        _this.setState({
-          cellSplittable: false,
-          cellsMergeable: false,
-          selectedRowIndex: -1,
-          selectedColumnIndex: -1
-        }, function () {
-          _this.props.editor.setValue(_utils__WEBPACK_IMPORTED_MODULE_12__["splitCell"](_this.props.editorState, _this.tableKey, selectedCells[0]));
-        });
-      }
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7___default()(_this)), "removeTable", function () {
-      _this.props.editor.setValue(_utils__WEBPACK_IMPORTED_MODULE_12__["removeTable"](_this.props.editorState, _this.tableKey));
-    });
-
-    _this.language = getLanguage(props.editor);
-    return _this;
-  }
-
-  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3___default()(Table, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      this.renderCells(this.props);
-      document.body.addEventListener('keydown', this.handleKeyDown, false);
-      document.body.addEventListener('mousemove', this.handleMouseMove, false);
-      document.body.addEventListener('mouseup', this.handleMouseUp, false);
-    }
-  }, {
-    key: "componentWillReceiveProps",
-    value: function componentWillReceiveProps(nextProps) {
-      this.renderCells(nextProps);
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      document.body.removeEventListener('keydown', this.handleKeyDown, false);
-      document.body.removeEventListener('mousemove', this.handleMouseMove, false);
-      document.body.removeEventListener('mouseup', this.handleMouseUp, false);
-    }
-  }, {
-    key: "getResizeOffset",
-    value: function getResizeOffset(offset) {
-      var leftLimit = 0;
-      var rightLimit = 0;
-      var _this$state5 = this.state,
-          colToolHandlers = _this$state5.colToolHandlers,
-          defaultColWidth = _this$state5.defaultColWidth;
-      leftLimit = -1 * ((colToolHandlers[this.__colResizeIndex - 1].width || defaultColWidth) - 30);
-      rightLimit = (colToolHandlers[this.__colResizeIndex].width || defaultColWidth) - 30;
-      offset = offset < leftLimit ? leftLimit : offset;
-      offset = offset > rightLimit ? rightLimit : offset;
-      return offset;
-    }
-  }, {
-    key: "adjustToolbarHandlers",
-    value: function adjustToolbarHandlers() {
-      var _this2 = this;
-
-      var needUpdate = false;
-
-      var rowToolHandlers = _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1___default()(this.state.rowToolHandlers);
-
-      Object.keys(this.__rowRefs).forEach(function (index) {
-        var rowHeight = _this2.__rowRefs[index] ? _this2.__rowRefs[index].getBoundingClientRect().height : 40;
-
-        if (rowToolHandlers[index] && rowToolHandlers[index].height !== rowHeight) {
-          needUpdate = true;
-          rowToolHandlers[index].height = rowHeight;
-        }
-      });
-
-      if (needUpdate) {
-        this.setState({
-          rowToolHandlers: rowToolHandlers
-        });
-      }
-    }
-  }, {
-    key: "updateCellsData",
-    value: function updateCellsData(blockData) {
-      this.props.editor.setValue(_utils__WEBPACK_IMPORTED_MODULE_12__["updateAllTableBlocks"](this.props.editorState, this.tableKey, blockData));
-    }
-  }, {
-    key: "renderCells",
-    value: function renderCells(props) {
-      var _this3 = this;
-
-      props = props || this.props;
-      this.colLength = 0;
-      var tableRows = [];
-      var colToolHandlers = [];
-      var rowToolHandlers = [];
-      var _props = props,
-          editorState = _props.editorState,
-          children = _props.children;
-
-      var tableWidth = this.__tableRef.getBoundingClientRect().width;
-
-      this.__startCellKey = children[0].key;
-      this.__endCellKey = children[children.length - 1].key;
-      children.forEach(function (cell, cellIndex) {
-        var cellBlock = editorState.getCurrentContent().getBlockForKey(cell.key);
-        var cellBlockData = cellBlock.getData();
-        var tableKey = cellBlockData.get('tableKey');
-        var colIndex = cellBlockData.get('colIndex') * 1;
-        var rowIndex = cellBlockData.get('rowIndex') * 1;
-        var colSpan = cellBlockData.get('colSpan');
-        var rowSpan = cellBlockData.get('rowSpan');
-        _this3.tableKey = tableKey;
-
-        if (rowIndex === 0) {
-          var colgroupData = cellBlockData.get('colgroupData') || [];
-          var totalColgroupWidth = colgroupData.reduce(function (width, col) {
-            return width + col.width * 1;
-          }, 0);
-
-          var _colSpan = (cellBlockData.get('colSpan') || 1) * 1;
-
-          for (var ii = _this3.colLength; ii < _this3.colLength + _colSpan; ii++) {
-            colToolHandlers[ii] = {
-              key: cell.key,
-              width: _this3.state.colToolHandlers[ii] ? _this3.state.colToolHandlers[ii].width : colgroupData[ii] ? colgroupData[ii].width / totalColgroupWidth * tableWidth * 1 : 0
-            };
-          }
-
-          _this3.colLength += _colSpan;
-        }
-
-        var newCell = react__WEBPACK_IMPORTED_MODULE_9___default.a.cloneElement(cell, {
-          'data-active': !!~_this3.state.selectedCells.indexOf(cell.key),
-          'data-row-index': rowIndex,
-          'data-col-index': colIndex || (tableRows[rowIndex] || []).length,
-          'data-cell-index': cellIndex,
-          'data-cell-key': cell.key,
-          'data-table-key': tableKey,
-          className: "bf-table-cell ".concat(cell.props.className),
-          colSpan: colSpan,
-          rowSpan: rowSpan,
-          onClick: _this3.selectCell,
-          onContextMenu: _this3.handleCellContexrMenu,
-          onMouseDown: _this3.handleCellMouseDown,
-          onMouseUp: _this3.handleCellMouseUp,
-          onMouseEnter: _this3.handleCellMouseEnter
-        });
-
-        for (var jj = rowIndex; jj < rowIndex + rowSpan; jj++) {
-          rowToolHandlers[jj] = {
-            key: cell.key,
-            height: 0
-          };
-          tableRows[jj] = tableRows[jj] || [];
-        }
-
-        if (!tableRows[rowIndex]) {
-          tableRows[rowIndex] = [newCell];
-        } else {
-          tableRows[rowIndex].push(newCell);
-        }
-      });
-      var defaultColWidth = tableWidth / this.colLength;
-      this.setState({
-        tableRows: tableRows,
-        colToolHandlers: colToolHandlers,
-        rowToolHandlers: rowToolHandlers,
-        defaultColWidth: defaultColWidth
-      }, this.adjustToolbarHandlers);
-    }
-  }, {
-    key: "createColGroup",
-    value: function createColGroup() {
-      var _this4 = this;
-
-      return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("colgroup", null, this.state.colToolHandlers.map(function (item, index) {
-        return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("col", {
-          ref: function ref(_ref) {
-            return _this4.__colRefs[index] = _ref;
-          },
-          width: item.width || _this4.state.defaultColWidth,
-          key: index
-        });
-      }));
-    }
-  }, {
-    key: "createColTools",
-    value: function createColTools() {
-      var _this5 = this;
-
-      var _this$state6 = this.state,
-          colResizing = _this$state6.colResizing,
-          colResizeOffset = _this$state6.colResizeOffset,
-          colToolHandlers = _this$state6.colToolHandlers,
-          selectedColumnIndex = _this$state6.selectedColumnIndex,
-          defaultColWidth = _this$state6.defaultColWidth;
-      return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
-        "data-active": selectedColumnIndex >= 0,
-        contentEditable: false,
-        "data-key": "bf-col-toolbar",
-        className: "bf-table-col-tools".concat(colResizing ? ' resizing' : ''),
-        onMouseDown: this.handleToolbarMouseDown
-      }, colToolHandlers.map(function (item, index) {
-        return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
-          key: index,
-          "data-key": item.key,
-          "data-index": index,
-          "data-active": selectedColumnIndex == index,
-          className: "bf-col-tool-handler",
-          style: {
-            width: item.width || defaultColWidth
-          },
-          onClick: _this5.selectColumn
-        }, _this5.props.columnResizable && index !== 0 ? react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
-          "data-index": index,
-          "data-key": item.key,
-          className: "bf-col-resizer".concat(colResizing && _this5.__colResizeIndex === index ? ' active' : ''),
-          style: colResizing && _this5.__colResizeIndex === index ? {
-            transform: "translateX(".concat(colResizeOffset, "px)")
-          } : null,
-          onMouseDown: _this5.handleColResizerMouseDown
-        }) : null, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
-          className: "bf-col-tool-left"
-        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
-          "data-index": index,
-          "data-role": "insert-column",
-          className: "bf-insert-col-before",
-          onClick: _this5.insertColumn
-        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("i", {
-          className: "bfi-add"
-        }))), react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
-          className: "bf-col-tool-center"
-        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
-          "data-index": index,
-          "data-role": "remove-col",
-          className: "bf-remove-col",
-          onClick: _this5.removeColumn
-        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("i", {
-          className: "bfi-bin"
-        }))), react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
-          className: "bf-col-tool-right"
-        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
-          "data-index": index + 1,
-          "data-role": "insert-column",
-          className: "bf-insert-col-after",
-          onClick: _this5.insertColumn
-        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("i", {
-          className: "bfi-add"
-        }))));
-      }));
-    }
-  }, {
-    key: "createRowTools",
-    value: function createRowTools() {
-      var _this6 = this;
-
-      var _this$state7 = this.state,
-          rowToolHandlers = _this$state7.rowToolHandlers,
-          selectedRowIndex = _this$state7.selectedRowIndex;
-      return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
-        "data-active": selectedRowIndex >= 0,
-        contentEditable: false,
-        className: "bf-table-row-tools",
-        onMouseDown: this.handleToolbarMouseDown
-      }, rowToolHandlers.map(function (item, index) {
-        return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
-          key: index,
-          "data-key": item.key,
-          "data-index": index,
-          "data-active": selectedRowIndex == index,
-          className: "bf-row-tool-handler",
-          style: {
-            height: item.height
-          },
-          onClick: _this6.selectRow
-        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
-          className: "bf-row-tool-up"
-        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
-          "data-index": index,
-          "data-role": "insert-row",
-          className: "bf-insert-row-before",
-          onClick: _this6.insertRow
-        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("i", {
-          className: "bfi-add"
-        }))), react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
-          className: "bf-row-tool-center"
-        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
-          "data-index": index,
-          "data-role": "remove-row",
-          className: "bf-remove-row",
-          onClick: _this6.removeRow
-        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("i", {
-          className: "bfi-bin"
-        }))), react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
-          className: "bf-row-tool-down"
-        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
-          "data-index": index + 1,
-          "data-role": "insert-row",
-          className: "bf-insert-row-after",
-          onClick: _this6.insertRow
-        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("i", {
-          className: "bfi-add"
-        }))));
-      }));
-    }
-  }, {
-    key: "createContextMenu",
-    value: function createContextMenu() {
-      var _this$state8 = this.state,
-          cellsMergeable = _this$state8.cellsMergeable,
-          cellSplittable = _this$state8.cellSplittable,
-          contextMenuPosition = _this$state8.contextMenuPosition;
-
-      if (!contextMenuPosition) {
-        return null;
-      }
-
-      return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
-        className: "bf-table-context-menu",
-        onContextMenu: this.handleContextMenuContextMenu,
-        contentEditable: false,
-        style: contextMenuPosition
-      }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
-        className: "context-menu-item",
-        onMouseDown: this.mergeCells,
-        "data-disabled": !cellsMergeable
-      }, this.language.mergeCells), react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
-        className: "context-menu-item",
-        onMouseDown: this.splitCell,
-        "data-disabled": !cellSplittable
-      }, this.language.splitCell), react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
-        className: "context-menu-item",
-        onMouseDown: this.removeTable
-      }, this.language.removeTable));
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this7 = this;
-
-      var _this$state9 = this.state,
-          tableRows = _this$state9.tableRows,
-          dragSelecting = _this$state9.dragSelecting,
-          draggingRectBounding = _this$state9.draggingRectBounding;
-      var readOnly = this.props.editor.props.readOnly;
-      return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
-        className: "bf-table-container"
-      }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("table", {
-        "data-role": "table",
-        className: "bf-table".concat(dragSelecting ? ' dragging' : ''),
-        ref: function ref(_ref3) {
-          return _this7.__tableRef = _ref3;
-        },
-        onMouseDown: this.handleTableMouseDown,
-        onMouseUp: this.hanldeTableMouseUp,
-        onMouseMove: this.handleTableMouseMove,
-        onMouseLeave: this.handleTableMouseLeave
-      }, this.createColGroup(), react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("tbody", null, tableRows.map(function (cells, rowIndex) {
-        return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("tr", {
-          ref: function ref(_ref2) {
-            return _this7.__rowRefs[rowIndex] = _ref2;
-          },
-          key: rowIndex
-        }, cells);
-      }))), dragSelecting ? react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", {
-        className: "dragging-rect",
-        style: draggingRectBounding
-      }) : null, !readOnly && this.createContextMenu(), !readOnly && this.createColTools(), !readOnly && this.createRowTools());
-    }
-  }]);
-
-  return Table;
-}(react__WEBPACK_IMPORTED_MODULE_9___default.a.Component);
-var tableRenderMap = function tableRenderMap(options) {
-  return function (props) {
-    return immutable__WEBPACK_IMPORTED_MODULE_10___default.a.Map({
-      'table-cell': {
-        element: 'td',
-        wrapper: react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement(Table, {
-          columnResizable: options.columnResizable,
-          editor: props.editor,
-          editorState: props.editorState
-        })
-      }
-    });
+;// CONCATENATED MODULE: ../node_modules/@babel/runtime/helpers/esm/getPrototypeOf.js
+function _getPrototypeOf(o) {
+  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
   };
-};
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(49).setImmediate))
-
-/***/ }),
-/* 21 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
+  return _getPrototypeOf(o);
+}
+;// CONCATENATED MODULE: ./table/languages.js
 var zh = {
   'rows': '行数',
   'columns': '列数',
@@ -2108,7 +1255,7 @@ var nl = {
   'mergeCells': 'Samenvoegen cellen',
   'splitCell': 'Split cell'
 };
-/* harmony default export */ __webpack_exports__["a"] = ({
+/* harmony default export */ const languages = ({
   zh: zh,
   zhHant: zhHant,
   en: en,
@@ -2118,866 +1265,986 @@ var nl = {
   pt_br: pt_br,
   nl: nl
 });
+// EXTERNAL MODULE: external "braft-editor"
+var external_braft_editor_ = __webpack_require__(163);
+var external_braft_editor_default = /*#__PURE__*/__webpack_require__.n(external_braft_editor_);
+;// CONCATENATED MODULE: ./table/render.jsx
 
-/***/ }),
-/* 22 */,
-/* 23 */
-/***/ (function(module, exports) {
 
-function _arrayWithHoles(arr) {
-  if (Array.isArray(arr)) return arr;
-}
 
-module.exports = _arrayWithHoles;
 
-/***/ }),
-/* 24 */
-/***/ (function(module, exports) {
 
-function _iterableToArrayLimit(arr, i) {
-  if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {
-    return;
+
+
+
+
+function render_ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function render_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { render_ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { render_ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+
+
+
+
+
+
+var getIndexFromEvent = function getIndexFromEvent(event) {
+  var ignoredTarget = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+
+  if (!isNaN(event)) {
+    return event * 1;
+  } else if (ignoredTarget && event && event.target && event.target.dataset.role === ignoredTarget) {
+    return false;
+  } else if (event && event.currentTarget && event.currentTarget.dataset.index) {
+    return event.currentTarget.dataset.index * 1;
   }
 
-  var _arr = [];
-  var _n = true;
-  var _d = false;
-  var _e = undefined;
-
-  try {
-    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-      _arr.push(_s.value);
-
-      if (i && _arr.length === i) break;
-    }
-  } catch (err) {
-    _d = true;
-    _e = err;
-  } finally {
-    try {
-      if (!_n && _i["return"] != null) _i["return"]();
-    } finally {
-      if (_d) throw _e;
-    }
-  }
-
-  return _arr;
-}
-
-module.exports = _iterableToArrayLimit;
-
-/***/ }),
-/* 25 */
-/***/ (function(module, exports) {
-
-function _nonIterableRest() {
-  throw new TypeError("Invalid attempt to destructure non-iterable instance");
-}
-
-module.exports = _nonIterableRest;
-
-/***/ }),
-/* 26 */
-/***/ (function(module, exports) {
-
-function _arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {
-      arr2[i] = arr[i];
-    }
-
-    return arr2;
-  }
-}
-
-module.exports = _arrayWithoutHoles;
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports) {
-
-function _iterableToArray(iter) {
-  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
-}
-
-module.exports = _iterableToArray;
-
-/***/ }),
-/* 28 */
-/***/ (function(module, exports) {
-
-function _nonIterableSpread() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance");
-}
-
-module.exports = _nonIterableSpread;
-
-/***/ }),
-/* 29 */,
-/* 30 */,
-/* 31 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 32 */,
-/* 33 */,
-/* 34 */,
-/* 35 */,
-/* 36 */,
-/* 37 */,
-/* 38 */,
-/* 39 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE__39__;
-
-/***/ }),
-/* 40 */,
-/* 41 */,
-/* 42 */,
-/* 43 */,
-/* 44 */,
-/* 45 */,
-/* 46 */,
-/* 47 */,
-/* 48 */,
-/* 49 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
-            (typeof self !== "undefined" && self) ||
-            window;
-var apply = Function.prototype.apply;
-
-// DOM APIs, for completeness
-
-exports.setTimeout = function() {
-  return new Timeout(apply.call(setTimeout, scope, arguments), clearTimeout);
+  return false;
 };
-exports.setInterval = function() {
-  return new Timeout(apply.call(setInterval, scope, arguments), clearInterval);
-};
-exports.clearTimeout =
-exports.clearInterval = function(timeout) {
-  if (timeout) {
-    timeout.close();
+
+var getLanguage = function getLanguage(editor) {
+  var lang = editor.editorProps.language;
+
+  if (typeof lang === 'function') {
+    return lang(languages, 'braft-table');
+  } else {
+    return languages[lang] || languages.zh;
   }
 };
+var Table = /*#__PURE__*/function (_React$Component) {
+  _inherits(Table, _React$Component);
 
-function Timeout(id, clearFn) {
-  this._id = id;
-  this._clearFn = clearFn;
-}
-Timeout.prototype.unref = Timeout.prototype.ref = function() {};
-Timeout.prototype.close = function() {
-  this._clearFn.call(scope, this._id);
-};
+  var _super = _createSuper(Table);
 
-// Does not start the time, just sets up the members needed.
-exports.enroll = function(item, msecs) {
-  clearTimeout(item._idleTimeoutId);
-  item._idleTimeout = msecs;
-};
-
-exports.unenroll = function(item) {
-  clearTimeout(item._idleTimeoutId);
-  item._idleTimeout = -1;
-};
-
-exports._unrefActive = exports.active = function(item) {
-  clearTimeout(item._idleTimeoutId);
-
-  var msecs = item._idleTimeout;
-  if (msecs >= 0) {
-    item._idleTimeoutId = setTimeout(function onTimeout() {
-      if (item._onTimeout)
-        item._onTimeout();
-    }, msecs);
-  }
-};
-
-// setimmediate attaches itself to the global object
-__webpack_require__(50);
-// On some exotic environments, it's not clear which object `setimmediate` was
-// able to install onto.  Search each possibility in the same order as the
-// `setimmediate` library.
-exports.setImmediate = (typeof self !== "undefined" && self.setImmediate) ||
-                       (typeof global !== "undefined" && global.setImmediate) ||
-                       (this && this.setImmediate);
-exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
-                         (typeof global !== "undefined" && global.clearImmediate) ||
-                         (this && this.clearImmediate);
-
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19)))
-
-/***/ }),
-/* 50 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
-    "use strict";
-
-    if (global.setImmediate) {
-        return;
-    }
-
-    var nextHandle = 1; // Spec says greater than zero
-    var tasksByHandle = {};
-    var currentlyRunningATask = false;
-    var doc = global.document;
-    var registerImmediate;
-
-    function setImmediate(callback) {
-      // Callback can either be a function or a string
-      if (typeof callback !== "function") {
-        callback = new Function("" + callback);
-      }
-      // Copy function arguments
-      var args = new Array(arguments.length - 1);
-      for (var i = 0; i < args.length; i++) {
-          args[i] = arguments[i + 1];
-      }
-      // Store and register the task
-      var task = { callback: callback, args: args };
-      tasksByHandle[nextHandle] = task;
-      registerImmediate(nextHandle);
-      return nextHandle++;
-    }
-
-    function clearImmediate(handle) {
-        delete tasksByHandle[handle];
-    }
-
-    function run(task) {
-        var callback = task.callback;
-        var args = task.args;
-        switch (args.length) {
-        case 0:
-            callback();
-            break;
-        case 1:
-            callback(args[0]);
-            break;
-        case 2:
-            callback(args[0], args[1]);
-            break;
-        case 3:
-            callback(args[0], args[1], args[2]);
-            break;
-        default:
-            callback.apply(undefined, args);
-            break;
-        }
-    }
-
-    function runIfPresent(handle) {
-        // From the spec: "Wait until any invocations of this algorithm started before this one have completed."
-        // So if we're currently running a task, we'll need to delay this invocation.
-        if (currentlyRunningATask) {
-            // Delay by doing a setTimeout. setImmediate was tried instead, but in Firefox 7 it generated a
-            // "too much recursion" error.
-            setTimeout(runIfPresent, 0, handle);
-        } else {
-            var task = tasksByHandle[handle];
-            if (task) {
-                currentlyRunningATask = true;
-                try {
-                    run(task);
-                } finally {
-                    clearImmediate(handle);
-                    currentlyRunningATask = false;
-                }
-            }
-        }
-    }
-
-    function installNextTickImplementation() {
-        registerImmediate = function(handle) {
-            process.nextTick(function () { runIfPresent(handle); });
-        };
-    }
-
-    function canUsePostMessage() {
-        // The test against `importScripts` prevents this implementation from being installed inside a web worker,
-        // where `global.postMessage` means something completely different and can't be used for this purpose.
-        if (global.postMessage && !global.importScripts) {
-            var postMessageIsAsynchronous = true;
-            var oldOnMessage = global.onmessage;
-            global.onmessage = function() {
-                postMessageIsAsynchronous = false;
-            };
-            global.postMessage("", "*");
-            global.onmessage = oldOnMessage;
-            return postMessageIsAsynchronous;
-        }
-    }
-
-    function installPostMessageImplementation() {
-        // Installs an event handler on `global` for the `message` event: see
-        // * https://developer.mozilla.org/en/DOM/window.postMessage
-        // * http://www.whatwg.org/specs/web-apps/current-work/multipage/comms.html#crossDocumentMessages
-
-        var messagePrefix = "setImmediate$" + Math.random() + "$";
-        var onGlobalMessage = function(event) {
-            if (event.source === global &&
-                typeof event.data === "string" &&
-                event.data.indexOf(messagePrefix) === 0) {
-                runIfPresent(+event.data.slice(messagePrefix.length));
-            }
-        };
-
-        if (global.addEventListener) {
-            global.addEventListener("message", onGlobalMessage, false);
-        } else {
-            global.attachEvent("onmessage", onGlobalMessage);
-        }
-
-        registerImmediate = function(handle) {
-            global.postMessage(messagePrefix + handle, "*");
-        };
-    }
-
-    function installMessageChannelImplementation() {
-        var channel = new MessageChannel();
-        channel.port1.onmessage = function(event) {
-            var handle = event.data;
-            runIfPresent(handle);
-        };
-
-        registerImmediate = function(handle) {
-            channel.port2.postMessage(handle);
-        };
-    }
-
-    function installReadyStateChangeImplementation() {
-        var html = doc.documentElement;
-        registerImmediate = function(handle) {
-            // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
-            // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
-            var script = doc.createElement("script");
-            script.onreadystatechange = function () {
-                runIfPresent(handle);
-                script.onreadystatechange = null;
-                html.removeChild(script);
-                script = null;
-            };
-            html.appendChild(script);
-        };
-    }
-
-    function installSetTimeoutImplementation() {
-        registerImmediate = function(handle) {
-            setTimeout(runIfPresent, 0, handle);
-        };
-    }
-
-    // If supported, we should attach to the prototype of global, since that is where setTimeout et al. live.
-    var attachTo = Object.getPrototypeOf && Object.getPrototypeOf(global);
-    attachTo = attachTo && attachTo.setTimeout ? attachTo : global;
-
-    // Don't get fooled by e.g. browserify environments.
-    if ({}.toString.call(global.process) === "[object process]") {
-        // For Node.js before 0.9
-        installNextTickImplementation();
-
-    } else if (canUsePostMessage()) {
-        // For non-IE10 modern browsers
-        installPostMessageImplementation();
-
-    } else if (global.MessageChannel) {
-        // For web workers, where supported
-        installMessageChannelImplementation();
-
-    } else if (doc && "onreadystatechange" in doc.createElement("script")) {
-        // For IE 6–8
-        installReadyStateChangeImplementation();
-
-    } else {
-        // For older browsers
-        installSetTimeoutImplementation();
-    }
-
-    attachTo.setImmediate = setImmediate;
-    attachTo.clearImmediate = clearImmediate;
-}(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
-
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19), __webpack_require__(51)))
-
-/***/ }),
-/* 51 */
-/***/ (function(module, exports) {
-
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-
-/***/ }),
-/* 52 */,
-/* 53 */,
-/* 54 */,
-/* 55 */,
-/* 56 */,
-/* 57 */,
-/* 58 */,
-/* 59 */,
-/* 60 */,
-/* 61 */,
-/* 62 */,
-/* 63 */,
-/* 64 */,
-/* 65 */,
-/* 66 */,
-/* 67 */,
-/* 68 */,
-/* 69 */,
-/* 70 */,
-/* 71 */,
-/* 72 */,
-/* 73 */,
-/* 74 */,
-/* 75 */,
-/* 76 */,
-/* 77 */,
-/* 78 */,
-/* 79 */,
-/* 80 */,
-/* 81 */,
-/* 82 */,
-/* 83 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-
-// EXTERNAL MODULE: ../node_modules/@babel/runtime/helpers/objectSpread.js
-var objectSpread = __webpack_require__(5);
-var objectSpread_default = /*#__PURE__*/__webpack_require__.n(objectSpread);
-
-// EXTERNAL MODULE: ./table/style.scss
-var style = __webpack_require__(31);
-
-// EXTERNAL MODULE: external "react"
-var external_react_ = __webpack_require__(1);
-var external_react_default = /*#__PURE__*/__webpack_require__.n(external_react_);
-
-// EXTERNAL MODULE: external "braft-utils"
-var external_braft_utils_ = __webpack_require__(6);
-
-// EXTERNAL MODULE: external "draft-js"
-var external_draft_js_ = __webpack_require__(3);
-
-// EXTERNAL MODULE: ./table/utils.js
-var utils = __webpack_require__(7);
-
-// CONCATENATED MODULE: ./table/handlers.js
-
-
- // todo
-// 禁止选中多个单元格式时进行输入和粘贴操作
-// 可以按tab/shift + tab键切换选中单元格
-// 可以按方向键切换选中表格
-// 在最后一个单元格中按Shift + 回车跳出表格
-
-var handlers_handleKeyCommand = function handleKeyCommand(oringeHandler) {
-  return function (command, editorState, editor) {
-    if (oringeHandler && oringeHandler(command, editorState, editor) === 'handled') {
-      return 'handled';
-    }
-
-    if ('backspace' === command) {
-      var contentState = editorState.getCurrentContent();
-      var focusOffset = editorState.getSelection().getFocusOffset();
-
-      if (focusOffset === 0) {
-        var _currentBlock = external_braft_utils_["ContentUtils"].getSelectionBlock(editorState);
-
-        var beforeBlock = contentState.getBlockBefore(_currentBlock.getKey());
-        if (!beforeBlock) return 'not-handled';
-
-        if ('table-cell' === beforeBlock.getType()) {
-          // 当前行 之前是表格的情况 特殊处理
-          var tableKey = beforeBlock.getData().get('tableKey');
-          editor.setValue(utils["removeTable"](editorState, tableKey));
-          return 'handled';
-        }
-      }
-    }
-
-    var selectedBlocks = external_braft_utils_["ContentUtils"].getSelectedBlocks(editorState);
-
-    if (!selectedBlocks.find(function (block) {
-      return block.getType() === 'table-cell';
-    })) {
-      return 'not-handled';
-    }
-
-    var currentBlock = external_braft_utils_["ContentUtils"].getSelectionBlock(editorState);
-
-    if (['backspace', 'delete'].indexOf(command) > -1) {
-      if (selectedBlocks.length > 1) {
-        return 'handled';
-      }
-
-      var textLen = currentBlock.getLength();
-
-      if (textLen === 0) {
-        return 'handled';
-      }
-
-      var _focusOffset = editorState.getSelection().getFocusOffset();
-
-      if (command === 'backspace' && _focusOffset === 0) {
-        return 'handled';
-      }
-
-      if (command === 'delete' && _focusOffset === textLen) {
-        return 'handled';
-      }
-    } else if (command === 'tab') {
-      return 'handled';
-    }
-  };
-};
-var handlers_handleReturn = function handleReturn(oringeHandler) {
-  return function (event, editorState, editor) {
-    if (oringeHandler && oringeHandler(event, editorState, editor) === 'handled') {
-      return 'handled';
-    }
-
-    if (!external_braft_utils_["ContentUtils"].selectionContainsBlockType(editorState, 'table-cell')) {
-      return 'not-handled';
-    }
-
-    var blockType = external_braft_utils_["ContentUtils"].getSelectionBlockType(editorState);
-
-    if (blockType !== 'table-cell') {
-      return 'not-handled';
-    }
-
-    editor.setValue(external_draft_js_["RichUtils"].insertSoftNewline(editorState));
-    return 'handled';
-  };
-};
-var handlers_handleDroppedFiles = function handleDroppedFiles(oringeHandler) {
-  return function (selectionState, files, editor) {
-    if (oringeHandler && oringeHandler(selectionState, files, editor) === 'handled') {
-      return 'handled';
-    }
-
-    if (!external_braft_utils_["ContentUtils"].selectionContainsBlockType(editor.state.editorState, 'table-cell')) {
-      return 'not-handled';
-    }
-
-    var currentBlock = external_braft_utils_["ContentUtils"].getSelectionBlock(editor.state.editorState);
-
-    if (currentBlock.getType() === 'table-cell') {
-      return 'handled';
-    }
-  };
-};
-var handlers_handlePastedFiles = function handlePastedFiles(oringeHandler) {
-  return function (files, editor) {
-    if (oringeHandler && oringeHandler(files, editor) === 'handled') {
-      return 'handled';
-    }
-
-    if (!external_braft_utils_["ContentUtils"].selectionContainsBlockType(editor.state.editorState, 'table-cell')) {
-      return 'not-handled';
-    }
-
-    var currentBlock = external_braft_utils_["ContentUtils"].getSelectionBlock(editor.state.editorState);
-
-    if (currentBlock.getType() === 'table-cell') {
-      return 'handled';
-    }
-  };
-};
-var handlers_handlePastedText = function handlePastedText(oringeHandler) {
-  return function (text, html, editorState, editor) {
-    if (oringeHandler && oringeHandler(text, html, editorState, editor) === 'handled') {
-      return 'handled';
-    }
-
-    var selectedBlocks = external_braft_utils_["ContentUtils"].getSelectedBlocks(editor.state.editorState);
-
-    if (!selectedBlocks.find(function (block) {
-      return block.getType() === 'table-cell';
-    })) {
-      return 'not-handled';
-    }
-
-    if (selectedBlocks.length === 1) {
-      editor.setValue(external_braft_utils_["ContentUtils"].insertText(editor.state.editorState, text));
-    }
-
-    return 'handled';
-  };
-};
-// EXTERNAL MODULE: ./table/render.jsx
-var table_render = __webpack_require__(20);
-
-// EXTERNAL MODULE: ../node_modules/@babel/runtime/helpers/classCallCheck.js
-var classCallCheck = __webpack_require__(8);
-var classCallCheck_default = /*#__PURE__*/__webpack_require__.n(classCallCheck);
-
-// EXTERNAL MODULE: ../node_modules/@babel/runtime/helpers/createClass.js
-var createClass = __webpack_require__(9);
-var createClass_default = /*#__PURE__*/__webpack_require__.n(createClass);
-
-// EXTERNAL MODULE: ../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js
-var possibleConstructorReturn = __webpack_require__(10);
-var possibleConstructorReturn_default = /*#__PURE__*/__webpack_require__.n(possibleConstructorReturn);
-
-// EXTERNAL MODULE: ../node_modules/@babel/runtime/helpers/getPrototypeOf.js
-var getPrototypeOf = __webpack_require__(11);
-var getPrototypeOf_default = /*#__PURE__*/__webpack_require__.n(getPrototypeOf);
-
-// EXTERNAL MODULE: ../node_modules/@babel/runtime/helpers/inherits.js
-var inherits = __webpack_require__(12);
-var inherits_default = /*#__PURE__*/__webpack_require__.n(inherits);
-
-// EXTERNAL MODULE: ../node_modules/@babel/runtime/helpers/assertThisInitialized.js
-var assertThisInitialized = __webpack_require__(0);
-var assertThisInitialized_default = /*#__PURE__*/__webpack_require__.n(assertThisInitialized);
-
-// EXTERNAL MODULE: ../node_modules/@babel/runtime/helpers/defineProperty.js
-var defineProperty = __webpack_require__(2);
-var defineProperty_default = /*#__PURE__*/__webpack_require__.n(defineProperty);
-
-// CONCATENATED MODULE: ./table/dropdown.jsx
-
-
-
-
-
-
-
-
-
-
-var dropdown_default =
-/*#__PURE__*/
-function (_React$Component) {
-  inherits_default()(_default, _React$Component);
-
-  function _default() {
-    var _getPrototypeOf2;
-
+  function Table(props) {
     var _this;
 
-    classCallCheck_default()(this, _default);
+    _classCallCheck(this, Table);
+
+    _this = _super.call(this, props);
+
+    _defineProperty(_assertThisInitialized(_this), "state", {
+      tableRows: [],
+      colToolHandlers: [],
+      rowToolHandlers: [],
+      defaultColWidth: 0,
+      colResizing: false,
+      colResizeOffset: 0,
+      selectedCells: [],
+      selectedRowIndex: -1,
+      selectedColumnIndex: -1,
+      setFirstRowAsHead: false,
+      dragSelecting: false,
+      draggingRectBounding: null,
+      cellsMergeable: false,
+      cellSplittable: false,
+      contextMenuPosition: null
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "__tableRef", null);
+
+    _defineProperty(_assertThisInitialized(_this), "__colRefs", {});
+
+    _defineProperty(_assertThisInitialized(_this), "__rowRefs", {});
+
+    _defineProperty(_assertThisInitialized(_this), "__colResizeIndex", 0);
+
+    _defineProperty(_assertThisInitialized(_this), "__colResizeStartAt", 0);
+
+    _defineProperty(_assertThisInitialized(_this), "__startCellKey", null);
+
+    _defineProperty(_assertThisInitialized(_this), "__endCellKey", null);
+
+    _defineProperty(_assertThisInitialized(_this), "__dragSelecting", false);
+
+    _defineProperty(_assertThisInitialized(_this), "__dragSelected", false);
+
+    _defineProperty(_assertThisInitialized(_this), "__dragSelectingStartColumnIndex", null);
+
+    _defineProperty(_assertThisInitialized(_this), "__dragSelectingStartRowIndex", null);
+
+    _defineProperty(_assertThisInitialized(_this), "__dragSelectingEndColumnIndex", null);
+
+    _defineProperty(_assertThisInitialized(_this), "__dragSelectingEndRowIndex", null);
+
+    _defineProperty(_assertThisInitialized(_this), "__draggingRectBoundingUpdating", false);
+
+    _defineProperty(_assertThisInitialized(_this), "__selectedCellsCleared", false);
+
+    _defineProperty(_assertThisInitialized(_this), "handleToolbarMouseDown", function (event) {
+      event.preventDefault();
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleKeyDown", function (event) {
+      if (event.keyCode === 8) {
+        var _this$state = _this.state,
+            selectedColumnIndex = _this$state.selectedColumnIndex,
+            selectedRowIndex = _this$state.selectedRowIndex;
+
+        if (selectedColumnIndex > -1) {
+          _this.removeColumn();
+
+          event.preventDefault();
+        } else if (selectedRowIndex > -1) {
+          _this.removeRow();
+
+          event.preventDefault();
+        }
+      }
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleMouseUp", function (event) {
+      if (event.button !== 0) {
+        return false;
+      }
+
+      if (_this.state.colResizing) {
+        var _this$state2 = _this.state,
+            defaultColWidth = _this$state2.defaultColWidth,
+            colToolHandlers = _this$state2.colToolHandlers,
+            colResizeOffset = _this$state2.colResizeOffset;
+
+        var nextColToolHandlers = _toConsumableArray(colToolHandlers);
+
+        nextColToolHandlers[_this.__colResizeIndex - 1].width = (nextColToolHandlers[_this.__colResizeIndex - 1].width || defaultColWidth) + colResizeOffset;
+        nextColToolHandlers[_this.__colResizeIndex].width = (nextColToolHandlers[_this.__colResizeIndex].width || defaultColWidth) - colResizeOffset;
+        _this.__colResizeIndex = 0;
+        _this.__colResizeStartAt = 0;
+
+        _this.setState({
+          contextMenuPosition: null,
+          colToolHandlers: nextColToolHandlers,
+          colResizeOffset: 0,
+          colResizing: false
+        }, function () {
+          _this.renderCells();
+
+          _this.updateCellsData({
+            colgroupData: nextColToolHandlers.map(function (item) {
+              return {
+                width: item.width
+              };
+            })
+          });
+        });
+      } else {
+        _this.setState({
+          contextMenuPosition: null
+        });
+      }
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleMouseMove", function (event) {
+      if (_this.state.colResizing) {
+        _this.setState({
+          colResizeOffset: _this.getResizeOffset(event.clientX - _this.__colResizeStartAt)
+        });
+      }
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleColResizerMouseDown", function (event) {
+      _this.__colResizeIndex = event.currentTarget.dataset.index * 1;
+      _this.__colResizeStartAt = event.clientX;
+
+      _this.setState({
+        colResizing: true
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleCellContexrMenu", function (event) {
+      var selectedCells = _this.state.selectedCells;
+      var cellKey = event.currentTarget.dataset.cellKey;
+
+      if (!~selectedCells.indexOf(cellKey)) {
+        _this.selectCell(event);
+      }
+
+      var _this$__tableRef$getB = _this.__tableRef.getBoundingClientRect(),
+          tableTop = _this$__tableRef$getB.top,
+          tableLeft = _this$__tableRef$getB.left,
+          tableWidth = _this$__tableRef$getB.width;
+
+      var top = event.clientY - tableTop + 15;
+      var left = event.clientX - tableLeft + 10;
+
+      if (left + 150 > tableWidth) {
+        left = tableWidth - 150;
+      }
+
+      _this.setState({
+        contextMenuPosition: {
+          top: top,
+          left: left
+        }
+      });
+
+      event.preventDefault();
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleContextMenuContextMenu", function (event) {
+      event.preventDefault();
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleCellMouseDown", function (event) {
+      if (_this.state.colResizing) {
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
+      }
+
+      _this.__dragSelecting = true;
+      _this.__dragSelectingStartColumnIndex = event.currentTarget.dataset.colIndex;
+      _this.__dragSelectingStartRowIndex = event.currentTarget.dataset.rowIndex;
+      _this.__draggingStartPoint = {
+        x: event.clientX,
+        y: event.clientY
+      };
+
+      _this.setState({
+        dragSelecting: true
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleCellMouseUp", function () {
+      _this.__dragSelecting = false;
+      _this.__dragSelected = false;
+      _this.__dragSelectingStartColumnIndex = null;
+      _this.__dragSelectingStartRowIndex = null;
+      _this.__dragSelectingEndColumnIndex = null;
+      _this.__dragSelectingEndRowIndex = null;
+
+      _this.setState({
+        dragSelecting: false,
+        draggingRectBounding: null
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleCellMouseEnter", function (event) {
+      if (_this.__dragSelecting) {
+        _this.__dragSelectingEndColumnIndex = event.currentTarget.dataset.colIndex;
+        _this.__dragSelectingEndRowIndex = event.currentTarget.dataset.rowIndex;
+
+        if (_this.__dragSelectingEndColumnIndex !== _this.__dragSelectingStartColumnIndex || _this.__dragSelectingEndRowIndex !== _this.__dragSelectingStartRowIndex) {
+          _this.__dragSelected = true;
+          event.preventDefault();
+        } else {
+          _this.__dragSelected = false;
+        }
+
+        _this.confirmDragSelecting();
+      }
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleTableMouseMove", function (event) {
+      if (_this.__dragSelecting && _this.__dragSelected) {
+        _this.updateDraggingRectBounding(event);
+
+        event.preventDefault();
+      }
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleTableMouseLeave", function (event) {
+      if (_this.__dragSelecting && event.currentTarget && event.currentTarget.dataset.role === 'table') {
+        _this.handleCellMouseUp();
+      }
+
+      event.preventDefault();
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "confirmDragSelecting", function () {
+      if (!_this.__dragSelectingStartColumnIndex || !_this.__dragSelectingStartRowIndex || !_this.__dragSelectingEndColumnIndex || !_this.__dragSelectingEndRowIndex) {
+        return false;
+      }
+
+      var _TableUtils$getCellsI = getCellsInsideRect(_this.props.editorState, _this.tableKey, [_this.__dragSelectingStartColumnIndex, _this.__dragSelectingStartRowIndex], [_this.__dragSelectingEndColumnIndex, _this.__dragSelectingEndRowIndex]),
+          selectedCells = _TableUtils$getCellsI.cellKeys,
+          spannedCellBlockKeys = _TableUtils$getCellsI.spannedCellBlockKeys;
+
+      if (selectedCells.length < 2) {
+        return false;
+      }
+
+      _this.setState({
+        selectedColumnIndex: -1,
+        selectedRowIndex: -1,
+        cellsMergeable: spannedCellBlockKeys.length === 0,
+        cellSplittable: false,
+        selectedCells: selectedCells
+      }, _this.renderCells);
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "updateDraggingRectBounding", function (mouseEvent) {
+      if (_this.__draggingRectBoundingUpdating || !_this.__dragSelecting) {
+        return false;
+      }
+
+      _this.__draggingRectBoundingUpdating = true;
+
+      var tableBounding = _this.__tableRef.getBoundingClientRect();
+
+      var _this$__draggingStart = _this.__draggingStartPoint,
+          startX = _this$__draggingStart.x,
+          startY = _this$__draggingStart.y;
+      var currentX = mouseEvent.clientX,
+          currentY = mouseEvent.clientY;
+      var draggingRectBounding = {};
+
+      if (currentX <= startX) {
+        draggingRectBounding.right = tableBounding.left + tableBounding.width - startX;
+      } else {
+        draggingRectBounding.left = startX - tableBounding.left + 9;
+      }
+
+      if (currentY <= startY) {
+        draggingRectBounding.bottom = tableBounding.top + tableBounding.height - startY;
+      } else {
+        draggingRectBounding.top = startY - tableBounding.top + 9;
+      }
+
+      draggingRectBounding.width = Math.abs(currentX - startX);
+      draggingRectBounding.height = Math.abs(currentY - startY);
+
+      _this.setState({
+        draggingRectBounding: draggingRectBounding
+      }, function () {
+        setTimeout(function () {
+          _this.__draggingRectBoundingUpdating = false;
+        }, 100);
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "selectCell", function (event) {
+      var selectedCells = _this.state.selectedCells;
+      var cellKey = event.currentTarget.dataset.cellKey;
+      var _event$currentTarget = event.currentTarget,
+          colSpan = _event$currentTarget.colSpan,
+          rowSpan = _event$currentTarget.rowSpan;
+      var nextSelectedCells = ~selectedCells.indexOf(cellKey) ? [] : [cellKey];
+      var cellSplittable = nextSelectedCells.length && (colSpan > 1 || rowSpan > 1);
+
+      _this.setState({
+        selectedCells: nextSelectedCells,
+        cellSplittable: cellSplittable,
+        cellsMergeable: false,
+        selectedRowIndex: -1,
+        selectedColumnIndex: -1
+      }, _this.renderCells);
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "selectColumn", function (event) {
+      var selectedColumnIndex = getIndexFromEvent(event, 'insert-column');
+
+      if (selectedColumnIndex === false) {
+        return false;
+      }
+
+      if (_this.state.selectedColumnIndex === selectedColumnIndex) {
+        _this.setState({
+          selectedCells: [],
+          cellsMergeable: false,
+          cellSplittable: false,
+          selectedColumnIndex: -1
+        }, _this.renderCells);
+
+        return false;
+      }
+
+      var _TableUtils$getCellsI2 = getCellsInsideRect(_this.props.editorState, _this.tableKey, [selectedColumnIndex, 0], [selectedColumnIndex, _this.state.rowToolHandlers.length - 1]),
+          selectedCells = _TableUtils$getCellsI2.cellKeys,
+          spannedCellBlockKeys = _TableUtils$getCellsI2.spannedCellBlockKeys;
+
+      _this.setState({
+        selectedColumnIndex: selectedColumnIndex,
+        selectedRowIndex: -1,
+        cellSplittable: false,
+        cellsMergeable: spannedCellBlockKeys.length === 0,
+        selectedCells: selectedCells
+      }, _this.renderCells);
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "selectRow", function (event) {
+      var selectedRowIndex = getIndexFromEvent(event, 'insert-row');
+
+      if (selectedRowIndex === false) {
+        return false;
+      }
+
+      if (_this.state.selectedRowIndex === selectedRowIndex) {
+        _this.setState({
+          selectedCells: [],
+          cellsMergeable: false,
+          cellSplittable: false,
+          selectedRowIndex: -1
+        }, _this.renderCells);
+
+        return false;
+      }
+
+      var _TableUtils$getCellsI3 = getCellsInsideRect(_this.props.editorState, _this.tableKey, [0, selectedRowIndex], [_this.state.colToolHandlers.length, selectedRowIndex]),
+          selectedCells = _TableUtils$getCellsI3.cellKeys,
+          spannedCellBlockKeys = _TableUtils$getCellsI3.spannedCellBlockKeys;
+
+      _this.setState({
+        selectedColumnIndex: -1,
+        selectedRowIndex: selectedRowIndex,
+        cellSplittable: false,
+        cellsMergeable: spannedCellBlockKeys.length === 0,
+        selectedCells: selectedCells
+      }, _this.renderCells);
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "insertColumn", function (event) {
+      var columnIndex = getIndexFromEvent(event);
+
+      if (columnIndex === false) {
+        return false;
+      }
+
+      var nextColToolHandlers = _this.state.colToolHandlers.map(function (item) {
+        return render_objectSpread(render_objectSpread({}, item), {}, {
+          width: 0
+        });
+      });
+
+      _this.setState({
+        selectedCells: [],
+        selectedRowIndex: -1,
+        selectedColumnIndex: -1,
+        colToolHandlers: nextColToolHandlers
+      }, function () {
+        _this.props.editor.setValue(insertColumn(_this.props.editorState, _this.tableKey, _this.state.tableRows.length, columnIndex, nextColToolHandlers));
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "removeColumn", function () {
+      var selectedColumnIndex = _this.state.selectedColumnIndex;
+
+      var nextColToolHandlers = _this.state.colToolHandlers.map(function (item) {
+        return render_objectSpread(render_objectSpread({}, item), {}, {
+          width: 0
+        });
+      });
+
+      if (selectedColumnIndex >= 0) {
+        _this.setState({
+          selectedColumnIndex: -1,
+          colToolHandlers: nextColToolHandlers
+        }, function () {
+          _this.props.editor.draftInstance.blur();
+
+          setImmediate(function () {
+            var result = removeColumn(_this.props.editorState, _this.tableKey, selectedColumnIndex, nextColToolHandlers);
+
+            _this.props.editor.setValue(_this.validateContent(result));
+          });
+        });
+      }
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "insertRow", function (event) {
+      var rowIndex = getIndexFromEvent(event);
+
+      if (rowIndex === false) {
+        return false;
+      }
+
+      _this.setState({
+        selectedCells: [],
+        selectedRowIndex: -1,
+        selectedColumnIndex: -1
+      }, function () {
+        _this.props.editor.setValue(insertRow(_this.props.editorState, _this.tableKey, _this.colLength, rowIndex));
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "validateContent", function (editorState) {
+      var len = editorState.toRAW(true).blocks.length;
+      return len ? editorState : external_braft_editor_default().createEditorState(null);
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "removeRow", function () {
+      var selectedRowIndex = _this.state.selectedRowIndex;
+
+      if (selectedRowIndex >= 0) {
+        _this.setState({
+          selectedRowIndex: -1
+        }, function () {
+          _this.props.editor.draftInstance.blur();
+
+          setImmediate(function () {
+            var result = removeRow(_this.props.editorState, _this.tableKey, selectedRowIndex);
+
+            _this.props.editor.setValue(_this.validateContent(result));
+          });
+        });
+      }
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "mergeCells", function () {
+      var _this$state3 = _this.state,
+          selectedCells = _this$state3.selectedCells,
+          cellsMergeable = _this$state3.cellsMergeable;
+
+      if (cellsMergeable && selectedCells.length > 1) {
+        _this.setState({
+          selectedCells: [selectedCells[0]],
+          cellSplittable: true,
+          cellsMergeable: false,
+          selectedRowIndex: -1,
+          selectedColumnIndex: -1
+        }, function () {
+          _this.props.editor.setValue(mergeCells(_this.props.editorState, _this.tableKey, selectedCells));
+        });
+      }
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "splitCell", function () {
+      var _this$state4 = _this.state,
+          selectedCells = _this$state4.selectedCells,
+          cellSplittable = _this$state4.cellSplittable;
+
+      if (cellSplittable && selectedCells.length === 1) {
+        _this.setState({
+          cellSplittable: false,
+          cellsMergeable: false,
+          selectedRowIndex: -1,
+          selectedColumnIndex: -1
+        }, function () {
+          _this.props.editor.setValue(splitCell(_this.props.editorState, _this.tableKey, selectedCells[0]));
+        });
+      }
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "removeTable", function () {
+      _this.props.editor.setValue(removeTable(_this.props.editorState, _this.tableKey));
+    });
+
+    _this.language = getLanguage(props.editor);
+    return _this;
+  }
+
+  _createClass(Table, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.renderCells(this.props);
+      document.body.addEventListener('keydown', this.handleKeyDown, false);
+      document.body.addEventListener('mousemove', this.handleMouseMove, false);
+      document.body.addEventListener('mouseup', this.handleMouseUp, false);
+    }
+  }, {
+    key: "componentWillReceiveProps",
+    value: function componentWillReceiveProps(nextProps) {
+      this.renderCells(nextProps);
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      document.body.removeEventListener('keydown', this.handleKeyDown, false);
+      document.body.removeEventListener('mousemove', this.handleMouseMove, false);
+      document.body.removeEventListener('mouseup', this.handleMouseUp, false);
+    }
+  }, {
+    key: "getResizeOffset",
+    value: function getResizeOffset(offset) {
+      var leftLimit = 0;
+      var rightLimit = 0;
+      var _this$state5 = this.state,
+          colToolHandlers = _this$state5.colToolHandlers,
+          defaultColWidth = _this$state5.defaultColWidth;
+      leftLimit = -1 * ((colToolHandlers[this.__colResizeIndex - 1].width || defaultColWidth) - 30);
+      rightLimit = (colToolHandlers[this.__colResizeIndex].width || defaultColWidth) - 30;
+      offset = offset < leftLimit ? leftLimit : offset;
+      offset = offset > rightLimit ? rightLimit : offset;
+      return offset;
+    }
+  }, {
+    key: "adjustToolbarHandlers",
+    value: function adjustToolbarHandlers() {
+      var _this2 = this;
+
+      var needUpdate = false;
+
+      var rowToolHandlers = _toConsumableArray(this.state.rowToolHandlers);
+
+      Object.keys(this.__rowRefs).forEach(function (index) {
+        var rowHeight = _this2.__rowRefs[index] ? _this2.__rowRefs[index].getBoundingClientRect().height : 40;
+
+        if (rowToolHandlers[index] && rowToolHandlers[index].height !== rowHeight) {
+          needUpdate = true;
+          rowToolHandlers[index].height = rowHeight;
+        }
+      });
+
+      if (needUpdate) {
+        this.setState({
+          rowToolHandlers: rowToolHandlers
+        });
+      }
+    }
+  }, {
+    key: "updateCellsData",
+    value: function updateCellsData(blockData) {
+      this.props.editor.setValue(updateAllTableBlocks(this.props.editorState, this.tableKey, blockData));
+    }
+  }, {
+    key: "renderCells",
+    value: function renderCells(props) {
+      var _this3 = this;
+
+      props = props || this.props;
+      this.colLength = 0;
+      var tableRows = [];
+      var colToolHandlers = [];
+      var rowToolHandlers = [];
+      var _props = props,
+          editorState = _props.editorState,
+          children = _props.children;
+
+      var tableWidth = this.__tableRef.getBoundingClientRect().width;
+
+      this.__startCellKey = children[0].key;
+      this.__endCellKey = children[children.length - 1].key;
+      children.forEach(function (cell, cellIndex) {
+        var cellBlock = editorState.getCurrentContent().getBlockForKey(cell.key);
+        var cellBlockData = cellBlock.getData();
+        var tableKey = cellBlockData.get('tableKey');
+        var colIndex = cellBlockData.get('colIndex') * 1;
+        var rowIndex = cellBlockData.get('rowIndex') * 1;
+        var colSpan = cellBlockData.get('colSpan');
+        var rowSpan = cellBlockData.get('rowSpan');
+        _this3.tableKey = tableKey;
+
+        if (rowIndex === 0) {
+          var colgroupData = cellBlockData.get('colgroupData') || [];
+          var totalColgroupWidth = colgroupData.reduce(function (width, col) {
+            return width + col.width * 1;
+          }, 0);
+
+          var _colSpan = (cellBlockData.get('colSpan') || 1) * 1;
+
+          for (var ii = _this3.colLength; ii < _this3.colLength + _colSpan; ii++) {
+            colToolHandlers[ii] = {
+              key: cell.key,
+              width: _this3.state.colToolHandlers[ii] ? _this3.state.colToolHandlers[ii].width : colgroupData[ii] ? colgroupData[ii].width / totalColgroupWidth * tableWidth * 1 : 0
+            };
+          }
+
+          _this3.colLength += _colSpan;
+        }
+
+        var newCell = /*#__PURE__*/external_react_default().cloneElement(cell, {
+          'data-active': !!~_this3.state.selectedCells.indexOf(cell.key),
+          'data-row-index': rowIndex,
+          'data-col-index': colIndex || (tableRows[rowIndex] || []).length,
+          'data-cell-index': cellIndex,
+          'data-cell-key': cell.key,
+          'data-table-key': tableKey,
+          className: "bf-table-cell ".concat(cell.props.className),
+          colSpan: colSpan,
+          rowSpan: rowSpan,
+          onClick: _this3.selectCell,
+          onContextMenu: _this3.handleCellContexrMenu,
+          onMouseDown: _this3.handleCellMouseDown,
+          onMouseUp: _this3.handleCellMouseUp,
+          onMouseEnter: _this3.handleCellMouseEnter
+        });
+
+        for (var jj = rowIndex; jj < rowIndex + rowSpan; jj++) {
+          rowToolHandlers[jj] = {
+            key: cell.key,
+            height: 0
+          };
+          tableRows[jj] = tableRows[jj] || [];
+        }
+
+        if (!tableRows[rowIndex]) {
+          tableRows[rowIndex] = [newCell];
+        } else {
+          tableRows[rowIndex].push(newCell);
+        }
+      });
+      var defaultColWidth = tableWidth / this.colLength;
+      this.setState({
+        tableRows: tableRows,
+        colToolHandlers: colToolHandlers,
+        rowToolHandlers: rowToolHandlers,
+        defaultColWidth: defaultColWidth
+      }, this.adjustToolbarHandlers);
+    }
+  }, {
+    key: "createColGroup",
+    value: function createColGroup() {
+      var _this4 = this;
+
+      return /*#__PURE__*/external_react_default().createElement("colgroup", null, this.state.colToolHandlers.map(function (item, index) {
+        return /*#__PURE__*/external_react_default().createElement("col", {
+          ref: function ref(_ref) {
+            return _this4.__colRefs[index] = _ref;
+          },
+          width: item.width || _this4.state.defaultColWidth,
+          key: index
+        });
+      }));
+    }
+  }, {
+    key: "createColTools",
+    value: function createColTools() {
+      var _this5 = this;
+
+      var _this$state6 = this.state,
+          colResizing = _this$state6.colResizing,
+          colResizeOffset = _this$state6.colResizeOffset,
+          colToolHandlers = _this$state6.colToolHandlers,
+          selectedColumnIndex = _this$state6.selectedColumnIndex,
+          defaultColWidth = _this$state6.defaultColWidth;
+      return /*#__PURE__*/external_react_default().createElement("div", {
+        "data-active": selectedColumnIndex >= 0,
+        contentEditable: false,
+        "data-key": "bf-col-toolbar",
+        className: "bf-table-col-tools".concat(colResizing ? ' resizing' : ''),
+        onMouseDown: this.handleToolbarMouseDown
+      }, colToolHandlers.map(function (item, index) {
+        return /*#__PURE__*/external_react_default().createElement("div", {
+          key: index,
+          "data-key": item.key,
+          "data-index": index,
+          "data-active": selectedColumnIndex == index,
+          className: "bf-col-tool-handler",
+          style: {
+            width: item.width || defaultColWidth
+          },
+          onClick: _this5.selectColumn
+        }, _this5.props.columnResizable && index !== 0 ? /*#__PURE__*/external_react_default().createElement("div", {
+          "data-index": index,
+          "data-key": item.key,
+          className: "bf-col-resizer".concat(colResizing && _this5.__colResizeIndex === index ? ' active' : ''),
+          style: colResizing && _this5.__colResizeIndex === index ? {
+            transform: "translateX(".concat(colResizeOffset, "px)")
+          } : null,
+          onMouseDown: _this5.handleColResizerMouseDown
+        }) : null, /*#__PURE__*/external_react_default().createElement("div", {
+          className: "bf-col-tool-left"
+        }, /*#__PURE__*/external_react_default().createElement("div", {
+          "data-index": index,
+          "data-role": "insert-column",
+          className: "bf-insert-col-before",
+          onClick: _this5.insertColumn
+        }, /*#__PURE__*/external_react_default().createElement("i", {
+          className: "bfi-add"
+        }))), /*#__PURE__*/external_react_default().createElement("div", {
+          className: "bf-col-tool-center"
+        }, /*#__PURE__*/external_react_default().createElement("div", {
+          "data-index": index,
+          "data-role": "remove-col",
+          className: "bf-remove-col",
+          onClick: _this5.removeColumn
+        }, /*#__PURE__*/external_react_default().createElement("i", {
+          className: "bfi-bin"
+        }))), /*#__PURE__*/external_react_default().createElement("div", {
+          className: "bf-col-tool-right"
+        }, /*#__PURE__*/external_react_default().createElement("div", {
+          "data-index": index + 1,
+          "data-role": "insert-column",
+          className: "bf-insert-col-after",
+          onClick: _this5.insertColumn
+        }, /*#__PURE__*/external_react_default().createElement("i", {
+          className: "bfi-add"
+        }))));
+      }));
+    }
+  }, {
+    key: "createRowTools",
+    value: function createRowTools() {
+      var _this6 = this;
+
+      var _this$state7 = this.state,
+          rowToolHandlers = _this$state7.rowToolHandlers,
+          selectedRowIndex = _this$state7.selectedRowIndex;
+      return /*#__PURE__*/external_react_default().createElement("div", {
+        "data-active": selectedRowIndex >= 0,
+        contentEditable: false,
+        className: "bf-table-row-tools",
+        onMouseDown: this.handleToolbarMouseDown
+      }, rowToolHandlers.map(function (item, index) {
+        return /*#__PURE__*/external_react_default().createElement("div", {
+          key: index,
+          "data-key": item.key,
+          "data-index": index,
+          "data-active": selectedRowIndex == index,
+          className: "bf-row-tool-handler",
+          style: {
+            height: item.height
+          },
+          onClick: _this6.selectRow
+        }, /*#__PURE__*/external_react_default().createElement("div", {
+          className: "bf-row-tool-up"
+        }, /*#__PURE__*/external_react_default().createElement("div", {
+          "data-index": index,
+          "data-role": "insert-row",
+          className: "bf-insert-row-before",
+          onClick: _this6.insertRow
+        }, /*#__PURE__*/external_react_default().createElement("i", {
+          className: "bfi-add"
+        }))), /*#__PURE__*/external_react_default().createElement("div", {
+          className: "bf-row-tool-center"
+        }, /*#__PURE__*/external_react_default().createElement("div", {
+          "data-index": index,
+          "data-role": "remove-row",
+          className: "bf-remove-row",
+          onClick: _this6.removeRow
+        }, /*#__PURE__*/external_react_default().createElement("i", {
+          className: "bfi-bin"
+        }))), /*#__PURE__*/external_react_default().createElement("div", {
+          className: "bf-row-tool-down"
+        }, /*#__PURE__*/external_react_default().createElement("div", {
+          "data-index": index + 1,
+          "data-role": "insert-row",
+          className: "bf-insert-row-after",
+          onClick: _this6.insertRow
+        }, /*#__PURE__*/external_react_default().createElement("i", {
+          className: "bfi-add"
+        }))));
+      }));
+    }
+  }, {
+    key: "createContextMenu",
+    value: function createContextMenu() {
+      var _this$state8 = this.state,
+          cellsMergeable = _this$state8.cellsMergeable,
+          cellSplittable = _this$state8.cellSplittable,
+          contextMenuPosition = _this$state8.contextMenuPosition;
+
+      if (!contextMenuPosition) {
+        return null;
+      }
+
+      return /*#__PURE__*/external_react_default().createElement("div", {
+        className: "bf-table-context-menu",
+        onContextMenu: this.handleContextMenuContextMenu,
+        contentEditable: false,
+        style: contextMenuPosition
+      }, /*#__PURE__*/external_react_default().createElement("div", {
+        className: "context-menu-item",
+        onMouseDown: this.mergeCells,
+        "data-disabled": !cellsMergeable
+      }, this.language.mergeCells), /*#__PURE__*/external_react_default().createElement("div", {
+        className: "context-menu-item",
+        onMouseDown: this.splitCell,
+        "data-disabled": !cellSplittable
+      }, this.language.splitCell), /*#__PURE__*/external_react_default().createElement("div", {
+        className: "context-menu-item",
+        onMouseDown: this.removeTable
+      }, this.language.removeTable));
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this7 = this;
+
+      var _this$state9 = this.state,
+          tableRows = _this$state9.tableRows,
+          dragSelecting = _this$state9.dragSelecting,
+          draggingRectBounding = _this$state9.draggingRectBounding;
+      var readOnly = this.props.editor.props.readOnly;
+      return /*#__PURE__*/external_react_default().createElement("div", {
+        className: "bf-table-container"
+      }, /*#__PURE__*/external_react_default().createElement("table", {
+        "data-role": "table",
+        className: "bf-table".concat(dragSelecting ? ' dragging' : ''),
+        ref: function ref(_ref3) {
+          return _this7.__tableRef = _ref3;
+        },
+        onMouseDown: this.handleTableMouseDown,
+        onMouseUp: this.hanldeTableMouseUp,
+        onMouseMove: this.handleTableMouseMove,
+        onMouseLeave: this.handleTableMouseLeave
+      }, this.createColGroup(), /*#__PURE__*/external_react_default().createElement("tbody", null, tableRows.map(function (cells, rowIndex) {
+        return /*#__PURE__*/external_react_default().createElement("tr", {
+          ref: function ref(_ref2) {
+            return _this7.__rowRefs[rowIndex] = _ref2;
+          },
+          key: rowIndex
+        }, cells);
+      }))), dragSelecting ? /*#__PURE__*/external_react_default().createElement("div", {
+        className: "dragging-rect",
+        style: draggingRectBounding
+      }) : null, !readOnly && this.createContextMenu(), !readOnly && this.createColTools(), !readOnly && this.createRowTools());
+    }
+  }]);
+
+  return Table;
+}((external_react_default()).Component);
+var tableRenderMap = function tableRenderMap(options) {
+  return function (props) {
+    return external_immutable_default().Map({
+      'table-cell': {
+        element: 'td',
+        wrapper: /*#__PURE__*/external_react_default().createElement(Table, {
+          columnResizable: options.columnResizable,
+          editor: props.editor,
+          editorState: props.editorState
+        })
+      }
+    });
+  };
+};
+;// CONCATENATED MODULE: ./table/dropdown.jsx
+
+
+
+
+
+
+
+
+function dropdown_createSuper(Derived) { var hasNativeReflectConstruct = dropdown_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function dropdown_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+
+
+
+var _default = /*#__PURE__*/function (_React$Component) {
+  _inherits(_default, _React$Component);
+
+  var _super = dropdown_createSuper(_default);
+
+  function _default() {
+    var _this;
+
+    _classCallCheck(this, _default);
 
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
 
-    _this = possibleConstructorReturn_default()(this, (_getPrototypeOf2 = getPrototypeOf_default()(_default)).call.apply(_getPrototypeOf2, [this].concat(args)));
+    _this = _super.call.apply(_super, [this].concat(args));
 
-    defineProperty_default()(assertThisInitialized_default()(assertThisInitialized_default()(_this)), "state", {
+    _defineProperty(_assertThisInitialized(_this), "state", {
       rows: 3,
       columns: 3
     });
 
-    defineProperty_default()(assertThisInitialized_default()(assertThisInitialized_default()(_this)), "inputValue", function (event) {
-      _this.setState(defineProperty_default()({}, event.target.name, event.target.value));
+    _defineProperty(_assertThisInitialized(_this), "inputValue", function (event) {
+      _this.setState(_defineProperty({}, event.target.name, event.target.value));
     });
 
-    defineProperty_default()(assertThisInitialized_default()(assertThisInitialized_default()(_this)), "confirmInsert", function () {
+    _defineProperty(_assertThisInitialized(_this), "confirmInsert", function () {
       _this.props.onConfirm(_this.state);
     });
 
-    defineProperty_default()(assertThisInitialized_default()(assertThisInitialized_default()(_this)), "cancelInsert", function () {
+    _defineProperty(_assertThisInitialized(_this), "cancelInsert", function () {
       _this.props.onCancel();
     });
 
     return _this;
   }
 
-  createClass_default()(_default, [{
+  _createClass(_default, [{
     key: "componentDidMount",
     value: function componentDidMount() {
       this.setState({
@@ -2988,25 +2255,25 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      return external_react_default.a.createElement("div", {
+      return /*#__PURE__*/external_react_default().createElement("div", {
         className: "bf-table-dropdown-control"
-      }, external_react_default.a.createElement("input", {
+      }, /*#__PURE__*/external_react_default().createElement("input", {
         placeholder: this.props.language.columns,
         className: "input",
         type: "text",
         name: "columns",
         value: this.state.columns,
         onChange: this.inputValue
-      }), external_react_default.a.createElement("label", {
+      }), /*#__PURE__*/external_react_default().createElement("label", {
         className: "label"
-      }, "x"), external_react_default.a.createElement("input", {
+      }, "x"), /*#__PURE__*/external_react_default().createElement("input", {
         placeholder: this.props.language.rows,
         className: "input",
         type: "text",
         name: "rows",
         value: this.state.rows,
         onChange: this.inputValue
-      }), external_react_default.a.createElement("button", {
+      }), /*#__PURE__*/external_react_default().createElement("button", {
         disabled: !this.state.rows || !this.state.columns,
         className: "button primary",
         onClick: this.confirmInsert
@@ -3015,10 +2282,10 @@ function (_React$Component) {
   }]);
 
   return _default;
-}(external_react_default.a.Component);
+}((external_react_default()).Component);
 
 
-// CONCATENATED MODULE: ./table/converts.js
+;// CONCATENATED MODULE: ./table/converts.js
 
 
 var parseColgoupData = function parseColgoupData(colgroupNode) {
@@ -3044,14 +2311,14 @@ var buildColgroup = function buildColgroup(blockData) {
 };
 
 var tableColgroupData = [];
-var converts_tableImportFn = function tableImportFn(nodeName, node) {
+var tableImportFn = function tableImportFn(nodeName, node) {
   if (nodeName !== 'body' && node && node.querySelector && node.querySelector(':scope > table')) {
     node.parentNode.insertBefore(node.querySelector(':scope > table'), node.nextSibling);
   }
 
   if (nodeName === 'table') {
     tableColgroupData = parseColgoupData(node.querySelector('colgroup'));
-    Object(utils["rebuildTableNode"])(node);
+    rebuildTableNode(node);
   }
 
   if (nodeName === 'th' || nodeName === 'td') {
@@ -3134,9 +2401,12 @@ var tableExportFn = function tableExportFn(exportAttrString) {
     };
   };
 };
-// CONCATENATED MODULE: ./table/index.jsx
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "dropdownInstance", function() { return dropdownInstance; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TableUtils", function() { return TableUtils; });
+;// CONCATENATED MODULE: ./table/index.jsx
+
+
+function table_ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function table_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { table_ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { table_ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 
 
@@ -3146,16 +2416,16 @@ var tableExportFn = function tableExportFn(exportAttrString) {
 
 
 
-external_braft_utils_["ContentUtils"].registerStrictBlockType('table-cell');
+external_braft_utils_.ContentUtils.registerStrictBlockType('table-cell');
 var dropdownInstance = null;
 
 var dropdownRef = function dropdownRef(instance) {
   return dropdownInstance = instance;
 };
 
-var TableUtils = utils;
-/* harmony default export */ var table = __webpack_exports__["default"] = (function (options) {
-  options = objectSpread_default()({
+var TableUtils = utils_namespaceObject;
+/* harmony default export */ const table = (function (options) {
+  options = table_objectSpread({
     defaultColumns: 3,
     defaultRows: 3,
     withDropdown: false,
@@ -3174,19 +2444,19 @@ var TableUtils = utils;
     includeEditors: includeEditors,
     excludeEditors: excludeEditors,
     control: function control(props) {
-      var language = Object(table_render["a" /* getLanguage */])(props.editor);
+      var language = getLanguage(props.editor);
       return {
         key: 'table',
         replace: 'table',
         type: 'dropdown',
         title: language.insertTable,
-        text: external_react_default.a.createElement("i", {
+        text: /*#__PURE__*/external_react_default().createElement("i", {
           className: "bfi-table"
         }),
         showArrow: false,
         autoHide: true,
         ref: dropdownRef,
-        component: external_react_default.a.createElement(dropdown_default, {
+        component: /*#__PURE__*/external_react_default().createElement(_default, {
           language: language,
           defaultRows: defaultRows,
           defaultColumns: defaultColumns,
@@ -3208,8 +2478,8 @@ var TableUtils = utils;
         key: 'table',
         replace: 'table',
         type: 'button',
-        title: Object(table_render["a" /* getLanguage */])(props.editor).insertTable,
-        text: external_react_default.a.createElement("i", {
+        title: getLanguage(props.editor).insertTable,
+        text: /*#__PURE__*/external_react_default().createElement("i", {
           className: "bfi-table"
         }),
         onClick: function onClick() {
@@ -3223,11 +2493,11 @@ var TableUtils = utils;
     includeEditors: includeEditors,
     excludeEditors: excludeEditors,
     interceptor: function interceptor(editorProps) {
-      editorProps.handleKeyCommand = handlers_handleKeyCommand(editorProps.handleKeyCommand);
-      editorProps.handleReturn = handlers_handleReturn(editorProps.handleReturn);
-      editorProps.handleDroppedFiles = handlers_handleDroppedFiles(editorProps.handleDroppedFiles);
-      editorProps.handlePastedFiles = handlers_handlePastedFiles(editorProps.handlePastedFiles);
-      editorProps.handlePastedText = handlers_handlePastedText(editorProps.handlePastedText);
+      editorProps.handleKeyCommand = handleKeyCommand(editorProps.handleKeyCommand);
+      editorProps.handleReturn = handleReturn(editorProps.handleReturn);
+      editorProps.handleDroppedFiles = handleDroppedFiles(editorProps.handleDroppedFiles);
+      editorProps.handlePastedFiles = handlePastedFiles(editorProps.handlePastedFiles);
+      editorProps.handlePastedText = handlePastedText(editorProps.handlePastedText);
       return editorProps;
     }
   }, {
@@ -3235,12 +2505,14 @@ var TableUtils = utils;
     name: 'table-cell',
     includeEditors: includeEditors,
     excludeEditors: excludeEditors,
-    renderMap: Object(table_render["b" /* tableRenderMap */])(options),
-    importer: converts_tableImportFn,
+    renderMap: tableRenderMap(options),
+    importer: tableImportFn,
     exporter: tableExportFn(exportAttrString)
   }];
 });
+})();
 
-/***/ })
-/******/ ]);
+/******/ 	return __webpack_exports__;
+/******/ })()
+;
 });
