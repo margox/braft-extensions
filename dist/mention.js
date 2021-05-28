@@ -4352,6 +4352,8 @@ var defaultSuggestionsFilter = defaultSuggestionsFilter$1;
 
 
 
+var _excluded = ["includeEditors", "excludeEditors"],
+    _excluded2 = ["MentionSuggestions"];
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
@@ -4372,12 +4374,12 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
   var includeEditors = options.includeEditors,
       excludeEditors = options.excludeEditors,
-      mentionPluginOptions = _objectWithoutProperties(options, ["includeEditors", "excludeEditors"]);
+      mentionPluginOptions = _objectWithoutProperties(options, _excluded);
 
   var mentionPlugin = index_esm(mentionPluginOptions); // MentionSuggestions 是一个 React Component 用来定制 mention 的数据
 
   var MentionSuggestions = mentionPlugin.MentionSuggestions,
-      draftEditorPlugin = _objectWithoutProperties(mentionPlugin, ["MentionSuggestions"]);
+      draftEditorPlugin = _objectWithoutProperties(mentionPlugin, _excluded2);
   /**
      * draft-js-plugin 为每个 plugin 的很多地方都注入了 get 和 set
      * 在 braft-editor 里面 由于 在 useExtension 里面并拿不到 editor 的实例

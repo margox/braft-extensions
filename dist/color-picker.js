@@ -182,6 +182,7 @@ var external_react_color_ = __webpack_require__(519);
 
 
 
+var _excluded = ["onChange", "color", "presetColors"];
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
@@ -196,7 +197,7 @@ var getColorPicker = function getColorPicker(superProps) {
     var onChange = _ref.onChange,
         color = _ref.color,
         presetColors = _ref.presetColors,
-        props = _objectWithoutProperties(_ref, ["onChange", "color", "presetColors"]);
+        props = _objectWithoutProperties(_ref, _excluded);
 
     var handleChange = function handleChange(colorObject) {
       if (colorObject.hex === color) {
