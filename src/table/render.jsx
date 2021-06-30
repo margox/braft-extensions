@@ -1,8 +1,8 @@
-import React from 'react'
+import BraftEditor from 'braft-editor'
 import Immutable from 'immutable'
+import React from 'react'
 import languages from './languages'
 import * as TableUtils from './utils'
-import BraftEditor from 'braft-editor'
 
 const getIndexFromEvent = (event, ignoredTarget = '') => {
   if (!isNaN(event)) {
@@ -691,7 +691,7 @@ export class Table extends React.Component {
         className="bf-table-row-tools"
         onMouseDown={this.handleToolbarMouseDown}
       >
-        {rowToolHandlers.map((item, index) => (
+        {rowToolHandlers.filter((item)=>item).map((item, index) => (
           <div
             key={index}
             data-key={item.key}
